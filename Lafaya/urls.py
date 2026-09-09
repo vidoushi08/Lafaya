@@ -31,5 +31,6 @@ urlpatterns = [
     path("car_events/", include("car_events.urls")),
     path("payments/", include("payments.urls")),
     path("reviews/", include("reviews.urls")),
+    path("booking/", include("booking.urls")),
     path("admin/", admin.site.urls),
 ]
