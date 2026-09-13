@@ -1,0 +1,25 @@
+{% load static %}
+
+<header class="navbar">
+  <nav class="navbar-container">
+    <a class="navbar-logo" href="{% url 'homepage:homepage' %}">
+      <img src="{% static 'images/lafaya_logo.png' %}" alt="Lafaya logo">
+    </a>
+
+    <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      &#9776;
+    </button>
+
+    <ul class="navbar-links">
+      <li><a href="{% url 'homepage:homepage' %}">Home</a></li>
+      <li><a href="{% url 'birthday:birthday' %}">Birthday</a></li>
+      <li><a href="{% url 'wedding:wedding' %}">Wedding</a></li>
+      <li><a href="{% url 'concert:concert' %}">Concert</a></li>
+      <li><a href="{% url 'seaside:seaside' %}">Seaside</a></li>
+      <li><a href="{% url 'conference:conference' %}">Conference</a></li>
+      <li><a href="{% url 'car_events:car_events' %}">Car Events</a></li>
+    </ul>
+
+    <a class="navbar-auth" href="{% url 'authentication:authentication' %}">Login</a>
+  </nav>
+</header>

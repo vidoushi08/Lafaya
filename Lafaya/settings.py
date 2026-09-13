@@ -80,7 +80,9 @@ ROOT_URLCONF = "Lafaya.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # handle the global shared templates ( HTML ) files
+        "DIRS": [BASE_DIR / "templates"],
+        # do also allow for app specific templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -137,10 +139,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
+# handle the global static files ( CSS + JS + images )
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+# generation of URLs based on the static directory
 STATIC_URL = "static/"
 
 
