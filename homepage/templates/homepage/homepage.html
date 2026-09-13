@@ -20,63 +20,70 @@
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-car homepage-events-hero-slide-active">
           <a href="{% url 'car_events:car_events' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/cars_main.png' %}" alt="Car Events">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Car Events heading</h2>
+              <p>Car Events description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Car Events heading</h2>
-            <p>Car Events description text goes here.</p>
-          </figcaption>
         </figure>
 
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-wedding">
           <a href="{% url 'wedding:wedding' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/wedding_main.png' %}" alt="Wedding">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Wedding heading</h2>
+              <p>Wedding description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Wedding heading</h2>
-            <p>Wedding description text goes here.</p>
-          </figcaption>
         </figure>
 
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-concert">
           <a href="{% url 'concert:concert' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/concert_main.png' %}" alt="Concert">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Concert heading</h2>
+              <p>Concert description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Concert heading</h2>
-            <p>Concert description text goes here.</p>
-          </figcaption>
         </figure>
 
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-seaside">
           <a href="{% url 'seaside:seaside' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/seaside_main.png' %}" alt="Seaside">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Seaside heading</h2>
+              <p>Seaside description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Seaside heading</h2>
-            <p>Seaside description text goes here.</p>
-          </figcaption>
         </figure>
 
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-conference">
           <a href="{% url 'conference:conference' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/conference_main.png' %}" alt="Conference">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Conference heading</h2>
+              <p>Conference description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Conference heading</h2>
-            <p>Conference description text goes here.</p>
-          </figcaption>
         </figure>
 
         <figure class="homepage-events-hero-slide homepage-events-hero-slide-birthday">
           <a href="{% url 'birthday:birthday' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/birthday_main.png' %}" alt="Birthday">
+            <figcaption class="homepage-events-hero-text">
+              <h2>Birthday heading</h2>
+              <p>Birthday description text goes here.</p>
+            </figcaption>
           </a>
-          <figcaption class="homepage-events-hero-text">
-            <h2>Birthday heading</h2>
-            <p>Birthday description text goes here.</p>
-          </figcaption>
         </figure>
       </div>
+
+      <button type="button" class="homepage-events-hero-arrow homepage-events-hero-arrow-prev" aria-label="Previous event">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button type="button" class="homepage-events-hero-arrow homepage-events-hero-arrow-next" aria-label="Next event">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
 
       <div class="homepage-events-hero-dots">
         <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-car homepage-events-hero-dot-active" aria-label="Car Events"></button>

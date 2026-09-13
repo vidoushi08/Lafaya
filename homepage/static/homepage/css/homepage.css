@@ -65,6 +65,7 @@
 }
 
 .homepage-events-hero-link {
+  position: relative;
   display: block;
   height: 100%;
 }
@@ -78,6 +79,7 @@
 
 .homepage-events-hero-text {
   position: absolute;
+  z-index: 1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -120,4 +122,35 @@
 .homepage-events-hero-dot-active {
   opacity: 1;
   background-color: var(--color-complement);
+}
+
+.homepage-events-hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-circle);
+  background-color: var(--color-white);
+  opacity: 0.5;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--color-dark);
+}
+
+.homepage-events-hero-arrow-prev {
+  left: 2.25rem;
+}
+
+.homepage-events-hero-arrow-next {
+  right: 2.25rem;
+}
+
+.homepage-events-hero-arrow:hover {
+  opacity: 1;
+  color: var(--color-complement);
 }
