@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     "reviews.apps.ReviewsConfig",
     # booking application
     "booking.apps.BookingConfig",
+    # contact application
+    "contact.apps.ContactConfig",
     # django default applications
     "django.contrib.admin",
     "django.contrib.auth",
