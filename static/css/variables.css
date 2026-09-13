@@ -5,6 +5,8 @@
   --color-accent: #c87d3b;
   --color-accent-hover: #b56d2e;
   --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-complement: #2a8da1;
+  --color-complement-hover: #23778a;
 
   --radius-btn: 10px;
   --radius-circle: 50%;

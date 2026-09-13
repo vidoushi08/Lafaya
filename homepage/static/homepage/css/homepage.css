@@ -1,0 +1,123 @@
+.homepage-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 35vh;
+  padding: 4rem var(--container-padding);
+}
+
+.homepage-welcome h1 {
+  font-size: 2.5rem;
+  color: var(--color-dark);
+}
+
+.homepage-welcome h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-dark);
+  margin-bottom: 2rem;
+}
+
+.homepage-welcome button {
+  background-color: var(--color-complement);
+  color: var(--color-white);
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.homepage-welcome button:hover {
+  background-color: var(--color-complement-hover);
+}
+
+.homepage-events-hero {
+  position: relative;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  aspect-ratio: 2.25 / 1;
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+}
+
+.homepage-events-hero-slides {
+  position: relative;
+  height: 100%;
+}
+
+.homepage-events-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-events-hero-slide-active {
+  opacity: 1;
+}
+
+.homepage-events-hero-link {
+  display: block;
+  height: 100%;
+}
+
+.homepage-events-hero-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-btn);
+}
+
+.homepage-events-hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-white);
+  padding: 1rem 2rem;
+  background-color: rgba(51, 51, 51, 0.5);
+  border-radius: var(--radius-btn);
+}
+
+.homepage-events-hero-text h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.homepage-events-hero-text p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.homepage-events-hero-dots {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.homepage-events-hero-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-circle);
+  background-color: var(--color-white);
+  opacity: 0.5;
+  border: none;
+  cursor: pointer;
+}
+
+.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-complement);
+}

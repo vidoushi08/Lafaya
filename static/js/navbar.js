@@ -8,9 +8,11 @@ document.querySelectorAll(".navbar-dropdown-toggle").forEach(function (toggle) {
 });
 
 document.addEventListener("click", function () {
-  document.querySelectorAll(".navbar-dropdown.active").forEach(function (dropdown) {
-    dropdown.classList.remove("active");
-    var toggle = dropdown.querySelector(".navbar-dropdown-toggle");
-    toggle.setAttribute("aria-expanded", "false");
-  });
+  document
+    .querySelectorAll(".navbar-dropdown.active")
+    .forEach(function (dropdown) {
+      dropdown.classList.remove("active");
+      var toggle = dropdown.querySelector(".navbar-dropdown-toggle");
+      toggle.setAttribute("aria-expanded", "false");
+    });
 });
