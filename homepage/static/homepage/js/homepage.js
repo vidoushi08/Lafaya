@@ -1,7 +1,7 @@
 const slides = document.querySelectorAll(".homepage-events-hero-slide");
 const dots = document.querySelectorAll(".homepage-events-hero-dot");
 let currentIndex = 0;
-const AUTO_SCROLL_MS = 4000;
+const AUTO_SCROLL_MS = 3000;
 let autoScrollTimer = null;
 let isHovered = false;
 

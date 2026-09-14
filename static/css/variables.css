@@ -1,12 +1,23 @@
 :root {
   --color-white: #ffffff;
+  --color-yellow-dark: #f59e0b;
   --color-dark: #333333;
   --color-brand: #b35334;
+  --color-gold: #d4af37;
+  --color-purple: #ff70a6;
   --color-accent: #c87d3b;
   --color-accent-hover: #b56d2e;
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-complement: #2a8da1;
   --color-complement-hover: #23778a;
+  --color-spotify: #1db954;
+  --color-airbnb: #ff5a5f;
+  --color-linkedin: #0a66c2;
+  --color-uber: #000000;
+  --color-pinterest: #bd081c;
+  --color-etsy: #f1641e;
+  --color-grey: #c9c9c9;
+  --color-muted: #e9e9e9;
 
   --radius-btn: 10px;
   --radius-circle: 50%;
