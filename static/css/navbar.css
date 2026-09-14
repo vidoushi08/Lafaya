@@ -17,27 +17,6 @@
   padding: 0.75rem var(--container-padding);
 }
 
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.navbar-logo-circle {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  border-radius: var(--radius-circle);
-  background-color: var(--color-brand);
-}
-
-.navbar-logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-dark);
-}
-
 .navbar-links {
   list-style: none;
   display: flex;

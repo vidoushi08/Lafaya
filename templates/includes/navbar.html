@@ -2,10 +2,7 @@
 
 <header class="navbar">
   <nav class="navbar-container">
-    <a class="navbar-logo" href="{% url 'homepage:homepage' %}" aria-label="Lafaya">
-      <span class="navbar-logo-circle" aria-hidden="true"></span>
-      <span class="navbar-logo-text">LAFAYA</span>
-    </a>
+    {% include 'includes/lafaya_logo.html' %}
 
     <button class="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
       &#9776;

@@ -11,6 +11,10 @@
   --color-etsy: #f1641e;
   --color-gold: #d4af37;
   --color-grey: #c9c9c9;
+  --color-grey-dark: #6b7280;
+  --color-instagram-1: #f58529;
+  --color-instagram-2: #dd2a7b;
+  --color-instagram-3: #8134af;
   --color-linkedin: #0a66c2;
   --color-muted: #e9e9e9;
   --color-white-muted: rgba(255, 255, 255, 0.85);
@@ -18,9 +22,13 @@
   --color-purple: #ff70a6;
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-spotify: #1db954;
+  --color-tiktok: #000000;
   --color-uber: #000000;
   --color-white: #ffffff;
+  --color-whatsapp: #25d366;
+  --color-x: #000000;
   --color-yellow-dark: #f59e0b;
+  --color-youtube: #ff0000;
 
   --radius-btn: 10px;
   --radius-circle: 50%;

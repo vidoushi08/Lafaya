@@ -72,3 +72,21 @@ document
   });
 
 startAutoScroll();
+
+const testimonialsTrack = document.querySelector(
+  ".homepage-testimonials-track",
+);
+
+testimonialsTrack
+  .querySelectorAll(".homepage-testimonials-card")
+  .forEach(function (card) {
+    testimonialsTrack.appendChild(card.cloneNode(true));
+  });
+
+testimonialsTrack.addEventListener("mouseenter", function () {
+  testimonialsTrack.classList.add("homepage-testimonials-track-paused");
+});
+
+testimonialsTrack.addEventListener("mouseleave", function () {
+  testimonialsTrack.classList.remove("homepage-testimonials-track-paused");
+});
