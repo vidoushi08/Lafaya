@@ -1,5 +1,7 @@
 .navbar {
-  background-color: var(--color-white);
+  background-color: var(--color-white-muted);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px var(--color-shadow);
   position: sticky;
   top: 0;

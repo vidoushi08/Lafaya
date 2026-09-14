@@ -104,6 +104,10 @@
   margin-top: 1rem;
 }
 
+.car-event-span-text {
+  color: var(--color-red);
+}
+
 .wedding-event-span-text {
   color: var(--color-gold);
 }
@@ -114,6 +118,10 @@
 
 .seaside-event-span-text {
   color: var(--color-yellow-dark);
+}
+
+.birthday-event-span-text {
+  color: var(--color-orange);
 }
 
 .homepage-events-hero-dots {
@@ -135,9 +143,34 @@
   cursor: pointer;
 }
 
-.homepage-events-hero-dot-active {
+.homepage-events-hero-dot-car.homepage-events-hero-dot-active {
   opacity: 1;
-  background-color: var(--color-complement);
+  background-color: var(--color-red);
+}
+
+.homepage-events-hero-dot-wedding.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-gold);
+}
+
+.homepage-events-hero-dot-concert.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-purple);
+}
+
+.homepage-events-hero-dot-seaside.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-yellow-dark);
+}
+
+.homepage-events-hero-dot-conference.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-white);
+}
+
+.homepage-events-hero-dot-birthday.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-orange);
 }
 
 .homepage-events-hero-arrow {
@@ -214,7 +247,10 @@
   background-color: var(--color-white);
   border-radius: var(--radius-btn);
   box-shadow: 0 4px 12px var(--color-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
 }
 
 .homepage-trusted-card i {
