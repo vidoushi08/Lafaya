@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Conference Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'conference/css/conference.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="conference-page">
+    <section class="conference-hero">
+      <img class="conference-hero-image" src="{% static 'images/events/conference_main.png' %}" alt="Conference stage with large presentation screens">
+      <div class="conference-hero-overlay"></div>
+      <div class="conference-hero-content">
+        <p class="conference-eyebrow">World-class corporate assemblies</p>
+        <h1>Experience Conference<br>Excellence Redefined</h1>
+        <p class="conference-hero-copy">Empower your team and engage stakeholders inside premier corporate architectural venues, supported by high-fidelity broadcast production and bespoke strategic coordination.</p>
+        <div class="conference-hero-actions">
+          <a class="conference-button conference-button-primary" href="#conference-venues">Explore venues</a>
+          <a class="conference-button conference-button-outline" href="#conference-services">View services</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="conference-band conference-venues" id="conference-venues" aria-labelledby="conference-venues-heading">
+      <div class="conference-section-heading conference-section-heading-row">
+        <div>
+          <p class="conference-eyebrow">Premier spaces</p>
+          <h2 id="conference-venues-heading">Stunning Conference Venues</h2>
+        </div>
+        <span class="conference-section-hint">Scroll to explore <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="conference-card-grid">
+        <article class="conference-card">
+          <img src="{% static 'conference/images/conference_venue_trianon.png' %}" alt="Trianon Convention Centre auditorium">
+          <div class="conference-card-content">
+            <p class="conference-card-location">Quatre Bornes, Mauritius</p>
+            <h3>Trianon Convention Centre</h3>
+            <p>A majestic high-ceilinged ballroom meticulously crafted for large-scale corporate summits, international keynotes, and celebratory galas.</p>
+          </div>
+          <a class="conference-card-link" href="#conference-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+        <article class="conference-card">
+          <img src="{% static 'conference/images/conference_venue_voila.png' %}" alt="Voila conference room setup">
+          <div class="conference-card-content">
+            <p class="conference-card-location">Bagatelle, Mauritius</p>
+            <h3>Voila Hotel</h3>
+            <p>A polished, acoustically insulated environment equipped for executive strategy workshops, confidential board meets, and dynamic panel reviews.</p>
+          </div>
+          <a class="conference-card-link" href="#conference-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+        <article class="conference-card">
+          <img src="{% static 'conference/images/conference_venue_caudan.png' %}" alt="Caudan Arts Centre conference venue">
+          <div class="conference-card-content">
+            <p class="conference-card-location">Port Louis, Mauritius</p>
+            <h3>Caudan Arts Centre</h3>
+            <p>An agile, high-concept space packed with interactive displays, modular partitions, and multi-functional brainstorming facilities.</p>
+          </div>
+          <a class="conference-card-link" href="#conference-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+      </div>
+      <div class="conference-section-controls" aria-hidden="true">
+        <span>+</span>
+        <span>-</span>
+      </div>
+    </section>
+
+    <section class="conference-section conference-packages" aria-labelledby="conference-packages-heading">
+      <div class="conference-section-heading conference-section-heading-row">
+        <div>
+          <p class="conference-eyebrow">Flexible tiers</p>
+          <h2 id="conference-packages-heading">Choose Your Conference Package</h2>
+        </div>
+        <span class="conference-section-hint">Compare tiers <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="conference-package-grid">
+        <article class="conference-package conference-package-starter">
+          <div class="conference-package-heading">
+            <p>Focused assemblies</p>
+            <h3>Starter Plan</h3>
+          </div>
+          <ul>
+            <li>Beachfront setup for up to 50 guests</li>
+            <li>Basic high-definition AV and microphone kits</li>
+            <li>4-hour exclusive session duration</li>
+          </ul>
+          <div class="conference-package-footer">
+            <div><p>Investment</p><strong>Rs 80,000</strong></div>
+            <a href="#conference-enquiry">Book now</a>
+          </div>
+        </article>
+        <article class="conference-package conference-package-professional">
+          <div class="conference-package-heading">
+            <p>High-end live events</p>
+            <h3>Professional Plan</h3>
+          </div>
+          <ul>
+            <li>Host up to 200 physical attendees</li>
+            <li>Multi-camera live streaming and broadcast integration</li>
+            <li>8-hour session including premium working lunches</li>
+          </ul>
+          <div class="conference-package-footer">
+            <div><p>Investment</p><strong>Rs 140,000</strong></div>
+            <a href="#conference-enquiry">Book now</a>
+          </div>
+        </article>
+        <article class="conference-package conference-package-enterprise">
+          <div class="conference-package-heading">
+            <p>Bespoke multi-day summits</p>
+            <h3>Enterprise Plan</h3>
+          </div>
+          <ul>
+            <li>Absolute venue buy-out hosting up to 500 guests</li>
+            <li>Multi-course formal gala, networking receptions, and bars</li>
+            <li>Full multi-day access, customized stage, bespoke staff</li>
+          </ul>
+          <div class="conference-package-footer">
+            <div><p>Investment</p><strong>Rs 200,000</strong></div>
+            <a href="#conference-enquiry">Book now</a>
+          </div>
+        </article>
+      </div>
+      <div class="conference-section-controls" aria-hidden="true">
+        <span>+</span>
+        <span>-</span>
+      </div>
+    </section>
+
+    <section class="conference-band conference-services" id="conference-services" aria-labelledby="conference-services-heading">
+      <div class="conference-section-heading conference-section-heading-centered">
+        <p class="conference-eyebrow">Strategic touches</p>
+        <h2 id="conference-services-heading">Conference Service Enhancements</h2>
+      </div>
+      <div class="conference-service-grid">
+        <article class="conference-service">
+          <img src="{% static 'conference/images/conference_services_branding.png' %}" alt="Branded conference stage and screens">
+          <div class="conference-service-content">
+            <h3>Stage Design &amp; Branding</h3>
+            <p>Curate impactful conference backdrops utilizing elegant physical geometry, dynamic screen integrations, and cohesive corporate signage.</p>
+            <div class="conference-service-tags"><span>Custom Backdrops</span><span>Premium Signage</span></div>
+          </div>
+        </article>
+        <article class="conference-service">
+          <img src="{% static 'conference/images/conference_services_recordings.png' %}" alt="Conference recording and broadcast production">
+          <div class="conference-service-content">
+            <h3>Live Streaming &amp; Recording</h3>
+            <p>Capture every session with crystal-clear 4K video feeds, remote attendee streaming tools, and pristine post-production archiving.</p>
+            <div class="conference-service-tags"><span>4K Broadcast</span><span>Post Production</span></div>
+          </div>
+        </article>
+        <article class="conference-service">
+          <img src="{% static 'conference/images/conference_services_catering.png' %}" alt="Catered conference dining service">
+          <div class="conference-service-content">
+            <h3>Corporate Catering</h3>
+            <p>Offer attendees a stellar culinary selection, spanning fresh morning pastries, vibrant lunch platters, and post-conference networking bites.</p>
+            <div class="conference-service-tags"><span>Fine Dining</span><span>Networking Bar</span></div>
+          </div>
+        </article>
+      </div>
+      <div class="conference-section-controls" aria-hidden="true">
+        <span>+</span>
+        <span>-</span>
+      </div>
+    </section>
+
+    <section class="conference-testimonial">
+      <blockquote>"Our annual summit at the Grand Ballroom was extraordinary. The AV setup, seamless coordination, and Lafaya's attention to detail made it our most successful event yet."</blockquote>
+      <cite>Clara &amp; Mark S., Corporate Event Directors</cite>
+    </section>
+
+    <section class="conference-enquiry" id="conference-enquiry">
+      <div>
+        <p class="conference-eyebrow">Make the next one count</p>
+        <h2>Let's shape a conference your audience remembers.</h2>
+      </div>
+      <a class="conference-button conference-button-secondary" href="mailto:hello@lafaya.mu">Start a conversation</a>
+    </section>
+  </div>
+{% endblock %}
