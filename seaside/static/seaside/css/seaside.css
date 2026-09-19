@@ -1,0 +1,458 @@
+.seaside-page {
+  background-color: var(--color-white);
+}
+
+.seaside-hero {
+  position: relative;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: var(--color-white);
+}
+
+.seaside-hero-image,
+.seaside-hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.seaside-hero-image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.seaside-hero-overlay {
+  background: linear-gradient(90deg, var(--color-overlay), rgba(0, 0, 0, 0.2));
+}
+
+.seaside-hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(var(--container-max-width), 100%);
+  margin: 0 auto;
+  padding: 6rem var(--container-padding);
+  text-align: left;
+}
+
+.seaside-eyebrow {
+  color: var(--color-yellow-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.seaside-hero .seaside-eyebrow {
+  color: var(--color-white);
+}
+
+.seaside-hero h1 {
+  max-width: 720px;
+  margin: 1.75rem 0 1.5rem;
+  font-size: 5rem;
+  line-height: 1.05;
+}
+
+.seaside-hero-copy {
+  max-width: 720px;
+  margin: 0 0 2.25rem;
+  color: var(--color-white-muted);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.seaside-hero-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.seaside-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.8rem 1.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-btn);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.seaside-button:hover {
+  transform: translateY(-2px);
+}
+
+.seaside-button-primary,
+.seaside-button-secondary {
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+.seaside-button-primary:hover,
+.seaside-button-secondary:hover {
+  background-color: var(--color-muted);
+}
+
+.seaside-button-outline {
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+.seaside-button-outline:hover {
+  background-color: var(--color-white-muted);
+  color: var(--color-dark);
+}
+
+.seaside-introduction {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: end;
+  padding: 7rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+  background-color: var(--color-white);
+}
+
+.seaside-introduction h2,
+.seaside-section-heading h2,
+.seaside-enquiry h2 {
+  max-width: 820px;
+  margin-top: 1rem;
+  color: var(--color-dark);
+  font-size: 3.25rem;
+  line-height: 1.05;
+}
+
+.seaside-introduction-copy {
+  max-width: 520px;
+  color: var(--color-grey-dark);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.seaside-section {
+  padding: 6.5rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+}
+
+.seaside-venues,
+.seaside-services {
+  background-color: var(--color-muted);
+}
+
+.seaside-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.seaside-section-heading-centered {
+  display: block;
+  text-align: center;
+}
+
+.seaside-section-heading-centered h2 {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.seaside-section-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  color: var(--color-grey-dark);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.seaside-section-hint i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-complement);
+  border-radius: var(--radius-circle);
+  color: var(--color-complement);
+}
+
+.seaside-card-grid,
+.seaside-package-grid,
+.seaside-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.seaside-card,
+.seaside-package,
+.seaside-service {
+  overflow: hidden;
+  border: none;
+  border-radius: var(--radius-btn);
+  background-color: var(--color-white);
+  box-shadow: 0 8px 20px var(--color-shadow);
+}
+
+.seaside-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.seaside-card img,
+.seaside-service img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.4 / 1;
+  object-fit: cover;
+}
+
+.seaside-card-content,
+.seaside-service-content {
+  padding: 1.5rem;
+}
+
+.seaside-card-location,
+.seaside-package-heading p {
+  margin-bottom: 0.55rem;
+  color: var(--color-complement);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.seaside-card h3,
+.seaside-service h3,
+.seaside-package h3 {
+  margin-bottom: 0.75rem;
+  color: var(--color-dark);
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+
+.seaside-card p,
+.seaside-service p {
+  color: var(--color-grey-dark);
+  line-height: 1.6;
+}
+
+.seaside-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-grey);
+  color: var(--color-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.seaside-card-link i {
+  color: var(--color-complement);
+}
+
+.seaside-packages {
+  background-color: var(--color-accent);
+}
+
+.seaside-packages .seaside-eyebrow,
+.seaside-packages .seaside-section-heading h2,
+.seaside-packages .seaside-section-hint {
+  color: var(--color-white);
+}
+
+.seaside-packages .seaside-section-hint i {
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+.seaside-package {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+.seaside-package-heading {
+  padding: 1.5rem;
+  background-color: var(--color-muted);
+}
+
+.seaside-package-heading h3 {
+  margin-bottom: 0;
+  color: var(--color-complement);
+  font-size: 1.75rem;
+}
+
+.seaside-package ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  margin: 0;
+  padding: 1.75rem 1.5rem;
+  list-style: none;
+}
+
+.seaside-package li {
+  color: var(--color-dark);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.seaside-package li::before {
+  margin-right: 0.75rem;
+  color: var(--color-complement);
+  content: "\\2713";
+  font-weight: 700;
+}
+
+.seaside-package-sunset .seaside-package-heading {
+  background-color: var(--color-yellow-dark);
+}
+
+.seaside-package-private .seaside-package-heading {
+  background-color: var(--color-complement);
+}
+
+.seaside-package-sunset .seaside-package-heading p,
+.seaside-package-sunset .seaside-package-heading h3,
+.seaside-package-private .seaside-package-heading p,
+.seaside-package-private .seaside-package-heading h3 {
+  color: var(--color-white);
+}
+
+.seaside-package-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--color-grey);
+}
+
+.seaside-package-footer strong {
+  color: var(--color-complement);
+  font-size: 1.35rem;
+}
+
+.seaside-package-footer a {
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-btn);
+  background-color: var(--color-complement);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.seaside-service-content {
+  min-height: 190px;
+}
+
+.seaside-service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.seaside-service-tags span {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--color-complement);
+  border-radius: var(--radius-btn);
+  color: var(--color-complement);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.seaside-testimonial {
+  padding: 6rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  text-align: center;
+}
+
+.seaside-testimonial blockquote {
+  max-width: 950px;
+  margin: 0 auto 1.5rem;
+  font-size: 2rem;
+  line-height: 1.35;
+}
+
+.seaside-testimonial cite {
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.seaside-enquiry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 4rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+  background-color: var(--color-dark);
+}
+
+.seaside-enquiry h2 {
+  color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+  .seaside-hero {
+    min-height: 580px;
+  }
+
+  .seaside-hero-content {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .seaside-hero h1 {
+    font-size: 3.5rem;
+  }
+
+  .seaside-hero-actions,
+  .seaside-section-heading,
+  .seaside-introduction,
+  .seaside-enquiry {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .seaside-introduction h2,
+  .seaside-section-heading h2,
+  .seaside-enquiry h2 {
+    font-size: 2.5rem;
+  }
+
+  .seaside-introduction,
+  .seaside-section,
+  .seaside-testimonial {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .seaside-card-grid,
+  .seaside-package-grid,
+  .seaside-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .seaside-testimonial blockquote {
+    font-size: 1.5rem;
+  }
+}

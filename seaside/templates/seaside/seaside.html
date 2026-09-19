@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Seaside Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'seaside/css/seaside.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="seaside-page">
+    <section class="seaside-hero">
+      <img class="seaside-hero-image" src="{% static 'images/events/seaside_main.png' %}" alt="Seaside event setting overlooking the ocean">
+      <div class="seaside-hero-overlay"></div>
+      <div class="seaside-hero-content">
+        <p class="seaside-eyebrow">Lafaya seaside gatherings</p>
+        <h1>Seaside luxury,<br>reimagined.</h1>
+        <p class="seaside-hero-copy">From intimate sunset dinners to unforgettable celebrations, we create open-air experiences shaped by the rhythm of the ocean.</p>
+        <div class="seaside-hero-actions">
+          <a class="seaside-button seaside-button-primary" href="#seaside-venues">Explore venues</a>
+          <a class="seaside-button seaside-button-outline" href="#seaside-enquiry">Plan your event</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="seaside-introduction">
+      <div>
+        <p class="seaside-eyebrow">Made for the moment</p>
+        <h2>Let the horizon set the mood.</h2>
+      </div>
+      <p class="seaside-introduction-copy">Lafaya brings together the setting, styling, food, and hospitality that turn a day by the sea into a memory worth keeping. Every detail is designed to feel relaxed, polished, and entirely yours.</p>
+    </section>
+
+    <section class="seaside-section seaside-venues" id="seaside-venues" aria-labelledby="seaside-venues-heading">
+      <div class="seaside-section-heading">
+        <div>
+          <p class="seaside-eyebrow">The right shoreline</p>
+          <h2 id="seaside-venues-heading">Find your perfect seaside setting.</h2>
+        </div>
+        <span class="seaside-section-hint">Explore locations <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="seaside-card-grid">
+        <article class="seaside-card">
+          <img src="{% static 'seaside/images/seaside_venue_pavilion.png' %}" alt="Seaside pavilion venue with ocean view">
+          <div class="seaside-card-content">
+            <p class="seaside-card-location">Northern coast, Mauritius</p>
+            <h3>The Glass Pavilion</h3>
+            <p>A bright, architectural setting for ceremonies, private dinners, and celebrations framed by white sand and blue water.</p>
+          </div>
+          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+        <article class="seaside-card">
+          <img src="{% static 'seaside/images/seaside_venue_terrace.png' %}" alt="Seaside terrace venue at sunset">
+          <div class="seaside-card-content">
+            <p class="seaside-card-location">West coast, Mauritius</p>
+            <h3>Sunset Terrace</h3>
+            <p>An easygoing waterfront terrace for sunset receptions, long-table dining, and evenings that flow into the night.</p>
+          </div>
+          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+        <article class="seaside-card">
+          <img src="{% static 'seaside/images/seaside_venue_villa.png' %}" alt="Seaside villa venue with outdoor dining">
+          <div class="seaside-card-content">
+            <p class="seaside-card-location">Private island setting</p>
+            <h3>Oceanfront Villa</h3>
+            <p>A private escape for intimate celebrations, weekend gatherings, and hosted experiences with a view in every direction.</p>
+          </div>
+          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="seaside-section seaside-packages" aria-labelledby="seaside-packages-heading">
+      <div class="seaside-section-heading">
+        <div>
+          <p class="seaside-eyebrow">Simple, considered packages</p>
+          <h2 id="seaside-packages-heading">Choose your kind of escape.</h2>
+        </div>
+        <span class="seaside-section-hint">Compare experiences <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+      <div class="seaside-package-grid">
+        <article class="seaside-package seaside-package-barefoot">
+          <div class="seaside-package-heading">
+            <p>Relaxed celebrations</p>
+            <h3>Barefoot Gathering</h3>
+          </div>
+          <ul>
+            <li>Seaside setup for up to 30 guests</li>
+            <li>Curated styling and ambient lighting</li>
+            <li>Welcome drinks and sunset service</li>
+          </ul>
+          <div class="seaside-package-footer"><strong>From Rs 65,000</strong><a href="#seaside-enquiry">Enquire</a></div>
+        </article>
+        <article class="seaside-package seaside-package-sunset">
+          <div class="seaside-package-heading">
+            <p>Signature celebrations</p>
+            <h3>Sunset Social</h3>
+          </div>
+          <ul>
+            <li>Host up to 100 guests by the water</li>
+            <li>Styled dining, music, and full service team</li>
+            <li>Fresh coastal menu and networking bar</li>
+          </ul>
+          <div class="seaside-package-footer"><strong>From Rs 120,000</strong><a href="#seaside-enquiry">Enquire</a></div>
+        </article>
+        <article class="seaside-package seaside-package-private">
+          <div class="seaside-package-heading">
+            <p>Unforgettable occasions</p>
+            <h3>Private Island</h3>
+          </div>
+          <ul>
+            <li>Exclusive venue hosting for up to 250 guests</li>
+            <li>Custom styling, entertainment, and production</li>
+            <li>Multi-course dining and hosted hospitality</li>
+          </ul>
+          <div class="seaside-package-footer"><strong>From Rs 200,000</strong><a href="#seaside-enquiry">Enquire</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="seaside-section seaside-services" aria-labelledby="seaside-services-heading">
+      <div class="seaside-section-heading seaside-section-heading-centered">
+        <p class="seaside-eyebrow">Every detail, beautifully handled</p>
+        <h2 id="seaside-services-heading">Seaside event enhancements.</h2>
+      </div>
+      <div class="seaside-service-grid">
+        <article class="seaside-service">
+          <img src="{% static 'seaside/images/seaside_services_styling.png' %}" alt="Styled seaside event table setting">
+          <div class="seaside-service-content">
+            <h3>Coastal styling</h3>
+            <p>Natural textures, considered florals, candlelight, and tablescapes that belong to the landscape.</p>
+            <div class="seaside-service-tags"><span>Tablescapes</span><span>Florals</span></div>
+          </div>
+        </article>
+        <article class="seaside-service">
+          <img src="{% static 'seaside/images/seaside_services_photography.png' %}" alt="Seaside event photography at sunset">
+          <div class="seaside-service-content">
+            <h3>Photography</h3>
+            <p>Thoughtful coverage of the people, atmosphere, and small unscripted moments that make the day yours.</p>
+            <div class="seaside-service-tags"><span>Editorial Coverage</span><span>Golden Hour</span></div>
+          </div>
+        </article>
+        <article class="seaside-service">
+          <img src="{% static 'seaside/images/seaside_services_catering.png' %}" alt="Seafood catering spread for a seaside event">
+          <div class="seaside-service-content">
+            <h3>Ocean-to-table catering</h3>
+            <p>Fresh, generous menus served with an easy rhythm from welcome aperitifs to the last toast.</p>
+            <div class="seaside-service-tags"><span>Fresh Menus</span><span>Beach Bar</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="seaside-testimonial">
+      <blockquote>"Every detail felt effortless. We arrived as hosts and spent the whole evening as guests at our own celebration."</blockquote>
+      <cite>Amara &amp; Theo, private celebration</cite>
+    </section>
+
+    <section class="seaside-enquiry" id="seaside-enquiry">
+      <div>
+        <p class="seaside-eyebrow">Your day, your horizon</p>
+        <h2>Bring your next gathering to the shore.</h2>
+      </div>
+      <a class="seaside-button seaside-button-secondary" href="mailto:hello@lafaya.mu">Start a conversation</a>
+    </section>
+  </div>
+{% endblock %}
