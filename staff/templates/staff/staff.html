@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lafaya Staff Dashboard{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff/css/staff.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="staff-dashboard-shell">
+    <aside class="staff-sidebar">
+      <div class="staff-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <div class="staff-portal-label">staff portal</div>
+
+      <nav class="staff-nav" aria-label="staff navigation">
+        <a href="#" class="staff-nav-item staff-nav-item-active">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="#" class="staff-nav-item">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="#" class="staff-nav-item">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="staff-main-panel">
+      <header class="staff-header">
+        <h1>STAFF DASHBOARD</h1>
+        <button type="button" class="staff-logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log Out</span>
+        </button>
+      </header>
+
+      <section class="staff-profile-card">
+        <div class="staff-profile-head">
+          <h2>Personal Details</h2>
+        </div>
+
+        <div class="staff-profile-body">
+          <div class="staff-profile-info">
+            <div class="staff-avatar">EW</div>
+
+            <div class="staff-details-list">
+              <div class="staff-name-block">
+                <h3>Emma Watson</h3>
+                <div class="staff-meta-row">
+                  <span>emma.watson@email.com</span>
+                </div>
+                <div class="staff-meta-row">
+                  <span>+230 5 123 1233</span>
+                </div>
+              </div>
+
+              <div class="staff-field-grid">
+                <div class="staff-field">
+                  <span class="staff-label">Address</span>
+                  <span class="staff-value">Royal Road, Curepipe, Mauritius</span>
+                </div>
+                <div class="staff-field">
+                  <span class="staff-label">Staff Since</span>
+                  <span class="staff-value">15 March 2023</span>
+                </div>
+                <div class="staff-field">
+                  <span class="staff-label">Staff ID</span>
+                  <span class="staff-value">251444</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-illustration" aria-hidden="true">
+            <div class="staff-botanical staff-botanical-a"></div>
+            <div class="staff-botanical staff-botanical-b"></div>
+            <div class="staff-botanical staff-botanical-c"></div>
+          </div>
+        </div>
+
+        <button type="button" class="staff-manage-btn">Manage Profile</button>
+      </section>
+
+      <section class="staff-action-grid">
+        <a href="#" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-green">
+            <i class="fa-solid fa-book-open-reader"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>Booking History</h3>
+            <p>View all your past and upcoming bookings.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+
+        <a href="#" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-red">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>View Tasks</h3>
+            <p>Plan your work.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+      </section>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
