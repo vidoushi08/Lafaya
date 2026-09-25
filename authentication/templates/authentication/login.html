@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Lafaya | Authentication{% endblock %}
+{% block title %}Lafaya | Login{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
@@ -48,7 +48,7 @@
 
       <p class="auth-switch">
         new here?
-        <a href="#">create an account</a>
+        <a href="{% url 'authentication:register' %}">create an account</a>
       </p>
     </div>
   </div>

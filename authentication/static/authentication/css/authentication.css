@@ -30,6 +30,10 @@
   border: 1px solid var(--auth-border);
 }
 
+.auth-card-register {
+  grid-template-columns: 1.1fr 1.2fr;
+}
+
 .auth-panel {
   padding: 56px 42px;
 }
@@ -40,6 +44,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.auth-panel-visual-alt {
+  background: linear-gradient(160deg, #1d1b1d 0%, #6e4c42 100%);
 }
 
 .auth-badge {
@@ -96,6 +104,16 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+.auth-form-register {
+  gap: 16px;
+}
+
+.auth-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
 .auth-form label {
@@ -182,7 +200,8 @@
 }
 
 @media (max-width: 768px) {
-  .auth-card {
+  .auth-card,
+  .auth-card-register {
     grid-template-columns: 1fr;
   }
 
@@ -192,5 +211,9 @@
 
   .auth-panel-visual {
     min-height: 260px;
+  }
+
+  .auth-name-row {
+    grid-template-columns: 1fr;
   }
 }
