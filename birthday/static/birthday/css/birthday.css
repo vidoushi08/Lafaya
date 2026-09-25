@@ -1,0 +1,301 @@
+.birthday-page {
+  width: 100%;
+}
+
+.birthday-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 620px;
+  padding: 4rem var(--container-padding);
+  background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url("/static/images/events/birthday_main.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.birthday-hero-content {
+  max-width: 700px;
+  text-align: center;
+  color: var(--color-white);
+}
+
+.birthday-eyebrow,
+.birthday-section-tag {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+.birthday-hero h1 {
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.birthday-hero-copy {
+  max-width: 620px;
+  margin: 1.5rem auto 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--color-white-muted);
+}
+
+.birthday-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+.birthday-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid transparent;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.birthday-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.birthday-button-primary {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+}
+
+.birthday-button-secondary {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: var(--color-white);
+}
+
+.birthday-intro,
+.birthday-venues,
+.birthday-packages,
+.birthday-services,
+.birthday-cta {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 4rem var(--container-padding);
+}
+
+.birthday-intro {
+  display: grid;
+  gap: 2rem;
+}
+
+.birthday-intro-copy h2,
+.birthday-section-heading h2,
+.birthday-cta-copy h2 {
+  margin: 0;
+  color: var(--color-dark);
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.birthday-intro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.birthday-stat {
+  padding: 2rem 1.5rem;
+  background-color: var(--color-muted);
+  border-radius: var(--radius-btn);
+  text-align: center;
+}
+
+.birthday-stat strong {
+  display: block;
+  font-size: 2rem;
+  color: var(--color-orange);
+}
+
+.birthday-stat span {
+  color: var(--color-dark);
+  opacity: 0.8;
+}
+
+.birthday-section-heading {
+  margin-bottom: 2rem;
+}
+
+.birthday-venue-grid,
+.birthday-package-grid,
+.birthday-service-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.birthday-venue-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.birthday-venue-card,
+.birthday-package-card,
+.birthday-service-card {
+  overflow: hidden;
+  border-radius: var(--radius-btn);
+  background-color: var(--color-white);
+  box-shadow: 0 10px 24px var(--color-shadow);
+}
+
+.birthday-venue-card img {
+  display: block;
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+.birthday-venue-copy {
+  padding: 1.5rem;
+}
+
+.birthday-venue-copy h3,
+.birthday-service-card h3,
+.birthday-package-card h3 {
+  margin: 0 0 0.75rem;
+  color: var(--color-dark);
+}
+
+.birthday-venue-copy p,
+.birthday-service-card p,
+.birthday-package-card li {
+  margin: 0;
+  color: var(--color-dark);
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+.birthday-package-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.birthday-package-card {
+  padding: 2rem 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.birthday-package-card-featured {
+  background: linear-gradient(180deg, #fffaf4 0%, #ffffff 100%);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+.birthday-package-name {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: var(--color-orange);
+  font-size: 0.78rem;
+  letter-spacing: 0.14rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.birthday-package-card h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.birthday-package-card ul {
+  margin: 0 0 1.5rem;
+  padding-left: 1.1rem;
+}
+
+.birthday-package-card li + li {
+  margin-top: 0.6rem;
+}
+
+.birthday-service-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.birthday-service-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.birthday-service-card img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.birthday-service-card div {
+  padding: 1.5rem;
+}
+
+.birthday-testimonial-band {
+  padding: 0 var(--container-padding);
+}
+
+.birthday-testimonial-card {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-orange) 0%, #d94e2a 100%);
+  border-radius: var(--radius-btn);
+  color: var(--color-white);
+  box-shadow: 0 16px 30px rgba(217, 78, 42, 0.25);
+}
+
+.birthday-testimonial-card p {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  line-height: 1.6;
+}
+
+.birthday-testimonial-card span {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+}
+
+.birthday-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.birthday-cta-copy {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .birthday-hero {
+    min-height: 500px;
+  }
+
+  .birthday-intro-stats,
+  .birthday-venue-grid,
+  .birthday-package-grid,
+  .birthday-service-grid,
+  .birthday-cta {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .birthday-cta {
+    align-items: flex-start;
+  }
+}
