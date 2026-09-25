@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lafaya | Authentication{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div class="auth-card">
+    <div class="auth-panel auth-panel-visual">
+      <div class="auth-badge">welcome back</div>
+      <h1>plan your next unforgettable event.</h1>
+      <p>
+        manage bookings, explore event ideas, and stay connected with the Lafaya team.
+      </p>
+    </div>
+
+    <div class="auth-panel auth-panel-form">
+      <div class="auth-header">
+        <span class="auth-kicker">login</span>
+        <h2>access your account</h2>
+      </div>
+
+      <form class="auth-form">
+        <label>
+          <span>email address</span>
+          <input type="email" name="email" placeholder="you@example.com">
+        </label>
+
+        <label>
+          <span>password</span>
+          <input type="password" name="password" placeholder="enter your password">
+        </label>
+
+        <div class="auth-meta">
+          <label class="remember-me">
+            <input type="checkbox" name="remember">
+            <span>remember me</span>
+          </label>
+          <a href="#">forgot password?</a>
+        </div>
+
+        <button type="submit" class="auth-button">sign in</button>
+      </form>
+
+      <p class="auth-switch">
+        new here?
+        <a href="#">create an account</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
