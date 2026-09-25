@@ -64,6 +64,11 @@
   color: #ffffff;
 }
 
+.auth-visual-content-top {
+  justify-content: flex-start;
+  padding-top: 42px;
+}
+
 .auth-badge {
   display: inline-block;
   width: fit-content;

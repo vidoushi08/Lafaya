@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Lafaya | Login{% endblock %}
+{% block title %}Lafaya - Login{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
@@ -11,11 +11,11 @@
 <section class="auth-page">
   <div class="auth-card auth-card-login">
     <div class="auth-visual" style="background-image: url('{% static 'images/login_side.png' %}');">
-      <div class="auth-visual-content">
-        <span class="auth-badge">welcome back</span>
-        <h1>create magical memories.</h1>
+      <div class="auth-visual-content auth-visual-content-top">
+        {% include 'includes/lafaya_logo.html' %}
+        <h1>Create magical memories.</h1>
         <p>
-          plan elegant celebrations with trusted venues, thoughtful details, and a seamless experience.
+          Plan elegant celebrations with trusted venues, thoughtful details, and a seamless experience.
         </p>
       </div>
     </div>
