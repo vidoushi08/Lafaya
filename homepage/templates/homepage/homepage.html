@@ -9,175 +9,177 @@
 
 {% block content %}
   <div class="homepage">
-    <section class="homepage-hero">
-      <div class="homepage-hero-overlay"></div>
-      <div class="homepage-hero-content">
-        <p class="homepage-hero-label">unforgettable birthday celebrations</p>
-        <h1>make every birthday magically memorable</h1>
-        <p>
-          from intimate gatherings to grand milestone celebrations, we craft bespoke birthday experiences with stunning venues, creative themes, and flawless coordination.
-        </p>
-        <div class="homepage-hero-actions">
-          <a href="#venues" class="homepage-button homepage-button-primary">explore venues</a>
-          <a href="#packages" class="homepage-button homepage-button-secondary">watch video</a>
+    <section class="homepage-welcome">
+      <h1>Leave it all to us</h1>
+      <h3>Your personal event management team</h3>
+      <button>Book Your Event</button>
+    </section>
+
+    <section class="homepage-events-hero">
+      <div class="homepage-events-hero-slides">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-car homepage-events-hero-slide-active">
+          <a href="{% url 'car_events:car_events' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/cars_main.png' %}" alt="Car Events">
+            <figcaption class="homepage-events-hero-text">
+              <h6>AUTOMOTIVE EVENT PRODUCTION</h6>
+              <h2>TURN YOUR <span class="car-event-span-text">CAR MEET</span> INTO A LANDMARK EVENT</h2>
+              <p>From venue booking and sponsorship aquisition to event management and marketing, we deliver unforgettable automotive experiences across Mauritius.</p>
+            </figcaption>
+          </a>
+        </figure>
+
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-wedding">
+          <a href="{% url 'wedding:wedding' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/wedding_main.png' %}" alt="Wedding">
+            <figcaption class="homepage-events-hero-text">
+              <h6>CURATING MASTERPIECE CELEBRATIONS</h6>
+              <h2>YOUR DREAM <span class="wedding-event-span-text">WEDDING</span> AWAITS</h2>
+              <p>Experience pure luxury, tailored precision, and romantic grandeur. We breathe life into your love story across the world's most exquisite backdrops.</p>
+            </figcaption>
+          </a>
+        </figure>
+
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-concert">
+          <a href="{% url 'concert:concert' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/concert_main.png' %}" alt="Concert">
+            <figcaption class="homepage-events-hero-text">
+              <h6>ENGINEERED FOR PURE ACOUSTIC ENERGY</h6>
+              <h2>EXPERIENCE <span class="concert-event-span-text">LIVE MUSIC REBORN</h2>
+              <p>Immerse yourself in legendary soundscapes, monumental lighting design, and unmatched physical stadium performance. We craft unforgettable sound journeys across the globe.</p>
+            </figcaption>
+          </a>
+        </figure>
+
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-seaside">
+          <a href="{% url 'seaside:seaside' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/seaside_main.png' %}" alt="Seaside">
+            <figcaption class="homepage-events-hero-text">
+              <h6>LAFAYA SEASIDE GATHERINGS</h6>
+              <h2>EXPERIENCE <span class="seaside-event-span-text">SEASIDE LUXURY</span> REIMAGINED</h2>
+              <p>Immerse your guests in panoramic horizon backdrops, bespoke beach decor, and unforgettable open-air dining. We design luxurious moments aligned with the flow of the tides.</p>
+            </figcaption>
+          </a>
+        </figure>
+
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-conference">
+          <a href="{% url 'conference:conference' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/conference_main.png' %}" alt="Conference">
+            <figcaption class="homepage-events-hero-text">
+              <h6>WORLD-CLASS CORPORATE ASSEMBLIES</h6>
+              <h2>EXPERIENCE CONFERENCE EXCELLENCE REDEFINED</h2>
+              <p>Empower your team and engage stakeholders inside premier corporate architectural venues, supported by high-fidelity broadcast production and bespoke strategic coordination.</p>
+            </figcaption>
+          </a>
+        </figure>
+
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-birthday">
+          <a href="{% url 'birthday:birthday' %}" class="homepage-events-hero-link">
+            <img src="{% static 'images/events/birthday_main.png' %}" alt="Birthday">
+            <figcaption class="homepage-events-hero-text">
+              <h6>UNFORGETTABLE BIRTHDAY CELEBRATIONS</h6>
+              <h2>MAKE EVERY BIRTHDAY <span class="birthday-event-span-text">MAGICALLY MEMORABLE</span></h2>
+              <p>From intimate gatherings to grand milestone celebrations, we craft bespoke birthday experiences with stunning venues, creative festive themes, and flawless coordination.</p>
+            </figcaption>
+          </a>
+        </figure>
+      </div>
+
+      <button type="button" class="homepage-events-hero-arrow homepage-events-hero-arrow-prev" aria-label="Previous event">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button type="button" class="homepage-events-hero-arrow homepage-events-hero-arrow-next" aria-label="Next event">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <div class="homepage-events-hero-dots">
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-car homepage-events-hero-dot-active" aria-label="Car Events"></button>
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-wedding" aria-label="Wedding"></button>
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-concert" aria-label="Concert"></button>
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-seaside" aria-label="Seaside"></button>
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-conference" aria-label="Conference"></button>
+        <button type="button" class="homepage-events-hero-dot homepage-events-hero-dot-birthday" aria-label="Birthday"></button>
+      </div>
+    </section>
+
+    <section class="homepage-trusted">
+      <h2 class="homepage-trusted-heading">Trusted by industry leaders</h2>
+      <p class="homepage-trusted-subheading">Famous brands choose Lafaya to bring their events to life</p>
+      <div class="homepage-trusted-panel">
+        <div class="homepage-trusted-cards">
+          <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-spotify" title="Spotify">
+            <i class="fa-brands fa-spotify"></i>
+            <span>Spotify</span>
+          </a>
+          <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-linkedin" title="LinkedIn">
+            <i class="fa-brands fa-linkedin"></i>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://www.airbnb.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-airbnb" title="Airbnb">
+            <i class="fa-brands fa-airbnb"></i>
+            <span>Airbnb</span>
+          </a>
+          <a href="https://www.uber.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-uber" title="Uber">
+            <i class="fa-brands fa-uber"></i>
+            <span>Uber</span>
+          </a>
+          <a href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-pinterest" title="Pinterest">
+            <i class="fa-brands fa-pinterest"></i>
+            <span>Pinterest</span>
+          </a>
+          <a href="https://www.etsy.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-etsy" title="Etsy">
+            <i class="fa-brands fa-etsy"></i>
+            <span>Etsy</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section id="venues" class="homepage-section homepage-section-venues">
-      <div class="homepage-section-header">
-        <div>
-          <p class="homepage-section-tag">premier spaces</p>
-          <h2>stunning birthday venues</h2>
-        </div>
-        <a href="#" class="homepage-link">scroll to explore</a>
-      </div>
-
-      <div class="homepage-venue-grid">
-        <article class="homepage-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_ballroom.png' %}" alt="Grand Ballroom">
-          <div class="homepage-venue-copy">
-            <span>grand celebrations</span>
-            <h3>the grand ballroom</h3>
-            <p>A majestic high-ceilinged ballroom with exquisite lighting, elegant detailing, and a polished event atmosphere.</p>
-            <a href="#" class="homepage-venue-button">explore venue</a>
+    <section class="homepage-testimonials">
+      <div class="homepage-testimonials-content">
+        <h2 class="homepage-testimonials-heading">Memories made with Lafaya</h2>
+        <div class="homepage-testimonials-track">
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/ayden.png' %}" alt="Ayden">
+            <p>Lafaya took our wedding off our shoulders completely. We just turned up and lived it - zero stress, every detail handled.</p>
+            <span class="homepage-testimonials-name">Ayden</span>
           </div>
-        </article>
-
-        <article class="homepage-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_terrace.png' %}" alt="Garden Terrace">
-          <div class="homepage-venue-copy">
-            <span>intimate gatherings</span>
-            <h3>the garden terrace</h3>
-            <p>A romantic outdoor setting with natural textures, warm lighting, and a calm atmosphere for special occasions.</p>
-            <a href="#" class="homepage-venue-button">explore venue</a>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/kenji.png' %}" alt="Kenji">
+            <p>They ran the whole launch show behind the scenes while I stayed on stage. I never worried about a single moving part.</p>
+            <span class="homepage-testimonials-name">Kenji</span>
           </div>
-        </article>
-
-        <article class="homepage-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_factory.png' %}" alt="Fun Factory">
-          <div class="homepage-venue-copy">
-            <span>kids parties</span>
-            <h3>the fun factory</h3>
-            <p>A lively venue with interactive play areas, vibrant décor, and energetic family-friendly entertainment.</p>
-            <a href="#" class="homepage-venue-button">explore venue</a>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/marcus.png' %}" alt="Marcus">
+            <p>Venue, permits, sponsors, schedules - Lafaya managed the entire meet. My crew and I simply enjoyed the day.</p>
+            <span class="homepage-testimonials-name">Marcus</span>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="packages" class="homepage-section homepage-section-packages">
-      <div class="homepage-section-header">
-        <div>
-          <p class="homepage-section-tag">flexible tiers</p>
-          <h2>choose your birthday package</h2>
-        </div>
-        <a href="#" class="homepage-link">compare tiers</a>
-      </div>
-
-      <div class="homepage-package-grid">
-        <article class="homepage-package-card homepage-package-card-light">
-          <span class="homepage-package-label">small gatherings</span>
-          <h3>basic bash</h3>
-          <ul>
-            <li>birthday cake styling</li>
-            <li>up to 30 guests</li>
-            <li>3-hour celebration window</li>
-            <li>DJ & sound support</li>
-          </ul>
-          <div class="homepage-package-footer">
-            <span>from</span>
-            <strong>rs 2500</strong>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/sophia.png' %}" alt="Sophia">
+            <p>One call and they took over everything. My milestone birthday was magical, and I didn't lift a finger.</p>
+            <span class="homepage-testimonials-name">Sophia</span>
           </div>
-        </article>
-
-        <article class="homepage-package-card homepage-package-card-featured">
-          <span class="homepage-package-label">most popular</span>
-          <h3>party pro</h3>
-          <ul>
-            <li>full venue styling</li>
-            <li>up to 80 guests</li>
-            <li>photo corner and lighting</li>
-            <li>food and beverage planning</li>
-          </ul>
-          <div class="homepage-package-footer">
-            <span>from</span>
-            <strong>rs 5000</strong>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/kenji.png' %}" alt="Theo">
+            <p>Our annual conference ran flawlessly. Lafaya coordinated every speaker, room and AV change while we focused on content.</p>
+            <span class="homepage-testimonials-name">Theo</span>
           </div>
-        </article>
-
-        <article class="homepage-package-card homepage-package-card-dark">
-          <span class="homepage-package-label">luxury events</span>
-          <h3>grand gala</h3>
-          <ul>
-            <li>signature event concept</li>
-            <li>up to 200 guests</li>
-            <li>live entertainment and catering</li>
-            <li>full guest experience design</li>
-          </ul>
-          <div class="homepage-package-footer">
-            <span>from</span>
-            <strong>rs 10000</strong>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/sophia.png' %}" alt="Nadia">
+            <p>They crafted our seaside gathering down to the last lantern. I arrived relaxed and simply enjoyed my own event.</p>
+            <span class="homepage-testimonials-name">Nadia</span>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="homepage-section homepage-section-services">
-      <div class="homepage-section-header">
-        <div>
-          <p class="homepage-section-tag">amenities</p>
-          <h2>bespoke creative services</h2>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/marcus.png' %}" alt="Liam">
+            <p>Lafaya handled the track bookings and marshalling for our car event. Zero phone calls, zero stress, one perfect weekend.</p>
+            <span class="homepage-testimonials-name">Liam</span>
+          </div>
+          <div class="homepage-testimonials-card">
+            <img src="{% static 'images/people/ayden.png' %}" alt="Amara">
+            <p>From the first meeting to the last dance, Lafaya steered everything. We felt like guests at our own wedding.</p>
+            <span class="homepage-testimonials-name">Amara</span>
+          </div>
         </div>
       </div>
-
-      <div class="homepage-service-grid">
-        <article class="homepage-service-card">
-          <img src="{% static 'birthday/images/birthday_services_styling.png' %}" alt="Signature Entertainment">
-          <div class="homepage-service-copy">
-            <h3>signature entertaining</h3>
-            <p>creative decor, custom backdrops, and polished visual styling that makes every guest feel the magic.</p>
-            <ul>
-              <li>celebration props</li>
-              <li>themed styling</li>
-              <li>guest ambience</li>
-            </ul>
-          </div>
-        </article>
-
-        <article class="homepage-service-card">
-          <img src="{% static 'birthday/images/birthday_services_gastronomy.png' %}" alt="Immersive Birthday Styling">
-          <div class="homepage-service-copy">
-            <h3>immersive birthday styling</h3>
-            <p>immersive design concepts, elegant birthday signage, and cohesive setups that bring your story to life.</p>
-            <ul>
-              <li>lighting design</li>
-              <li>photo styling</li>
-              <li>custom flow</li>
-            </ul>
-          </div>
-        </article>
-
-        <article class="homepage-service-card">
-          <img src="{% static 'birthday/images/birthday_services_entertainment.png' %}" alt="Celebration Gastronomy">
-          <div class="homepage-service-copy">
-            <h3>celebration gastronomy</h3>
-            <p>curated menus, dessert tables, and beverage experiences designed to delight guests from first bite to last toast.</p>
-            <ul>
-              <li>menu design</li>
-              <li>cake styling</li>
-              <li>cocktail service</li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="homepage-testimonial-wrap">
-      <blockquote>
-        “from the first idea to the final candle, everything was magical. the beautiful setup, entertainment, and attention to every little detail made it a birthday celebration my child and our guests will never forget.”
-      </blockquote>
-      <p>— clara & mark, corporate event directors</p>
     </section>
   </div>
 {% endblock %}

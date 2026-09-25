@@ -1,355 +1,380 @@
-.homepage {
-  background: #f4f0eb;
-}
-
-.homepage-hero {
-  position: relative;
+.homepage-welcome {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 620px;
-  padding: 4rem var(--container-padding);
-  background-image: linear-gradient(rgba(20, 18, 17, 0.62), rgba(20, 18, 17, 0.78)), url("/static/images/events/birthday_main.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.homepage-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.42));
-}
-
-.homepage-hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
   text-align: center;
-  color: var(--color-white);
-}
-
-.homepage-hero-label {
-  margin-bottom: 1rem;
-  letter-spacing: 0.18rem;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.homepage-hero h1 {
-  margin: 0;
-  font-size: clamp(2.8rem, 5vw, 5.2rem);
-  line-height: 0.96;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--color-white);
-}
-
-.homepage-hero p {
-  max-width: 720px;
-  margin: 1.25rem auto 0;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.84);
-}
-
-.homepage-hero-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-}
-
-.homepage-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 180px;
-  padding: 0.9rem 1.7rem;
-  border-radius: var(--radius-btn);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.12rem;
-  text-transform: uppercase;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.homepage-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
-}
-
-.homepage-button-primary {
-  background-color: var(--color-orange);
-  border-color: var(--color-orange);
-  color: var(--color-white);
-}
-
-.homepage-button-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--color-white);
-}
-
-.homepage-section {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
+  min-height: 35vh;
   padding: 4rem var(--container-padding);
 }
 
-.homepage-section-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
+.homepage-welcome h1 {
+  font-size: 2.5rem;
+  color: var(--color-dark);
+}
+
+.homepage-welcome h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--color-dark);
   margin-bottom: 2rem;
 }
 
-.homepage-section-tag {
-  margin: 0 0 0.75rem;
-  color: var(--color-orange);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.18rem;
-  text-transform: uppercase;
-}
-
-.homepage-section-header h2 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: var(--color-dark);
-}
-
-.homepage-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.65rem 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 999px;
-  color: var(--color-dark);
-  text-decoration: none;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12rem;
-}
-
-.homepage-venue-grid,
-.homepage-package-grid,
-.homepage-service-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.homepage-venue-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.homepage-venue-card {
-  overflow: hidden;
-  background-color: var(--color-white);
-  border-radius: var(--radius-btn);
-  box-shadow: 0 10px 24px var(--color-shadow);
-}
-
-.homepage-venue-card img {
-  display: block;
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-}
-
-.homepage-venue-copy {
-  padding: 1.5rem 1.25rem 1.75rem;
-}
-
-.homepage-venue-copy span {
-  display: inline-block;
-  margin-bottom: 0.75rem;
-  color: var(--color-orange);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14rem;
-  text-transform: uppercase;
-}
-
-.homepage-venue-copy h3 {
-  margin: 0 0 0.75rem;
-  font-size: 1.9rem;
-  color: var(--color-dark);
-}
-
-.homepage-venue-copy p {
-  color: rgba(51, 51, 51, 0.8);
-  line-height: 1.7;
-  margin-bottom: 1.25rem;
-}
-
-.homepage-venue-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-orange);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.homepage-package-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.homepage-package-card {
-  display: flex;
-  flex-direction: column;
-  min-height: 330px;
-  padding: 1.6rem 1.5rem;
-  border-radius: var(--radius-btn);
-  box-shadow: 0 10px 24px var(--color-shadow);
-}
-
-.homepage-package-card-light {
-  background: #f7ebd8;
-}
-
-.homepage-package-card-featured {
-  background: #1e1c26;
+.homepage-welcome button {
+  background-color: var(--color-complement);
   color: var(--color-white);
-}
-
-.homepage-package-card-dark {
-  background: linear-gradient(180deg, #f4b197 0%, #f28a66 100%);
-  color: var(--color-white);
-}
-
-.homepage-package-label {
-  display: inline-block;
-  margin-bottom: 0.8rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12rem;
-  text-transform: uppercase;
-}
-
-.homepage-package-card h3 {
-  margin: 0 0 1rem;
-  font-size: clamp(1.8rem, 2.5vw, 2.5rem);
-}
-
-.homepage-package-card ul {
-  margin: 0;
-  padding-left: 1.2rem;
-  line-height: 1.9;
-  color: inherit;
-}
-
-.homepage-package-footer {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.homepage-package-footer span {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12rem;
-}
-
-.homepage-package-footer strong {
-  font-size: 1.7rem;
-}
-
-.homepage-service-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.homepage-service-card {
-  overflow: hidden;
-  background: var(--color-white);
+  border: none;
+  padding: 0.75rem 1.75rem;
   border-radius: var(--radius-btn);
-  box-shadow: 0 10px 24px var(--color-shadow);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.homepage-service-card img {
-  display: block;
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
+.homepage-welcome button:hover {
+  background-color: var(--color-complement-hover);
 }
 
-.homepage-service-copy {
-  padding: 1.5rem 1.2rem 1.7rem;
-}
-
-.homepage-service-copy h3 {
-  margin: 0 0 0.75rem;
-  font-size: 1.5rem;
-  color: var(--color-dark);
-}
-
-.homepage-service-copy p {
-  color: rgba(51, 51, 51, 0.78);
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.homepage-service-copy ul {
-  margin: 0;
-  padding-left: 1.1rem;
-  color: rgba(51, 51, 51, 0.8);
-  line-height: 1.8;
-}
-
-.homepage-testimonial-wrap {
-  max-width: 1200px;
+.homepage-events-hero {
+  position: relative;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 2rem var(--container-padding) 4rem;
+  padding: 0 var(--container-padding);
+  aspect-ratio: 2.25 / 1;
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+}
+
+.homepage-events-hero-slides {
+  position: relative;
+  height: 100%;
+}
+
+.homepage-events-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-events-hero-slide-active {
+  opacity: 1;
+}
+
+.homepage-events-hero-link {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+
+.homepage-events-hero-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-btn);
+}
+
+.homepage-events-hero-text {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-white);
+  padding: 1rem 2rem;
+  border-radius: var(--radius-btn);
+}
+
+.homepage-events-hero-text h6 {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.homepage-events-hero-text h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.homepage-events-hero-text p {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+.car-event-span-text {
+  color: var(--color-red);
+}
+
+.wedding-event-span-text {
+  color: var(--color-gold);
+}
+
+.concert-event-span-text {
+  color: var(--color-purple);
+}
+
+.seaside-event-span-text {
+  color: var(--color-yellow-dark);
+}
+
+.birthday-event-span-text {
+  color: var(--color-orange);
+}
+
+.homepage-events-hero-dots {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+}
+
+.homepage-events-hero-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-circle);
+  background-color: var(--color-white);
+  opacity: 0.5;
+  border: none;
+  cursor: pointer;
+}
+
+.homepage-events-hero-dot-car.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-red);
+}
+
+.homepage-events-hero-dot-wedding.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-gold);
+}
+
+.homepage-events-hero-dot-concert.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-purple);
+}
+
+.homepage-events-hero-dot-seaside.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-yellow-dark);
+}
+
+.homepage-events-hero-dot-conference.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-white);
+}
+
+.homepage-events-hero-dot-birthday.homepage-events-hero-dot-active {
+  opacity: 1;
+  background-color: var(--color-orange);
+}
+
+.homepage-events-hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-circle);
+  background-color: var(--color-white);
+  opacity: 0.5;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--color-dark);
+}
+
+.homepage-events-hero-arrow-prev {
+  left: 2.25rem;
+}
+
+.homepage-events-hero-arrow-next {
+  right: 2.25rem;
+}
+
+.homepage-events-hero-arrow:hover {
+  opacity: 1;
+  color: var(--color-complement);
+}
+
+.homepage-trusted {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 4rem var(--container-padding);
   text-align: center;
 }
 
-.homepage-testimonial-wrap blockquote {
-  max-width: 980px;
-  margin: 0 auto;
-  font-size: clamp(1.3rem, 2vw, 2.5rem);
-  line-height: 1.6;
+.homepage-trusted-heading {
+  font-size: 2rem;
   color: var(--color-dark);
-  font-style: italic;
+  margin-bottom: 0.5rem;
 }
 
-.homepage-testimonial-wrap p {
-  margin-top: 1.5rem;
-  color: rgba(51, 51, 51, 0.7);
-  font-size: 0.75rem;
-  letter-spacing: 0.14rem;
-  text-transform: uppercase;
+.homepage-trusted-subheading {
+  font-size: 1rem;
+  color: var(--color-dark);
+  opacity: 0.7;
+  margin-bottom: 2.5rem;
 }
 
-@media (max-width: 900px) {
-  .homepage-venue-grid,
-  .homepage-package-grid,
-  .homepage-service-grid {
-    grid-template-columns: 1fr;
+.homepage-trusted-panel {
+  background-color: var(--color-muted);
+  border-radius: var(--radius-btn);
+  padding: 2.5rem 1.5rem;
+}
+
+.homepage-trusted-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.homepage-trusted-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 180px;
+  padding: 2.5rem 1rem;
+  background-color: var(--color-white);
+  border-radius: var(--radius-btn);
+  box-shadow: 0 4px 12px var(--color-shadow);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.homepage-trusted-card i {
+  font-size: 3.5rem;
+  color: var(--color-grey);
+  transition: color 0.3s ease;
+}
+
+.homepage-trusted-card:hover i {
+  color: var(--color-brand);
+}
+
+.homepage-trusted-card-spotify:hover i {
+  color: var(--color-spotify);
+}
+
+.homepage-trusted-card-linkedin:hover i {
+  color: var(--color-linkedin);
+}
+
+.homepage-trusted-card-airbnb:hover i {
+  color: var(--color-airbnb);
+}
+
+.homepage-trusted-card-uber:hover i {
+  color: var(--color-uber);
+}
+
+.homepage-trusted-card-pinterest:hover i {
+  color: var(--color-pinterest);
+}
+
+.homepage-trusted-card-etsy:hover i {
+  color: var(--color-etsy);
+}
+
+.homepage-trusted-card span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.homepage-trusted-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px var(--color-shadow);
+}
+
+.homepage-testimonials {
+  background-color: var(--color-muted);
+  overflow: hidden;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.homepage-testimonials-content {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.homepage-testimonials-heading {
+  font-size: 2rem;
+  color: var(--color-dark);
+  margin-bottom: 2.5rem;
+}
+
+.homepage-testimonials-track {
+  display: flex;
+  width: max-content;
+  animation: homepage-testimonials-scroll 60s linear infinite;
+}
+
+.homepage-testimonials-track-paused {
+  animation-play-state: paused;
+}
+
+.homepage-testimonials-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 340px;
+  min-height: 260px;
+  margin-right: 1.5rem;
+  padding: 2rem 1.5rem;
+  background-color: var(--color-white);
+  border-radius: var(--radius-btn);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.homepage-testimonials-card img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-circle);
+  object-fit: cover;
+  margin-bottom: 1.25rem;
+}
+
+.homepage-testimonials-card p {
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  opacity: 0.85;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.homepage-testimonials-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+@keyframes homepage-testimonials-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
   }
 }
 
-@media (max-width: 768px) {
-  .homepage-hero {
-    min-height: 500px;
-  }
-
-  .homepage-section-header {
-    display: block;
-  }
-
-  .homepage-link {
-    margin-top: 1rem;
+@media (prefers-reduced-motion: reduce) {
+  .homepage-testimonials-track {
+    animation: none;
   }
 }

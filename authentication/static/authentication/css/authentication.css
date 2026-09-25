@@ -1,7 +1,7 @@
 :root {
   --auth-bg: #f5efe8;
   --auth-card: #ffffff;
-  --auth-panel: #f7f3ee;
+  --auth-panel: #f9f3ee;
   --auth-text: #1f2933;
   --auth-muted: #5f6c7b;
   --auth-accent: #b35334;
@@ -16,38 +16,52 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: linear-gradient(135deg, var(--auth-bg) 0%, #f8f3ef 100%);
+  background: linear-gradient(135deg, #f5efe8 0%, #f8f0eb 100%);
 }
 
 .auth-card {
-  width: min(980px, 100%);
+  width: min(1100px, 100%);
   background: var(--auth-card);
-  border-radius: 28px;
-  box-shadow: 0 24px 60px var(--auth-shadow);
+  border-radius: 30px;
+  box-shadow: 0 28px 70px var(--auth-shadow);
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   overflow: hidden;
   border: 1px solid var(--auth-border);
 }
 
+.auth-card-login {
+  min-height: 700px;
+}
+
 .auth-card-register {
   grid-template-columns: 1.1fr 1.2fr;
 }
 
-.auth-panel {
-  padding: 56px 42px;
+.auth-visual {
+  position: relative;
+  min-height: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
 }
 
-.auth-panel-visual {
-  background: linear-gradient(160deg, #1d1b1d 0%, #513128 100%);
-  color: #ffffff;
+.auth-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 22, 34, 0.18), rgba(6, 18, 27, 0.62));
+}
+
+.auth-visual-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-}
-
-.auth-panel-visual-alt {
-  background: linear-gradient(160deg, #1d1b1d 0%, #6e4c42 100%);
+  justify-content: flex-end;
+  padding: 48px 36px 42px;
+  color: #ffffff;
 }
 
 .auth-badge {
@@ -55,34 +69,43 @@
   width: fit-content;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  backdrop-filter: blur(8px);
 }
 
-.auth-panel-visual h1 {
-  margin: 20px 0 12px;
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
+.auth-visual-content h1 {
+  margin: 18px 0 12px;
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
   line-height: 1.08;
   font-weight: 700;
+  max-width: 420px;
 }
 
-.auth-panel-visual p {
+.auth-visual-content p {
   margin: 0;
   max-width: 430px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1.05rem;
   line-height: 1.7;
 }
 
+.auth-panel {
+  padding: 54px 42px;
+}
+
 .auth-panel-form {
-  background: var(--auth-panel);
+  background: rgba(249, 243, 238, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .auth-header {
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 .auth-kicker {
@@ -95,9 +118,10 @@
 }
 
 .auth-header h2 {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   color: var(--auth-text);
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-size: clamp(2rem, 2.7vw, 2.6rem);
+  font-weight: 700;
 }
 
 .auth-form {
@@ -122,7 +146,7 @@
   gap: 8px;
   color: var(--auth-text);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
 }
 
 .auth-form input {
@@ -146,7 +170,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 4px;
   color: var(--auth-muted);
   font-size: 0.9rem;
@@ -173,7 +197,7 @@
 }
 
 .auth-button {
-  margin-top: 10px;
+  margin-top: 8px;
   border: 0;
   border-radius: 14px;
   background: linear-gradient(135deg, var(--auth-accent) 0%, var(--auth-accent-dark) 100%);
@@ -189,28 +213,35 @@
 
 .auth-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(179, 83, 52, 0.22);
+  box-shadow: 0 14px 26px rgba(179, 83, 52, 0.22);
 }
 
 .auth-switch {
-  margin-top: 26px;
+  margin-top: 24px;
   text-align: center;
   color: var(--auth-muted);
   font-size: 0.95rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .auth-card,
-  .auth-card-register {
+  .auth-card-register,
+  .auth-card-login {
     grid-template-columns: 1fr;
   }
 
-  .auth-panel {
-    padding: 34px 24px;
+  .auth-visual {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-page {
+    padding: 20px 12px;
   }
 
-  .auth-panel-visual {
-    min-height: 260px;
+  .auth-panel {
+    padding: 34px 22px;
   }
 
   .auth-name-row {
