@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Car Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'car_events/css/car_events.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="car-events-page">
+    <section class="car-events-hero">
+      <div class="car-events-hero-inner">
+        <div class="car-events-badge">AUTOMOTIVE EVENT PRODUCTION</div>
+        <h1>
+          TURN YOUR CAR MEET INTO
+          <span>A LANDMARK EVENT</span>
+        </h1>
+        <p>
+          From venue booking and sponsorship planning to event management and marketing, we deliver
+          unforgettable experiences across Mauritius.
+        </p>
+        <a href="#car-events-venues" class="car-events-button">EXPLORE VENUES</a>
+      </div>
+    </section>
+
+    <section class="car-events-venues" id="car-events-venues">
+      <div class="car-events-section-header">
+        <span class="car-events-rule"></span>
+        <h2>Amazing Car Meet Venues</h2>
+        <a href="#car-events-packages" class="car-events-link-button">
+          <span>Scroll to explore</span>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+
+      <div class="car-events-venue-grid">
+        <article class="car-events-venue-card">
+          <div class="car-events-venue-image venue-svicc"></div>
+          <div class="car-events-venue-body">
+            <small>PAILLE, MAURITIUS</small>
+            <h3>SVICC</h3>
+            <p>
+              Located in Pailes, SVICC is one of the largest event venues in Mauritius. It offers
+              over 7000 m² of space.
+            </p>
+            <div class="car-events-card-footer">
+              <span>Explore Venue</span>
+              <button type="button" aria-label="Explore venue">›</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="car-events-venue-card">
+          <div class="car-events-venue-image venue-cote-dor"></div>
+          <div class="car-events-venue-body">
+            <small>ST PIERRE, MAURITIUS</small>
+            <h3>Côte d'Or</h3>
+            <p>
+              Situated in St Pierre, Côte d'Or is a world-class sports and entertainment complex
+              featuring a stadium and premium hospitality spaces.
+            </p>
+            <div class="car-events-card-footer">
+              <span>Explore Venue</span>
+              <button type="button" aria-label="Explore venue">›</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="car-events-venue-card">
+          <div class="car-events-venue-image venue-tribeca"></div>
+          <div class="car-events-venue-body">
+            <small>TRIANON, MAURITIUS</small>
+            <h3>Tribeca Mall</h3>
+            <p>
+              Located in Trianon, Tribeca Mall is the latest shopping and entertainment destination
+              in Mauritius.
+            </p>
+            <div class="car-events-card-footer">
+              <span>Explore Venue</span>
+              <button type="button" aria-label="Explore venue">›</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-packages" id="car-events-packages">
+      <div class="car-events-section-header package-header">
+        <span class="car-events-rule package-rule"></span>
+        <h2>Our Event Packages</h2>
+        <a href="#car-events-enhancements" class="car-events-link-button package-link">
+          <span>Compare Tiers</span>
+          <span class="arrow">›</span>
+        </a>
+      </div>
+
+      <div class="car-events-package-grid">
+        <article class="car-events-package-card">
+          <div class="car-events-package-top">
+            <small>FOCUSED ASSEMBLIES</small>
+            <h3>Starter Meet</h3>
+          </div>
+          <ul>
+            <li>Up to 200 Vehicles</li>
+            <li>Event Coordination</li>
+            <li>Media Promotion</li>
+          </ul>
+          <div class="car-events-package-price">
+            <span>Rs 80,000</span>
+            <button type="button">Book Now</button>
+          </div>
+        </article>
+
+        <article class="car-events-package-card featured-package">
+          <div class="car-events-package-top featured-top">
+            <small>HIGH END LIVE EVENTS</small>
+            <h3>Premium Meet</h3>
+          </div>
+          <ul>
+            <li>Up to 1,000 Vehicles</li>
+            <li>Sponsor Management</li>
+            <li>Professional Photography &amp; Video</li>
+          </ul>
+          <div class="car-events-package-price">
+            <span>Rs 140,000</span>
+            <button type="button">Book Now</button>
+          </div>
+        </article>
+
+        <article class="car-events-package-card">
+          <div class="car-events-package-top">
+            <small>BESPOKE MULTI-DAY EVENTS</small>
+            <h3>Festival Experience</h3>
+          </div>
+          <ul>
+            <li>Large Scale Automotive Festival</li>
+            <li>Brand Activations</li>
+            <li>Live Performances</li>
+          </ul>
+          <div class="car-events-package-price">
+            <span>Rs 200,000</span>
+            <button type="button">Book Now</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-enhancements" id="car-events-enhancements">
+      <div class="car-events-section-header centered-header">
+        <h2>Car Meet Enhancements</h2>
+      </div>
+
+      <div class="car-events-enhancement-grid">
+        <article class="car-events-enhancement-card">
+          <div class="car-events-enhancement-image enhancement-vip"></div>
+          <div class="car-events-enhancement-body">
+            <h3>VIP Experience Pack</h3>
+            <ul>
+              <li>VIP Parking</li>
+              <li>VIP Lounge</li>
+              <li>Catering</li>
+              <li>Branded VIP Passes</li>
+            </ul>
+            <div class="car-events-card-footer">
+              <span>VIP Parking</span>
+              <button type="button" aria-label="VIP Parking">›</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="car-events-enhancement-card">
+          <div class="car-events-enhancement-image enhancement-show"></div>
+          <div class="car-events-enhancement-body">
+            <h3>Show &amp; Shine Pack</h3>
+            <ul>
+              <li>Troplay Design</li>
+              <li>Judging</li>
+              <li>Registration Management</li>
+              <li>Award Ceremony</li>
+            </ul>
+            <div class="car-events-card-footer">
+              <span>Winner Trophy</span>
+              <button type="button" aria-label="Winner Trophy">›</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="car-events-enhancement-card">
+          <div class="car-events-enhancement-image enhancement-jdm"></div>
+          <div class="car-events-enhancement-body">
+            <h3>JDM Experience Package</h3>
+            <ul>
+              <li>JDM Themed Event Branding</li>
+              <li>Best JDM Awards</li>
+              <li>Garage &amp; Media Support</li>
+              <li>Japanese Street Culture Vibes</li>
+            </ul>
+            <div class="car-events-card-footer">
+              <span>Safety</span>
+              <button type="button" aria-label="Safety">›</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-quote">
+      <p>
+        “The venue was perfect, the logistics were seamless, and the event flow kept attendees
+        engaged all day. Our members are already asking when the next meet will be.”
+      </p>
+      <span>— CAR CLUB ORGANIZER</span>
+    </section>
+  </div>
+{% endblock %}
