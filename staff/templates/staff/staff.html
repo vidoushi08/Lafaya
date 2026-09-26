@@ -23,7 +23,7 @@
           <i class="fa-solid fa-book-bookmark"></i>
           <span>Booking History</span>
         </a>
-        <a href="#" class="staff-nav-item">
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-nav-item">
           <i class="fa-solid fa-clipboard-list"></i>
           <span>View Tasks</span>
         </a>
@@ -102,7 +102,7 @@
           <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
         </a>
 
-        <a href="#" class="staff-action-card">
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-action-card">
           <div class="staff-action-icon staff-icon-red">
             <i class="fa-solid fa-clipboard-check"></i>
           </div>

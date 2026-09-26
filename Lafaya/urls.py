@@ -25,6 +25,7 @@ urlpatterns = [
     path("staff/", include("staff.urls")),
     path("staff-booking-history/", include("staff_booking_history.urls")),
     path("staff-profile/", include("staff_profile.urls")),
+    path("staff-task-assignment/", include("staff_task_assignment.urls")),
     path("birthday/", include("birthday.urls")),
     path("wedding/", include("wedding.urls")),
     path("concert/", include("concert.urls")),
