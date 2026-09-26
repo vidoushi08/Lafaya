@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "customer_dashboard.apps.CustomerDashboardConfig",
     # staff application
     "staff.apps.StaffConfig",
+    # staff booking history application
+    "staff_booking_history.apps.StaffBookingHistoryConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
     # wedding application

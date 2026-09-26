@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Booking History | Lafaya{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff_booking_history/css/staff_booking_history.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="booking-history-shell">
+    <aside class="booking-history-sidebar">
+      <div class="booking-history-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <div class="booking-history-portal-label">staff portal</div>
+
+      <nav class="booking-history-nav" aria-label="staff portal navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="booking-history-nav-item booking-history-nav-item-active">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="#" class="booking-history-nav-item">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="#" class="booking-history-nav-item">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="booking-history-main-panel">
+      <header class="booking-history-header">
+        <h1>Staff Booking History</h1>
+        <button type="button" class="booking-history-logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log Out</span>
+        </button>
+      </header>
+
+      <div class="booking-history-summary-row">
+        <div class="booking-history-summary-card">
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-soft"></span> 248</span>
+          <p>Total historical bookings</p>
+        </div>
+        <div class="booking-history-summary-card">
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-success"></span> 231</span>
+          <p>Completed</p>
+        </div>
+        <div class="booking-history-summary-card">
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-warning"></span> 11</span>
+          <p>Awaiting review</p>
+        </div>
+        <div class="booking-history-summary-card">
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-danger"></span> 6</span>
+          <p>Cancelled</p>
+        </div>
+      </div>
+
+      <section class="booking-history-table-panel">
+        <div class="booking-history-toolbar">
+          <div class="booking-history-search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search staff, event ID or staff ID..." aria-label="Search bookings" />
+          </div>
+
+          <div class="booking-history-filter-group">
+            <button type="button" class="booking-history-filter-btn">All statuses <i class="fa-solid fa-chevron-down"></i></button>
+            <button type="button" class="booking-history-filter-btn">All events <i class="fa-solid fa-chevron-down"></i></button>
+            <button type="button" class="booking-history-filter-btn">01 Jun — 22 Sep 2026 <i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </div>
+
+        <div class="booking-history-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Staff name</th>
+                <th>Date assigned</th>
+                <th>Date completed</th>
+                <th>Event type</th>
+                <th>Event ID</th>
+                <th>Staff ID</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="booking-history-avatar avatar-brown">LI</span> Liam</td>
+                <td>12 July 2026</td>
+                <td>10 September 2026</td>
+                <td>Birthday</td>
+                <td>EV-260712-84</td>
+                <td>STF-0184</td>
+                <td><span class="booking-history-status success">Completed</span></td>
+              </tr>
+              <tr>
+                <td><span class="booking-history-avatar avatar-gold">AO</span> Amara Okafor</td>
+                <td>28 June 2026</td>
+                <td>02 September 2026</td>
+                <td>Wedding</td>
+                <td>EV-260628-71</td>
+                <td>STF-0062</td>
+                <td><span class="booking-history-status success">Completed</span></td>
+              </tr>
+              <tr>
+                <td><span class="booking-history-avatar avatar-olive">NW</span> Noah Williams</td>
+                <td>05 August 2026</td>
+                <td>29 August 2026</td>
+                <td>Conference</td>
+                <td>EV-260805-19</td>
+                <td>STF-0117</td>
+                <td><span class="booking-history-status warning">In review</span></td>
+              </tr>
+              <tr>
+                <td><span class="booking-history-avatar avatar-sand">SM</span> Sofia Martinez</td>
+                <td>16 July 2026</td>
+                <td>22 August 2026</td>
+                <td>Concert</td>
+                <td>EV-267016-52</td>
+                <td>STF-0095</td>
+                <td><span class="booking-history-status success">Completed</span></td>
+              </tr>
+              <tr>
+                <td><span class="booking-history-avatar avatar-rose">EC</span> Ethan Clarke</td>
+                <td>03 June 2026</td>
+                <td>18 August 2026</td>
+                <td>Seaside</td>
+                <td>EV-260603-38</td>
+                <td>STF-0143</td>
+                <td><span class="booking-history-status danger">Cancelled</span></td>
+              </tr>
+              <tr>
+                <td><span class="booking-history-avatar avatar-peach">MP</span> Maya Patel</td>
+                <td>20 May 2026</td>
+                <td>09 August 2026</td>
+                <td>Birthday</td>
+                <td>EV-260520-63</td>
+                <td>STF-0028</td>
+                <td><span class="booking-history-status success">Completed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="booking-history-pagination">
+          <span>Showing 1-6 of 248 bookings</span>
+          <div class="booking-history-page-links">
+            <button type="button" class="booking-history-page-btn disabled">Previous</button>
+            <button type="button" class="booking-history-page-btn active">1</button>
+            <button type="button" class="booking-history-page-btn">2</button>
+            <button type="button" class="booking-history-page-btn">3</button>
+            <button type="button" class="booking-history-page-btn">4</button>
+            <button type="button" class="booking-history-page-btn">Next</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -19,7 +19,7 @@
       <div class="staff-portal-label">staff portal</div>
 
       <nav class="staff-nav" aria-label="staff navigation">
-        <a href="#" class="staff-nav-item staff-nav-item-active">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-nav-item staff-nav-item-active">
           <i class="fa-solid fa-book-bookmark"></i>
           <span>Booking History</span>
         </a>
@@ -91,7 +91,7 @@
       </section>
 
       <section class="staff-action-grid">
-        <a href="#" class="staff-action-card">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-action-card">
           <div class="staff-action-icon staff-icon-green">
             <i class="fa-solid fa-book-open-reader"></i>
           </div>
