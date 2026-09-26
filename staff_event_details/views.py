@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 
@@ -94,5 +95,8 @@ TASK_DETAILS = {
 
 
 def detail(request, task_id):
-    task = TASK_DETAILS.get(task_id, TASK_DETAILS["floral-styling-review"])
+    task = TASK_DETAILS.get(task_id)
+    if task is None:
+        raise Http404("Staff event detail was not found.")
+
     return render(request, "staff_event_details/detail.html", {"task": task})
