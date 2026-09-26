@@ -87,7 +87,6 @@
           </div>
         </div>
 
-        <a href="{% url 'staff_profile:profile' %}" class="staff-manage-btn">Manage Profile</a>
       </section>
 
       <section class="staff-action-grid">
@@ -109,6 +108,17 @@
           <div class="staff-action-text">
             <h3>View Tasks</h3>
             <p>Plan your work.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'staff_profile:profile' %}" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-blue">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>Manage Profile</h3>
+            <p>Update your personal staff details.</p>
           </div>
           <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
         </a>

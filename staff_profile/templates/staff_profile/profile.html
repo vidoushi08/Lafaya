@@ -16,32 +16,31 @@
         {% include 'includes/lafaya_logo.html' %}
       </div>
 
-      <div class="staff-profile-portal-label">Staff Portal</div>
+      <div class="staff-profile-portal-label">staff portal</div>
 
       <nav class="staff-profile-nav" aria-label="Staff portal navigation">
         <a href="{% url 'staff_booking_history:history' %}" class="staff-profile-nav-item">
-          <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
+          <i class="fa-solid fa-book-bookmark" aria-hidden="true"></i>
           <span>Booking History</span>
         </a>
-        <a href="#" class="staff-profile-nav-item">
-          <i class="fa-regular fa-clipboard" aria-hidden="true"></i>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-profile-nav-item">
+          <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
           <span>View Tasks</span>
         </a>
         <a href="{% url 'staff_profile:profile' %}" class="staff-profile-nav-item staff-profile-nav-item-active" aria-current="page">
-          <i class="fa-regular fa-user" aria-hidden="true"></i>
+          <i class="fa-solid fa-user-gear" aria-hidden="true"></i>
           <span>Manage Profile</span>
         </a>
       </nav>
     </aside>
 
-    <main class="staff-profile-main">
-      <div class="staff-profile-decoration" aria-hidden="true">
-        <img src="{% static 'images/ceramic_pot.png' %}" alt="">
-      </div>
-
+    <main class="staff-profile-main-panel">
       <div class="staff-profile-content">
         <header class="staff-profile-header">
-          <h1><span>Staff</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><strong>Manage Profile</strong></h1>
+          <div>
+            <p class="staff-profile-kicker">staff account</p>
+            <h1>Manage Profile</h1>
+          </div>
           <button type="button" class="staff-profile-save-button">Save</button>
         </header>
 

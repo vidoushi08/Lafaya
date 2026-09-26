@@ -236,28 +236,9 @@
   bottom: 0;
 }
 
-.staff-manage-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  margin: 2.5rem 0 0 auto;
-  background: #5a755f;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.7rem;
-  padding: 0.9rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.25;
-  cursor: pointer;
-  box-shadow: 0 8px 18px rgba(90, 117, 95, 0.2);
-  text-decoration: none;
-}
-
 .staff-action-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   margin-top: 1.7rem;
 }
@@ -294,6 +275,10 @@
 
 .staff-icon-red {
   background: #b55d42;
+}
+
+.staff-icon-blue {
+  background: #4d6987;
 }
 
 .staff-action-text {
