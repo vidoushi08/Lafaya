@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "staff_profile.apps.StaffProfileConfig",
     # staff task assignment application
     "staff_task_assignment.apps.StaffTaskAssignmentConfig",
+    # staff event details application
+    "staff_event_details.apps.StaffEventDetailsConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
     # wedding application

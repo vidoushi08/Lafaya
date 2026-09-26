@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Event Details | Lafaya{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff_event_details/css/detail.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="staff-detail-shell">
+    <aside class="staff-detail-sidebar">
+      <div class="staff-detail-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <div class="staff-detail-portal-label">staff portal</div>
+
+      <nav class="staff-detail-nav" aria-label="staff portal navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-detail-nav-item">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-detail-nav-item staff-detail-nav-item-active">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-detail-nav-item">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="staff-detail-main-panel">
+      <header class="staff-detail-header">
+        <div class="staff-detail-breadcrumb">
+          <span>staff</span>
+          <i class="fa-solid fa-angle-right"></i>
+          <span>view tasks</span>
+        </div>
+        <button type="button" class="staff-detail-logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log Out</span>
+        </button>
+      </header>
+
+      <section class="staff-detail-title-row">
+        <h1>{{ task.title }}</h1>
+        <span class="staff-detail-status staff-detail-status-{{ task.status|cut:' ' }}">{{ task.status }}</span>
+      </section>
+
+      <section class="staff-detail-cards">
+        <article class="staff-detail-card">
+          <h2><i class="fa-regular fa-calendar-days"></i> Event Details</h2>
+
+          <div class="staff-detail-grid">
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">theme</span>
+              <span class="staff-detail-value">{{ task.theme }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">date</span>
+              <span class="staff-detail-value">{{ task.date }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">time</span>
+              <span class="staff-detail-value">{{ task.time }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">venue</span>
+              <span class="staff-detail-value">{{ task.venue }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">guests</span>
+              <span class="staff-detail-value">{{ task.guests }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">my role</span>
+              <span class="staff-detail-value">{{ task.role }}</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="staff-detail-card">
+          <h2><i class="fa-solid fa-list-check"></i> Event Services</h2>
+
+          <ul class="staff-detail-services">
+            {% for service in task.services %}
+              <li>
+                <i class="fa-solid fa-check"></i>
+                <span>{{ service }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </article>
+      </section>
+
+      <section class="staff-detail-assignment-panel">
+        <h2><i class="fa-regular fa-clipboard"></i> My Assigned Tasks</h2>
+
+        <ul class="staff-detail-task-list">
+          {% for item in task.tasks %}
+            <li class="staff-detail-task-item">
+              <div class="staff-detail-task-left">
+                <span class="staff-detail-check"></span>
+                <span>{{ item.label }}</span>
+              </div>
+
+              <div class="staff-detail-task-right">
+                <span class="staff-detail-task-status staff-detail-task-status-{{ item.status_class }}">{{ item.status }}</span>
+                <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-detail-task-button">{{ item.button }}</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <div class="staff-detail-actions">
+        <a href="{% url 'staff:staff' %}" class="staff-detail-secondary-btn">Back to dashboard</a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-detail-primary-btn">View all my tasks</a>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
