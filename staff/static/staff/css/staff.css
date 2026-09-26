@@ -237,6 +237,8 @@
 }
 
 .staff-manage-btn {
+  display: inline-flex;
+  align-items: center;
   margin-top: 1.1rem;
   background: #5a755f;
   color: #ffffff;
@@ -247,6 +249,7 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(90, 117, 95, 0.2);
+  text-decoration: none;
 }
 
 .staff-action-grid {

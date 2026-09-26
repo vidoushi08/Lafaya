@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Staff Profile | Lafaya{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff_profile/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="staff-profile-shell">
+    <aside class="staff-profile-sidebar">
+      <div class="staff-profile-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <div class="staff-profile-portal-label">Staff Portal</div>
+
+      <nav class="staff-profile-nav" aria-label="Staff portal navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-profile-nav-item">
+          <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="#" class="staff-profile-nav-item">
+          <i class="fa-regular fa-clipboard" aria-hidden="true"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-profile-nav-item staff-profile-nav-item-active" aria-current="page">
+          <i class="fa-regular fa-user" aria-hidden="true"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="staff-profile-main">
+      <div class="staff-profile-decoration" aria-hidden="true">
+        <img src="{% static 'images/ceramic_pot.png' %}" alt="">
+      </div>
+
+      <div class="staff-profile-content">
+        <header class="staff-profile-header">
+          <h1><span>Staff</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><strong>Manage Profile</strong></h1>
+          <button type="button" class="staff-profile-save-button">Save</button>
+        </header>
+
+        <section class="staff-profile-editor" aria-label="Staff profile details">
+          <div class="staff-profile-photo-column">
+            <img class="staff-profile-photo" src="{% static 'images/default_profile_picture.png' %}" alt="Profile photo for Emma Watson">
+            <button type="button" class="staff-profile-photo-button">
+              <i class="fa-solid fa-camera" aria-hidden="true"></i>
+              <span>Change Photo</span>
+            </button>
+          </div>
+
+          <div class="staff-profile-fields">
+            <label class="staff-profile-field">
+              <span>First Name</span>
+              <input type="text" value="Emma" autocomplete="given-name">
+            </label>
+            <label class="staff-profile-field">
+              <span>Last Name</span>
+              <input type="text" value="Watson" autocomplete="family-name">
+            </label>
+            <label class="staff-profile-field staff-profile-field-wide">
+              <span>Email</span>
+              <input type="email" value="emma.watson@email.com" autocomplete="email">
+            </label>
+            <label class="staff-profile-field">
+              <span>Phone</span>
+              <input type="tel" value="+230 5 123 1233" autocomplete="tel">
+            </label>
+            <label class="staff-profile-field">
+              <span>Date of Birth</span>
+              <input type="date" value="1999-03-15">
+            </label>
+            <label class="staff-profile-field">
+              <span>Gender</span>
+              <select>
+                <option selected>Female</option>
+                <option>Male</option>
+                <option>Prefer not to say</option>
+              </select>
+            </label>
+            <label class="staff-profile-field">
+              <span>Language</span>
+              <select>
+                <option selected>English</option>
+                <option>French</option>
+                <option>Creole</option>
+              </select>
+            </label>
+            <label class="staff-profile-field staff-profile-field-wide">
+              <span>Address</span>
+              <input type="text" value="Royal Road, Curepipe, Mauritius" autocomplete="street-address">
+            </label>
+            <label class="staff-profile-field">
+              <span>City</span>
+              <input type="text" value="Curepipe" autocomplete="address-level2">
+            </label>
+            <label class="staff-profile-field">
+              <span>Postal Code</span>
+              <input type="text" value="73557" autocomplete="postal-code">
+            </label>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

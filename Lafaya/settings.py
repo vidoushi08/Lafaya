@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "staff.apps.StaffConfig",
     # staff booking history application
     "staff_booking_history.apps.StaffBookingHistoryConfig",
+    # staff profile application
+    "staff_profile.apps.StaffProfileConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
     # wedding application

@@ -27,7 +27,7 @@
           <i class="fa-solid fa-clipboard-list"></i>
           <span>View Tasks</span>
         </a>
-        <a href="#" class="staff-nav-item">
+        <a href="{% url 'staff_profile:profile' %}" class="staff-nav-item">
           <i class="fa-solid fa-user-gear"></i>
           <span>Manage Profile</span>
         </a>
@@ -87,7 +87,7 @@
           </div>
         </div>
 
-        <button type="button" class="staff-manage-btn">Manage Profile</button>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-manage-btn">Manage Profile</a>
       </section>
 
       <section class="staff-action-grid">
