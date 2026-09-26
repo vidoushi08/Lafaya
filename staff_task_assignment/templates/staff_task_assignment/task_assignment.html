@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Staff Tasks | Lafaya{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff_task_assignment/css/task_assignment.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="task-assignment-shell">
+    <aside class="task-assignment-sidebar">
+      <div class="task-assignment-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <div class="task-assignment-portal-label">staff portal</div>
+
+      <nav class="task-assignment-nav" aria-label="staff portal navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="task-assignment-nav-item">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="task-assignment-nav-item task-assignment-nav-item-active">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="{% url 'staff_profile:profile' %}" class="task-assignment-nav-item">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="task-assignment-main-panel">
+      <header class="task-assignment-header">
+        <div>
+          <p class="task-assignment-kicker">team coordination</p>
+          <h1>Task Assignment</h1>
+        </div>
+        <button type="button" class="task-assignment-logout-btn">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Log Out</span>
+        </button>
+      </header>
+
+      <section class="task-assignment-summary-row">
+        <div class="task-assignment-summary-card">
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-soft"></span> 18</span>
+          <p>Open tasks</p>
+        </div>
+        <div class="task-assignment-summary-card">
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-warning"></span> 07</span>
+          <p>In progress</p>
+        </div>
+        <div class="task-assignment-summary-card">
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-success"></span> 26</span>
+          <p>Completed</p>
+        </div>
+        <div class="task-assignment-summary-card">
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-danger"></span> 03</span>
+          <p>Blocked</p>
+        </div>
+      </section>
+
+      <section class="task-assignment-board">
+        <div class="task-assignment-topbar">
+          <div class="task-assignment-search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search tasks, client or date" aria-label="Search tasks" />
+          </div>
+
+          <div class="task-assignment-filter-group">
+            <button type="button" class="task-assignment-filter-btn">All tasks <i class="fa-solid fa-chevron-down"></i></button>
+            <button type="button" class="task-assignment-filter-btn">Priority <i class="fa-solid fa-chevron-down"></i></button>
+          </div>
+        </div>
+
+        <div class="task-assignment-list">
+          <article class="task-card task-card-priority-high">
+            <div class="task-card-head">
+              <div>
+                <p class="task-card-tag">Wedding</p>
+                <h2>Floral styling review</h2>
+              </div>
+              <span class="task-status task-status-danger">high priority</span>
+            </div>
+
+            <div class="task-card-meta">
+              <div><span class="task-label">client</span><strong>Amara &amp; Ethan</strong></div>
+              <div><span class="task-label">due</span><strong>Today • 4:00 PM</strong></div>
+              <div><span class="task-label">staff</span><strong>Emma Watson</strong></div>
+            </div>
+
+            <p class="task-card-copy">
+              Finalise floral arrangement samples, coordinate venue setup, and confirm the ceremony backdrop plan with the wedding coordinator.
+            </p>
+
+            <div class="task-card-actions">
+              <button type="button" class="task-action-btn task-action-btn-primary">View details</button>
+              <button type="button" class="task-action-btn task-action-btn-secondary">Mark done</button>
+            </div>
+          </article>
+
+          <article class="task-card task-card-priority-medium">
+            <div class="task-card-head">
+              <div>
+                <p class="task-card-tag">Birthday</p>
+                <h2>Guest list check-in</h2>
+              </div>
+              <span class="task-status task-status-warning">in progress</span>
+            </div>
+
+            <div class="task-card-meta">
+              <div><span class="task-label">client</span><strong>Leah Morgan</strong></div>
+              <div><span class="task-label">due</span><strong>Tomorrow • 9:30 AM</strong></div>
+              <div><span class="task-label">staff</span><strong>Junior Patel</strong></div>
+            </div>
+
+            <p class="task-card-copy">
+              Confirm RSVP completion, prepare name tags, and coordinate welcome desk staffing for the arrival window.
+            </p>
+
+            <div class="task-card-actions">
+              <button type="button" class="task-action-btn task-action-btn-primary">View details</button>
+              <button type="button" class="task-action-btn task-action-btn-secondary">Mark done</button>
+            </div>
+          </article>
+
+          <article class="task-card task-card-priority-low">
+            <div class="task-card-head">
+              <div>
+                <p class="task-card-tag">Conference</p>
+                <h2>Stage sound check</h2>
+              </div>
+              <span class="task-status task-status-success">scheduled</span>
+            </div>
+
+            <div class="task-card-meta">
+              <div><span class="task-label">client</span><strong>Harbor Summit</strong></div>
+              <div><span class="task-label">due</span><strong>Wed • 1:15 PM</strong></div>
+              <div><span class="task-label">staff</span><strong>Nora James</strong></div>
+            </div>
+
+            <p class="task-card-copy">
+              Review audio setup, test live streaming feed, and ensure all event presenters have final briefing notes.
+            </p>
+
+            <div class="task-card-actions">
+              <button type="button" class="task-action-btn task-action-btn-primary">View details</button>
+              <button type="button" class="task-action-btn task-action-btn-secondary">Mark done</button>
+            </div>
+          </article>
+
+          <article class="task-card task-card-priority-medium">
+            <div class="task-card-head">
+              <div>
+                <p class="task-card-tag">Seaside</p>
+                <h2>Catering schedule</h2>
+              </div>
+              <span class="task-status task-status-warning">needs review</span>
+            </div>
+
+            <div class="task-card-meta">
+              <div><span class="task-label">client</span><strong>Oceanview Villa</strong></div>
+              <div><span class="task-label">due</span><strong>Thu • 11:00 AM</strong></div>
+              <div><span class="task-label">staff</span><strong>Sarah Moore</strong></div>
+            </div>
+
+            <p class="task-card-copy">
+              Confirm appetizer sequence, beverage station timing, and supplier arrival order for guest service flow.
+            </p>
+
+            <div class="task-card-actions">
+              <button type="button" class="task-action-btn task-action-btn-primary">View details</button>
+              <button type="button" class="task-action-btn task-action-btn-secondary">Mark done</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
