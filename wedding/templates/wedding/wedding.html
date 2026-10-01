@@ -1,0 +1,86 @@
+{% extends 'base.html'%}
+{% load static%}
+
+{%block title%}Wedding Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{%static 'wedding/css/wedding.css'%}">
+{% endblock %}
+
+{% block content %}
+
+<div class = "wedding-page">
+    <section class="wedding-hero">
+        <img class = "wedding-hero-image"
+            src ="{% static 'wedding/images/wedding_hero.png' %}"
+            alt ="Elegant wedding venue decorated with flowers">
+
+        <div class ="wedding-hero-overlay"></div>
+
+        <div class = "wedding-hero-content">
+            <p class ="wedding-eyebrow">Lafaya Weddings</p>
+
+            <h1>Your Dream Wedding Awaits</h1>
+
+            <p class ="wedding-hero-copy">
+                Create unforgettable moments in a setting designed 
+                especially for your special day!
+            </p>
+
+            <div class="wedding-hero-actions">
+                <a class="wedding-button wedding-button-primary" href="#wedding-venues" >
+                    Explore Venues
+                </a>
+
+                <a class="wedding-button wedding-button-outline" href="#wedding-enquiry">
+                    Plan your wedding
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="wedding-section wedding-venues" id="wedding-venues">
+        <div class="wedding-section-heading">
+            <p class="wedding-eyebrow">The Perfect Setting</p>
+            <h2>Venues of Rare Splendor</h2>
+        </div>
+
+        <div class="wedding-card-grid">
+            <article class="wedding-card">
+                <img src="{% static 'Lafaya\wedding\static\wedding\images\wedding_venue_domain_abineaux.png' %}"
+                    alt="Domain Abineaux wedding venue">
+                
+                <div class="wedding-card-content">
+                    <h3>Domain Abineaux</h3>
+                    <p>A beautiful setting for an unforgettable wedding celebration.</p>
+                </div>
+            </article>
+
+            <article class="wedding-card">
+                <img src="{% static 'wedding/images/wedding_services_island_hall.png' %}"
+                    alt="Island Hall wedding venue">
+                
+                <div class="wedding-card-content">
+                    <h3>Island Hall</h3>
+                    <p>An elegant venue designed for memorable celebrations.</p>
+                </div>
+            </article>
+
+            <article class="wedding-card">
+                <img src="{% static 'wedding/images/wedding_services_seven_rays.png' %}"
+                    alt="Domain Abineaux wedding venue">
+                
+                <div class="wedding-card-content">
+                    <h3>Seven Rays</h3>
+                    <p>A distinctive location for your dream wedding.</p>
+                </div>
+            </article>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
