@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # homepage application
     "homepage.apps.HomepageConfig",
+    # common shared utilities application
+    "common.apps.CommonConfig",
     # authentication application
     "authentication.apps.AuthenticationConfig",
     # customer dashboard application
@@ -74,6 +76,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+AUTH_USER_MODEL = "authentication.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
