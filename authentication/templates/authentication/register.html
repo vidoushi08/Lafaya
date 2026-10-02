@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<section class="auth-page">
+<section class="auth-page auth-page-register">
   <div class="auth-card auth-card-register">
     <div class="auth-panel auth-panel-visual auth-panel-visual-alt" style="background-image: url('/static/images/register_background.png');">
       <div class="auth-badge">join lafaya</div>
@@ -24,32 +24,74 @@
         <h2>create your account</h2>
       </div>
 
-      <form class="auth-form auth-form-register">
+      <form class="auth-form auth-form-register" method="post">
+        {% csrf_token %}
         <div class="auth-name-row">
           <label>
-            <span>first name</span>
-            <input type="text" name="first_name" placeholder="first name">
+            <span>first name *</span>
+            <input type="text" id="first_name" name="first_name" placeholder="first name" autocomplete="given-name" required>
           </label>
 
           <label>
-            <span>last name</span>
-            <input type="text" name="last_name" placeholder="last name">
+            <span>last name *</span>
+            <input type="text" id="last_name" name="last_name" placeholder="last name" autocomplete="family-name" required>
           </label>
         </div>
 
         <label>
-          <span>email address</span>
-          <input type="email" name="email" placeholder="you@example.com">
+          <span>username *</span>
+          <input type="text" id="username" name="username" placeholder="choose a username" autocomplete="username" required>
         </label>
 
         <label>
-          <span>password</span>
-          <input type="password" name="password" placeholder="create a password">
+          <span>email address *</span>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </label>
+
+        <div class="auth-name-row">
+          <label>
+            <span>phone number</span>
+            <input type="tel" id="phone" name="phone" placeholder="+230 5xxx xxxx" autocomplete="tel">
+          </label>
+
+          <label>
+            <span>date of birth</span>
+            <input type="date" id="date_of_birth" name="date_of_birth" autocomplete="bday">
+          </label>
+        </div>
+
+        <label>
+          <span>gender</span>
+          <select id="gender" name="gender" autocomplete="sex" required>
+            {% for value, label in gender_choices %}
+              <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select>
         </label>
 
         <label>
-          <span>confirm password</span>
-          <input type="password" name="confirm_password" placeholder="confirm your password">
+          <span>address</span>
+          <input type="text" id="address" name="address" placeholder="street address" autocomplete="street-address">
+        </label>
+
+        <label>
+          <span>city</span>
+          <select id="city" name="city" autocomplete="address-level2">
+            <option value="">select city</option>
+            {% for city in cities %}
+              <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label>
+          <span>password *</span>
+          <input type="password" id="password1" name="password1" placeholder="create a password" autocomplete="new-password" required>
+        </label>
+
+        <label>
+          <span>confirm password *</span>
+          <input type="password" id="password2" name="password2" placeholder="confirm your password" autocomplete="new-password" required>
         </label>
 
         <button type="submit" class="auth-button">create account</button>

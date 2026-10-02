@@ -19,6 +19,10 @@
   background: linear-gradient(135deg, #f5efe8 0%, #f8f0eb 100%);
 }
 
+.auth-page-register {
+  align-items: flex-start;
+}
+
 .auth-card {
   width: min(1100px, 100%);
   background: var(--auth-card);
@@ -206,7 +210,19 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.auth-form input:focus {
+.auth-form select {
+  border: 1px solid var(--auth-border);
+  background: #ffffff;
+  border-radius: 14px;
+  min-height: 52px;
+  padding: 0 16px;
+  font-size: 1rem;
+  color: var(--auth-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
   outline: none;
   border-color: var(--auth-accent);
   box-shadow: 0 0 0 4px rgba(179, 83, 52, 0.12);
