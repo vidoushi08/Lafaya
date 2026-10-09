@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.contrib.auth import authenticate
 from django.conf import settings
@@ -14,10 +16,36 @@ from common.location import load_city_postal_codes
 from .models import User
 
 
+logger = logging.getLogger(__name__)
+
+
 class CaseInsensitivePasswordResetForm(PasswordResetForm):
     def get_users(self, email):
         active_users = User.objects.filter(email__iexact=email, is_active=True)
         return (user for user in active_users if user.has_usable_password())
+
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
+        if settings.DEBUG:
+            logger.warning(
+                "Password reset email generated (token_length=%d)",
+                len(context["token"]),
+            )
+        return super().send_mail(
+            subject_template_name,
+            email_template_name,
+            context,
+            from_email,
+            to_email,
+            html_email_template_name,
+        )
 
 
 class EmailLoginForm(forms.Form):

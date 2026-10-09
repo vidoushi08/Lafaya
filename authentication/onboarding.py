@@ -15,8 +15,8 @@ from .models import User
 
 
 def _issue_token(user):
-    token = secrets.token_urlsafe(32)
-    user.onboarding_token_hash = hashlib.sha256(token.encode()).hexdigest()
+    token = secrets.token_hex(15)
+    user.onboarding_token_hash = _token_digest(user, token)
     user.onboarding_token_created_at = timezone.now()
     user.save(
         update_fields=("onboarding_token_hash", "onboarding_token_created_at")
@@ -69,21 +69,37 @@ def send_staff_invitation(user, request):
 
 
 def onboarding_token_is_valid(user, token, account_type, timeout):
-    if (
-        user.is_active
-        or user.account_type != account_type
-        or not user.onboarding_token_hash
-        or user.onboarding_token_created_at is None
-    ):
-        return False
+    return onboarding_token_failure_reason(user, token, account_type, timeout) is None
+
+
+def onboarding_token_failure_reason(user, token, account_type, timeout):
+    if user is None:
+        return "account_not_found"
+    if user.is_active:
+        return "account_already_active"
+    if user.account_type != account_type:
+        return "account_type_mismatch"
+    if not user.onboarding_token_hash:
+        return "token_not_recorded"
+    if user.onboarding_token_created_at is None:
+        return "token_timestamp_missing"
     if account_type == User.AccountType.CUSTOMER and not user.has_usable_password():
-        return False
+        return "customer_password_missing"
     if account_type == User.AccountType.STAFF and user.has_usable_password():
-        return False
-    if user.onboarding_token_created_at + timedelta(seconds=timeout) < timezone.now():
-        return False
-    token_hash = hashlib.sha256(token.encode()).hexdigest()
-    return hmac.compare_digest(user.onboarding_token_hash, token_hash)
+        return "staff_password_already_set"
+    if user.onboarding_token_created_at + timedelta(seconds=timeout) <= timezone.now():
+        return "token_expired"
+    token_hash = _token_digest(user, token)
+    if not hmac.compare_digest(user.onboarding_token_hash, token_hash):
+        return "token_mismatch"
+    return None
+
+
+def _token_digest(user, token):
+    payload = (
+        f"{user.account_type}:{user.username}:{user.email.casefold()}:{token}"
+    )
+    return hashlib.sha256(payload.encode()).hexdigest()
 
 
 def can_resend_onboarding_email(user):

@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.contrib.auth import authenticate, get_user_model
 from django.core import mail
 from django.db import IntegrityError, transaction
-from django.test import TestCase, override_settings
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -130,6 +130,28 @@ class RegisterPageTests(TestCase):
 		data.update(overrides)
 		return data
 
+	def _create_verification_link(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		return match.group(1)
+
+	def _csrf_token_for_verification(self, client, verify_path):
+		response = client.get(verify_path)
+		self.assertEqual(response.status_code, 200)
+		match = re.search(
+			r'name="csrfmiddlewaretoken" value="([^"]+)"',
+			response.content.decode(),
+		)
+		self.assertIsNotNone(match)
+		return match.group(1)
+
 	def test_register_page_shows_profile_fields_and_city_options(self):
 		response = self.client.get("/authentication/register/")
 
@@ -196,7 +218,17 @@ class RegisterPageTests(TestCase):
 		)
 		self.assertIsNotNone(verify_match)
 		verify_path = verify_match.group(1)
+		verify_token = verify_path.rstrip("/").rsplit("/", 1)[-1]
+		self.assertRegex(verify_token, r"^[0-9a-f]{30}$")
 		verify_response = self.client.get(verify_path)
+		self.assertContains(verify_response, "Confirm your email address")
+		self.assertEqual(verify_response["Referrer-Policy"], "no-referrer")
+		self.assertIn("no-store", verify_response["Cache-Control"])
+		user.refresh_from_db()
+		self.assertFalse(user.is_active)
+		self.assertTrue(user.onboarding_token_hash)
+
+		verify_response = self.client.post(verify_path)
 		self.assertContains(verify_response, "email verified")
 		user.refresh_from_db()
 		self.assertTrue(user.is_active)
@@ -212,6 +244,56 @@ class RegisterPageTests(TestCase):
 			},
 		)
 		self.assertRedirects(login_response, "/customer_dashboard/")
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_verification_accepts_null_origin_only_for_same_origin_browser_post(self):
+		verify_path = self._create_verification_link()
+		client = Client(enforce_csrf_checks=True)
+		csrf_token = self._csrf_token_for_verification(client, verify_path)
+
+		response = client.post(
+			verify_path,
+			{"csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+
+		self.assertContains(response, "email verified")
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertTrue(user.is_active)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_verification_still_requires_csrf_token_for_null_origin_post(self):
+		verify_path = self._create_verification_link()
+		client = Client(enforce_csrf_checks=True)
+		client.get(verify_path)
+
+		response = client.post(
+			verify_path,
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+
+		self.assertEqual(response.status_code, 403)
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertFalse(user.is_active)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_verification_rejects_null_origin_cross_site_post(self):
+		verify_path = self._create_verification_link()
+		client = Client(enforce_csrf_checks=True)
+		csrf_token = self._csrf_token_for_verification(client, verify_path)
+
+		response = client.post(
+			verify_path,
+			{"csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="cross-site",
+		)
+
+		self.assertEqual(response.status_code, 403)
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertFalse(user.is_active)
 
 	@override_settings(
 		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
@@ -252,7 +334,11 @@ class RegisterPageTests(TestCase):
 			mail.outbox[1].body,
 		)
 		self.assertIsNotNone(second_match)
-		self.assertContains(self.client.get(second_match.group(1)), "email verified")
+		verify_path = second_match.group(1)
+		self.assertContains(self.client.get(verify_path), "Confirm your email address")
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertFalse(user.is_active)
+		self.assertContains(self.client.post(verify_path), "email verified")
 
 	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 	def test_customer_verification_link_expires(self):
@@ -271,8 +357,49 @@ class RegisterPageTests(TestCase):
 
 		response = self.client.get(match.group(1))
 		self.assertContains(response, "link unavailable")
+		self.client.post(match.group(1))
 		user.refresh_from_db()
 		self.assertFalse(user.is_active)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_customer_verification_token_cannot_be_used_for_staff_invitation(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		match = re.search(
+			r"/authentication/verify/([^/]+)/([^/\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		staff_invitation_path = reverse(
+			"authentication:staff_invitation",
+			kwargs={"uidb64": match.group(1), "token": match.group(2)},
+		)
+
+		response = self.client.get(staff_invitation_path)
+		self.assertContains(response, "invitation link unavailable")
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertFalse(user.is_active)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_customer_verification_token_is_invalidated_when_email_changes(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		user = get_user_model().objects.get(username="new-customer")
+		user.email = "updated-customer@example.com"
+		user.save(update_fields=("email",))
+
+		response = self.client.get(match.group(1))
+		self.assertContains(response, "link unavailable")
+		self.assertFalse(get_user_model().objects.get(pk=user.pk).is_active)
 
 	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 	def test_resend_verification_response_is_generic_and_cooldown_limits_mail(self):
@@ -583,9 +710,31 @@ class SuperAdminAccessTests(TestCase):
 		)
 		self.assertIsNotNone(invitation_match)
 		invitation_path = invitation_match.group(1)
+		token_parts = re.search(
+			r"/authentication/staff-invitation/([^/]+)/([^/\s]+)",
+			invitation_path,
+		)
+		self.assertIsNotNone(token_parts)
+		customer_verification_path = reverse(
+			"authentication:verify_email",
+			kwargs={
+				"uidb64": token_parts.group(1),
+				"token": token_parts.group(2),
+			},
+		)
+		self.assertContains(
+			self.client.get(customer_verification_path),
+			"link unavailable",
+		)
 		response = self.client.get(invitation_path)
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, "set your password")
+		self.assertEqual(response["Referrer-Policy"], "no-referrer")
+		self.assertIn("no-store", response["Cache-Control"])
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
+		self.assertFalse(staff.has_usable_password())
+		self.assertTrue(staff.onboarding_token_hash)
 		response = self.client.post(
 			invitation_path,
 			{
@@ -936,3 +1085,33 @@ class AccountPasswordTests(TestCase):
 
 		self.assertRedirects(response, reverse("authentication:password_reset_done"))
 		self.assertEqual(len(mail.outbox), 0)
+
+	@override_settings(
+		DEBUG=True,
+		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+	)
+	def test_customer_password_reset_link_opens_password_form(self):
+		customer = self.create_account(
+			username="reset-customer",
+			email="reset-customer@example.com",
+			account_type="customer",
+		)
+
+		with self.assertLogs("authentication.forms", level="WARNING") as logs:
+			response = self.client.post(
+				reverse("authentication:password_reset"),
+				{"email": customer.email},
+			)
+		self.assertRedirects(response, reverse("authentication:password_reset_done"))
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn("token_length=39", logs.output[0])
+
+		reset_match = re.search(
+			r"http://testserver(/authentication/password/reset/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(reset_match)
+		confirm_response = self.client.get(reset_match.group(1), follow=True)
+
+		self.assertTrue(confirm_response.context["validlink"])
+		self.assertContains(confirm_response, "choose a new password")

@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
@@ -7,6 +9,7 @@ from django.db import transaction
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
+from django.views.decorators.cache import never_cache
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -20,9 +23,12 @@ from .forms import (
 from .models import User
 from .onboarding import (
     can_resend_onboarding_email,
+    onboarding_token_failure_reason,
     onboarding_token_is_valid,
     send_customer_verification,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def login_view(request):
@@ -111,10 +117,35 @@ def verification_resend_done_view(request):
     return render(request, "authentication/verification_resend_done.html")
 
 
+@never_cache
 def verify_email_view(request, uidb64, token):
+    if request.method not in ("GET", "POST"):
+        return HttpResponseNotAllowed(["GET", "POST"])
+
     user = _get_user_from_uid(uidb64)
+    failure_reason = onboarding_token_failure_reason(
+        user,
+        token,
+        User.AccountType.CUSTOMER,
+        settings.CUSTOMER_EMAIL_VERIFICATION_TIMEOUT,
+    )
+    if failure_reason and settings.DEBUG:
+        token_is_urlsafe = token.isascii() and all(
+            character.isalnum() or character in "-_"
+            for character in token
+        )
+        logger.warning(
+            "Customer email verification rejected: %s "
+            "(token_length=%d, token_is_urlsafe=%s)",
+            failure_reason,
+            len(token),
+            token_is_urlsafe,
+        )
+    link_valid = bool(
+        failure_reason is None
+    )
     verified = False
-    if user is not None:
+    if request.method == "POST" and user is not None and link_valid:
         with transaction.atomic():
             user = User.objects.select_for_update().filter(pk=user.pk).first()
             if user and onboarding_token_is_valid(
@@ -134,17 +165,24 @@ def verify_email_view(request, uidb64, token):
                     )
                 )
                 verified = True
-    return render(
+        if not verified:
+            link_valid = False
+    response = render(
         request,
         "authentication/verification_result.html",
-        {"verified": verified},
+        {"verified": verified, "link_valid": link_valid},
     )
+    response["Referrer-Policy"] = "no-referrer"
+    return response
 
 
+@never_cache
 def staff_invitation_view(request, uidb64, token):
     user = _get_user_from_uid(uidb64)
     if not _valid_staff_invitation(user, token):
-        return render(request, "authentication/staff_invitation_invalid.html")
+        response = render(request, "authentication/staff_invitation_invalid.html")
+        response["Referrer-Policy"] = "no-referrer"
+        return response
 
     form = SetPasswordForm(
         user,
@@ -154,7 +192,12 @@ def staff_invitation_view(request, uidb64, token):
         with transaction.atomic():
             locked_user = User.objects.select_for_update().filter(pk=user.pk).first()
             if not _valid_staff_invitation(locked_user, token):
-                return render(request, "authentication/staff_invitation_invalid.html")
+                response = render(
+                    request,
+                    "authentication/staff_invitation_invalid.html",
+                )
+                response["Referrer-Policy"] = "no-referrer"
+                return response
             locked_user.set_password(form.cleaned_data["new_password1"])
             locked_user.is_active = True
             locked_user.onboarding_token_hash = ""
@@ -169,11 +212,13 @@ def staff_invitation_view(request, uidb64, token):
             )
         return redirect("authentication:staff_invitation_complete")
 
-    return render(
+    response = render(
         request,
         "authentication/staff_invitation_setup.html",
         {"form": form},
     )
+    response["Referrer-Policy"] = "no-referrer"
+    return response
 
 
 def staff_invitation_complete_view(request):
@@ -216,3 +261,32 @@ class LafayaPasswordResetConfirmView(PasswordResetConfirmView):
     form_class = PasswordResetTrackingSetPasswordForm
     template_name = "authentication/password_reset_confirm.html"
     success_url = reverse_lazy("authentication:password_reset_complete")
+
+    def dispatch(self, request, *args, **kwargs):
+        if settings.DEBUG:
+            user = self.get_user(kwargs["uidb64"])
+            token = kwargs["token"]
+            if token == self.reset_url_token:
+                session_token = request.session.get("_password_reset_token")
+                if not self.token_generator.check_token(user, session_token):
+                    reason = (
+                        "reset_session_missing"
+                        if not session_token
+                        else "reset_session_invalid"
+                    )
+                    logger.warning(
+                        "Password reset confirmation rejected: %s",
+                        reason,
+                    )
+            elif not self.token_generator.check_token(user, token):
+                reason = (
+                    "account_not_found"
+                    if user is None
+                    else "token_invalid_or_expired_or_account_changed"
+                )
+                logger.warning(
+                    "Password reset link rejected: %s (token_length=%d)",
+                    reason,
+                    len(token),
+                )
+        return super().dispatch(request, *args, **kwargs)
