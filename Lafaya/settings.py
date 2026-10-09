@@ -58,6 +58,10 @@ INSTALLED_APPS = [
     "booking.apps.BookingConfig",
     # contact application
     "contact.apps.ContactConfig",
+
+    # venues application
+    "venues.apps.VenuesConfig",
+
     # django default applications
     "django.contrib.admin",
     "django.contrib.auth",
