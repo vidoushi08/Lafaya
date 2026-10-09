@@ -98,6 +98,22 @@
   color: #2d2d2d;
 }
 
+.staff-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.staff-header-actions form,
+.staff-header-actions a {
+  margin: 0;
+}
+
+.staff-header-actions a {
+  color: #2d2d2d;
+  font-size: 0.85rem;
+}
+
 .staff-logout-btn {
   display: inline-flex;
   align-items: center;

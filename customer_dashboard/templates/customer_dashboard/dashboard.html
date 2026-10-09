@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Dashboard | Lafaya{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">customer account</span>
+      <h1>customer dashboard</h1>
+    </div>
+    <p>Welcome, {{ request.user.get_full_name|default:request.user.username }}.</p>
+    <p><a href="{% url 'authentication:password_change' %}">change password</a></p>
+    <form method="post" action="{% url 'authentication:logout' %}">
+      {% csrf_token %}
+      <button class="auth-button" type="submit">log out</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

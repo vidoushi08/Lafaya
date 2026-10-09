@@ -123,6 +123,21 @@
   font-size: 0.7rem;
 }
 
+.staff-detail-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.staff-detail-header-actions form {
+  margin: 0;
+}
+
+.staff-detail-header-actions a {
+  color: var(--detail-text);
+  font-size: 0.85rem;
+}
+
 .staff-detail-logout-btn {
   display: inline-flex;
   align-items: center;

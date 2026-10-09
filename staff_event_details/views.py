@@ -1,6 +1,8 @@
 from django.http import Http404
 from django.shortcuts import render
 
+from common.decorators import account_type_required
+
 
 TASK_DETAILS = {
     "floral-styling-review": {
@@ -94,6 +96,7 @@ TASK_DETAILS = {
 }
 
 
+@account_type_required("staff")
 def detail(request, task_id):
     task = TASK_DETAILS.get(task_id)
     if task is None:

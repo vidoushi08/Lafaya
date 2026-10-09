@@ -123,6 +123,21 @@
   color: var(--task-text);
 }
 
+.task-assignment-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.task-assignment-header-actions form {
+  margin: 0;
+}
+
+.task-assignment-header-actions a {
+  color: var(--task-text);
+  font-size: 0.85rem;
+}
+
 .task-assignment-logout-btn {
   display: inline-flex;
   align-items: center;

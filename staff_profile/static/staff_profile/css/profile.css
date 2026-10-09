@@ -130,6 +130,21 @@
   color: var(--profile-text);
 }
 
+.staff-profile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.staff-profile-header-actions form {
+  margin: 0;
+}
+
+.staff-profile-header-actions a {
+  color: var(--profile-text);
+  font-size: 0.85rem;
+}
+
 .staff-profile-save-button {
   display: inline-flex;
   align-items: center;

@@ -1,8 +1,12 @@
+import re
 from datetime import date
 
 from django.contrib.auth import authenticate, get_user_model
+from django.core import mail
 from django.db import IntegrityError, transaction
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from django.urls import reverse
+
 
 
 class UserModelTests(TestCase):
@@ -80,13 +84,29 @@ class UserModelTests(TestCase):
 		user = get_user_model().objects.create_superuser(
 			username="lafaya-admin",
 			email="admin@example.com",
-			password="A-strong-test-password-42",
+			password="C0mpl3x+event-planning-2026!",
 		)
 
 		with self.assertRaises(IntegrityError):
 			with transaction.atomic():
 				get_user_model().objects.filter(pk=user.pk).update(
 					account_type="customer",
+				)
+
+	def test_database_rejects_case_insensitive_duplicate_email(self):
+		User = get_user_model()
+		User.objects.create_user(
+			username="first-email",
+			email="Unique.Email@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+
+		with self.assertRaises(IntegrityError):
+			with transaction.atomic():
+				User.objects.create_user(
+					username="second-email",
+					email="unique.email@EXAMPLE.com",
+					password="C0mpl3x+event-planning-2026!",
 				)
 
 
@@ -220,13 +240,43 @@ class LoginFlowTests(TestCase):
 		response = self.client.post(
 			"/authentication/",
 			{
-				"email": "CUSTOMER@example.com",
+				"identifier": "CUSTOMER@example.com",
 				"password": "C0mpl3x+event-planning-2026!",
 			},
 		)
 
 		self.assertRedirects(response, "/customer_dashboard/")
 		self.assertEqual(int(self.client.session["_auth_user_id"]), user.pk)
+
+	def test_customer_login_accepts_username(self):
+		self.create_account(username="customer-username")
+
+		response = self.client.post(
+			"/authentication/",
+			{
+				"identifier": "customer-username",
+				"password": "C0mpl3x+event-planning-2026!",
+			},
+		)
+
+		self.assertRedirects(response, "/customer_dashboard/")
+
+	def test_superadmin_login_accepts_username(self):
+		get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+
+		response = self.client.post(
+			"/authentication/",
+			{
+				"identifier": "lafaya-admin",
+				"password": "C0mpl3x+event-planning-2026!",
+			},
+		)
+
+		self.assertRedirects(response, "/admin/")
 
 	def test_staff_login_redirects_to_staff_dashboard(self):
 		self.create_account(
@@ -237,7 +287,7 @@ class LoginFlowTests(TestCase):
 		response = self.client.post(
 			"/authentication/",
 			{
-				"email": "assigned-staff@example.com",
+				"identifier": "assigned-staff@example.com",
 				"password": "C0mpl3x+event-planning-2026!",
 			},
 		)
@@ -254,7 +304,7 @@ class LoginFlowTests(TestCase):
 		response = self.client.post(
 			"/authentication/",
 			{
-				"email": "admin@example.com",
+				"identifier": "admin@example.com",
 				"password": "C0mpl3x+event-planning-2026!",
 			},
 		)
@@ -266,27 +316,27 @@ class LoginFlowTests(TestCase):
 
 		response = self.client.post(
 			"/authentication/",
-			{"email": "customer@example.com", "password": "incorrect-password"},
+			{"identifier": "customer@example.com", "password": "incorrect-password"},
 		)
 
 		self.assertEqual(response.status_code, 200)
-		self.assertContains(response, "Invalid email address or password.")
+		self.assertContains(response, "Invalid email/username or password.")
 		self.assertNotIn("_auth_user_id", self.client.session)
 
 	def test_unknown_email_uses_the_same_generic_error(self):
 		response = self.client.post(
 			"/authentication/",
-			{"email": "unknown@example.com", "password": "incorrect-password"},
+			{"identifier": "unknown@example.com", "password": "incorrect-password"},
 		)
 
 		self.assertEqual(response.status_code, 200)
-		self.assertContains(response, "Invalid email address or password.")
+		self.assertContains(response, "Invalid email/username or password.")
 		self.assertNotIn("_auth_user_id", self.client.session)
 
 	def test_safe_next_url_is_honored_and_external_next_is_ignored(self):
 		self.create_account()
 		credentials = {
-			"email": "customer@example.com",
+			"identifier": "customer@example.com",
 			"password": "C0mpl3x+event-planning-2026!",
 		}
 
@@ -309,7 +359,7 @@ class LoginFlowTests(TestCase):
 		self.client.post(
 			"/authentication/",
 			{
-				"email": "customer@example.com",
+				"identifier": "customer@example.com",
 				"password": "C0mpl3x+event-planning-2026!",
 			},
 		)
@@ -322,7 +372,7 @@ class LoginFlowTests(TestCase):
 		self.client.post(
 			"/authentication/",
 			{
-				"email": "customer@example.com",
+				"identifier": "customer@example.com",
 				"password": "C0mpl3x+event-planning-2026!",
 				"remember": "on",
 			},
@@ -452,3 +502,178 @@ class SuperAdminAccessTests(TestCase):
 
 		self.assertEqual(response.status_code, 302)
 		self.assertIn("/admin/login/", response["Location"])
+
+
+class AccountAreaAccessTests(TestCase):
+	def create_account(self, account_type):
+		return get_user_model().objects.create_user(
+			username=f"{account_type}-access",
+			email=f"{account_type}-access@example.com",
+			password="C0mpl3x+event-planning-2026!",
+			account_type=account_type,
+		)
+
+	def test_anonymous_visitors_are_redirected_from_account_areas(self):
+		protected_paths = (
+			"/customer_dashboard/",
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+			"/staff-event-details/floral-styling-review/",
+		)
+
+		for path in protected_paths:
+			with self.subTest(path=path):
+				response = self.client.get(path)
+				self.assertEqual(response.status_code, 302)
+				self.assertTrue(response["Location"].startswith("/authentication/?next="))
+
+	def test_customer_and_staff_can_only_access_their_own_account_areas(self):
+		customer = self.create_account("customer")
+		staff = self.create_account("staff")
+		staff_paths = (
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+			"/staff-event-details/floral-styling-review/",
+		)
+
+		self.client.force_login(customer)
+		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 200)
+		for path in staff_paths:
+			with self.subTest(account="customer", path=path):
+				self.assertEqual(self.client.get(path).status_code, 403)
+
+		self.client.force_login(staff)
+		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 403)
+		for path in staff_paths:
+			with self.subTest(account="staff", path=path):
+				self.assertEqual(self.client.get(path).status_code, 200)
+
+	def test_superuser_is_separate_from_customer_and_staff_portals(self):
+		superuser = get_user_model().objects.create_superuser(
+			username="portal-admin",
+			email="portal-admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superuser)
+
+		for path in (
+			"/customer_dashboard/",
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+			"/staff-event-details/floral-styling-review/",
+		):
+			with self.subTest(path=path):
+				self.assertEqual(self.client.get(path).status_code, 403)
+
+
+class AccountPasswordTests(TestCase):
+	password = "C0mpl3x+event-planning-2026!"
+	new_password = "An0ther+strong-password-2026!"
+
+	def create_account(self, **kwargs):
+		return get_user_model().objects.create_user(
+			username=kwargs.pop("username", "password-user"),
+			email=kwargs.pop("email", "password@example.com"),
+			password=self.password,
+			**kwargs,
+		)
+
+	def test_logout_requires_post_and_clears_authenticated_session(self):
+		user = self.create_account()
+		self.client.force_login(user)
+
+		get_response = self.client.get(reverse("authentication:logout"))
+		self.assertEqual(get_response.status_code, 405)
+		self.assertIn("_auth_user_id", self.client.session)
+
+		post_response = self.client.post(reverse("authentication:logout"))
+		self.assertRedirects(post_response, reverse("authentication:login"))
+		self.assertNotIn("_auth_user_id", self.client.session)
+
+	def test_authenticated_user_can_change_password_without_losing_session(self):
+		user = self.create_account()
+		self.client.force_login(user)
+
+		response = self.client.post(
+			reverse("authentication:password_change"),
+			{
+				"old_password": self.password,
+				"new_password1": self.new_password,
+				"new_password2": self.new_password,
+			},
+		)
+
+		self.assertRedirects(
+			response,
+			reverse("authentication:password_change_done"),
+		)
+		user.refresh_from_db()
+		self.assertTrue(user.check_password(self.new_password))
+		self.assertEqual(
+			self.client.get(reverse("authentication:password_change_done")).status_code,
+			200,
+		)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_password_reset_is_case_insensitive_and_preserves_staff_identity(self):
+		staff = self.create_account(
+			username="assigned-staff",
+			email="Assigned.Staff@example.com",
+			account_type="staff",
+		)
+		original_email = staff.email
+
+		response = self.client.post(
+			reverse("authentication:password_reset"),
+			{"email": "ASSIGNED.STAFF@EXAMPLE.COM"},
+		)
+		self.assertRedirects(response, reverse("authentication:password_reset_done"))
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn(original_email, mail.outbox[0].to)
+
+		reset_match = re.search(
+			r"http://testserver(/authentication/password/reset/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(reset_match)
+		reset_path = reset_match.group(1)
+		confirm_response = self.client.get(reset_path, follow=True)
+		self.assertTrue(confirm_response.context["validlink"])
+		confirm_path = confirm_response.request["PATH_INFO"]
+		confirm_response = self.client.post(
+			confirm_path,
+			{
+				"new_password1": self.new_password,
+				"new_password2": self.new_password,
+			},
+		)
+
+		self.assertRedirects(
+			confirm_response,
+			reverse("authentication:password_reset_complete"),
+		)
+		staff.refresh_from_db()
+		self.assertTrue(staff.check_password(self.new_password))
+		self.assertEqual(staff.email, original_email)
+		self.assertEqual(staff.account_type, "staff")
+		self.assertIsNotNone(staff.password_reset_at)
+		self.assertEqual(len(mail.outbox), 2)
+		self.assertIn(original_email, mail.outbox[1].to)
+		expired_response = self.client.get(reset_path, follow=True)
+		self.assertFalse(expired_response.context["validlink"])
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_password_reset_response_does_not_reveal_unknown_email(self):
+		response = self.client.post(
+			reverse("authentication:password_reset"),
+			{"email": "not-registered@example.com"},
+		)
+
+		self.assertRedirects(response, reverse("authentication:password_reset_done"))
+		self.assertEqual(len(mail.outbox), 0)

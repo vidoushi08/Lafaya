@@ -81,6 +81,8 @@ AUTH_USER_MODEL = "authentication.User"
 AUTHENTICATION_BACKENDS = [
     "authentication.backends.EmailOrUsernameModelBackend",
 ]
+LOGIN_URL = "authentication:login"
+PASSWORD_RESET_TIMEOUT = 3600
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -168,8 +170,5 @@ STATIC_URL = "static/"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@lafaya.mu"

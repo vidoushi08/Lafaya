@@ -7,6 +7,7 @@ from django import forms
 
 from .admin_site import superadmin_site
 from .models import User
+from django.core.exceptions import ValidationError
 
 
 class LafayaUserChangeForm(UserChangeForm):
@@ -35,6 +36,12 @@ class LafayaUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("username", "email", "account_type")
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("An account with this email address already exists.")
+        return email
 
 
 @admin.register(User, site=superadmin_site)

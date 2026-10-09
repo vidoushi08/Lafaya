@@ -1,20 +1,31 @@
 from django import forms
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.conf import settings
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.utils import timezone
 
 from common.location import load_city_postal_codes
 from .models import User
 
 
+class CaseInsensitivePasswordResetForm(PasswordResetForm):
+    def get_users(self, email):
+        active_users = User.objects.filter(email__iexact=email, is_active=True)
+        return (user for user in active_users if user.has_usable_password())
+
+
 class EmailLoginForm(forms.Form):
-    email = forms.EmailField(
-        label="Email address",
-        widget=forms.EmailInput(
+    identifier = forms.CharField(
+        label="Email address or username",
+        max_length=254,
+        strip=True,
+        widget=forms.TextInput(
             attrs={
-                "id": "email",
-                "placeholder": "you@example.com",
-                "autocomplete": "email",
+                "id": "identifier",
+                "placeholder": "email address or username",
+                "autocomplete": "username",
                 "required": True,
             }
         ),
@@ -37,20 +48,36 @@ class EmailLoginForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        email = cleaned_data.get("email")
+        identifier = cleaned_data.get("identifier")
         password = cleaned_data.get("password")
-        if email and password:
+        if identifier and password:
             self.user_cache = authenticate(
                 self.request,
-                username=email.strip(),
+                username=identifier,
                 password=password,
             )
             if self.user_cache is None:
-                raise ValidationError("Invalid email address or password.")
+                raise ValidationError("Invalid email/username or password.")
         return cleaned_data
 
     def get_user(self):
         return self.user_cache
+
+
+class PasswordResetTrackingSetPasswordForm(SetPasswordForm):
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.password_reset_at = timezone.now()
+        if commit:
+            user.save()
+            send_mail(
+                "Your Lafaya password was changed",
+                "The password for your Lafaya account was changed. "
+                "If you did not make this change, contact the Lafaya team.",
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+            )
+        return user
 
 
 class CustomerRegistrationForm(UserCreationForm):

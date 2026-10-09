@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Lower
 
 
 class User(AbstractUser):
@@ -12,7 +13,7 @@ class User(AbstractUser):
 		FEMALE = "female", "Female"
 		MALE = "male", "Male"
 
-	email = models.EmailField(unique=True, blank=False)
+	email = models.EmailField(blank=False)
 	account_type = models.CharField(
 		max_length=10,
 		choices=AccountType.choices,
@@ -25,11 +26,16 @@ class User(AbstractUser):
 	address = models.CharField(max_length=255, blank=True)
 	city = models.CharField(max_length=100, blank=True)
 	postal_code = models.CharField(max_length=20, blank=True)
+	password_reset_at = models.DateTimeField(null=True, blank=True)
 
 	REQUIRED_FIELDS = ["email"]
 
 	class Meta(AbstractUser.Meta):
 		constraints = [
+			models.UniqueConstraint(
+				Lower("email"),
+				name="user_email_case_insensitive_unique",
+			),
 			models.CheckConstraint(
 				condition=(
 					Q(is_superuser=True, account_type="")

@@ -41,10 +41,16 @@
           <i class="fa-solid fa-angle-right"></i>
           <span>view tasks</span>
         </div>
-        <button type="button" class="staff-detail-logout-btn">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Log Out</span>
-        </button>
+        <div class="staff-detail-header-actions">
+          <a href="{% url 'authentication:password_change' %}">Change password</a>
+          <form method="post" action="{% url 'authentication:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="staff-detail-logout-btn">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              <span>Log Out</span>
+            </button>
+          </form>
+        </div>
       </header>
 
       <section class="staff-detail-title-row">

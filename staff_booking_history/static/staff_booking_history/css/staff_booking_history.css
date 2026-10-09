@@ -116,6 +116,21 @@
   color: var(--booking-text);
 }
 
+.booking-history-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.booking-history-header-actions form {
+  margin: 0;
+}
+
+.booking-history-header-actions a {
+  color: var(--booking-text);
+  font-size: 0.85rem;
+}
+
 .booking-history-logout-btn {
   display: inline-flex;
   align-items: center;
