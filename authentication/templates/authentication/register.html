@@ -26,72 +26,81 @@
 
       <form class="auth-form auth-form-register" method="post">
         {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="auth-form-errors" role="alert">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
         <div class="auth-name-row">
           <label>
             <span>first name *</span>
-            <input type="text" id="first_name" name="first_name" placeholder="first name" autocomplete="given-name" required>
+            {{ form.first_name }}
+            {% for error in form.first_name.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
 
           <label>
             <span>last name *</span>
-            <input type="text" id="last_name" name="last_name" placeholder="last name" autocomplete="family-name" required>
+            {{ form.last_name }}
+            {% for error in form.last_name.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
         </div>
 
         <label>
           <span>username *</span>
-          <input type="text" id="username" name="username" placeholder="choose a username" autocomplete="username" required>
+          {{ form.username }}
+          {% for error in form.username.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
           <span>email address *</span>
-          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          {{ form.email }}
+          {% for error in form.email.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <div class="auth-name-row">
           <label>
             <span>phone number</span>
-            <input type="tel" id="phone" name="phone" placeholder="+230 5xxx xxxx" autocomplete="tel">
+            {{ form.phone }}
+            {% for error in form.phone.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
 
           <label>
             <span>date of birth</span>
-            <input type="date" id="date_of_birth" name="date_of_birth" autocomplete="bday">
+            {{ form.date_of_birth }}
+            {% for error in form.date_of_birth.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
         </div>
 
         <label>
           <span>gender</span>
-          <select id="gender" name="gender" autocomplete="sex" required>
-            {% for value, label in gender_choices %}
-              <option value="{{ value }}">{{ label }}</option>
-            {% endfor %}
-          </select>
+          {{ form.gender }}
+          {% for error in form.gender.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
           <span>address</span>
-          <input type="text" id="address" name="address" placeholder="street address" autocomplete="street-address">
+          {{ form.address }}
+          {% for error in form.address.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
           <span>city</span>
-          <select id="city" name="city" autocomplete="address-level2">
-            <option value="">select city</option>
-            {% for city in cities %}
-              <option value="{{ city }}">{{ city }}</option>
-            {% endfor %}
-          </select>
+          {{ form.city }}
+          {% for error in form.city.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
           <span>password *</span>
-          <input type="password" id="password1" name="password1" placeholder="create a password" autocomplete="new-password" required>
+          {{ form.password1 }}
+          {% for error in form.password1.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
           <span>confirm password *</span>
-          <input type="password" id="password2" name="password2" placeholder="confirm your password" autocomplete="new-password" required>
+          {{ form.password2 }}
+          {% for error in form.password2.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <button type="submit" class="auth-button">create account</button>

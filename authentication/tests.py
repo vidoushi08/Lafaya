@@ -68,6 +68,23 @@ class UserModelTests(TestCase):
 
 
 class RegisterPageTests(TestCase):
+	def registration_data(self, **overrides):
+		data = {
+			"first_name": "New",
+			"last_name": "Customer",
+			"username": "new-customer",
+			"email": "customer@example.com",
+			"phone": "+230 5555 1234",
+			"date_of_birth": "1995-06-15",
+			"gender": "female",
+			"address": "12 Example Street",
+			"city": "Port Louis",
+			"password1": "C0mpl3x+event-planning-2026!",
+			"password2": "C0mpl3x+event-planning-2026!",
+		}
+		data.update(overrides)
+		return data
+
 	def test_register_page_shows_profile_fields_and_city_options(self):
 		response = self.client.get("/authentication/register/")
 
@@ -89,7 +106,76 @@ class RegisterPageTests(TestCase):
 
 		self.assertNotContains(response, 'name="postal_code"')
 		self.assertContains(response, '<option value="Port Louis">Port Louis</option>')
-		self.assertContains(response, 'name="gender" autocomplete="sex" required')
-		self.assertNotContains(response, "select gender")
+		self.assertContains(response, 'name="gender" id="gender" autocomplete="sex" required')
+		self.assertContains(response, "select gender")
 		for value, label in get_user_model().Gender.choices:
 			self.assertContains(response, f'<option value="{value}">{label}</option>')
+
+	def test_registration_creates_a_customer_with_a_hashed_password(self):
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(
+				email="Customer@Example.com",
+				account_type="staff",
+			),
+			follow=True,
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.redirect_chain, [("/authentication/", 302)])
+		user = get_user_model().objects.get(username="new-customer")
+		self.assertEqual(user.email, "customer@example.com")
+		self.assertEqual(user.account_type, "customer")
+		self.assertEqual(user.postal_code, "11302")
+		self.assertTrue(user.check_password("C0mpl3x+event-planning-2026!"))
+		self.assertNotEqual(user.password, "C0mpl3x+event-planning-2026!")
+		self.assertContains(response, "Your customer account has been created.")
+
+	def test_registration_rejects_duplicate_email_case_insensitively(self):
+		get_user_model().objects.create_user(
+			username="existing-customer",
+			email="customer@example.com",
+			password="C0mpl3x+existing-password-2026!",
+		)
+
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(email="CUSTOMER@example.com"),
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn("email", response.context["form"].errors)
+		self.assertEqual(get_user_model().objects.count(), 1)
+
+	def test_registration_rejects_mismatched_passwords(self):
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(password2="Different+password-2026!"),
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn("password2", response.context["form"].errors)
+		self.assertEqual(get_user_model().objects.count(), 0)
+
+	def test_registration_uses_configured_password_validators(self):
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(
+				password1="password",
+				password2="password",
+			),
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn("password2", response.context["form"].errors)
+		self.assertEqual(get_user_model().objects.count(), 0)
+
+	def test_registration_rejects_unknown_city(self):
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(city="Not a city"),
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertIn("city", response.context["form"].errors)
+		self.assertEqual(get_user_model().objects.count(), 0)

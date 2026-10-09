@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 
-from common.location import load_cities
-from .models import User
+from .forms import CustomerRegistrationForm
 
 
 def login_view(request):
@@ -9,11 +9,10 @@ def login_view(request):
 
 
 def register_view(request):
-    return render(
-        request,
-        "authentication/register.html",
-        {
-            "cities": load_cities(),
-            "gender_choices": User.Gender.choices,
-        },
-    )
+    form = CustomerRegistrationForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Your customer account has been created. You can now sign in.")
+        return redirect("authentication:login")
+
+    return render(request, "authentication/register.html", {"form": form})

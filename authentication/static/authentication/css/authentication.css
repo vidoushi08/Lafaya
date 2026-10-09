@@ -184,6 +184,19 @@
   gap: 16px;
 }
 
+.auth-field-error,
+.auth-form-errors,
+.auth-messages {
+  color: var(--auth-accent-dark);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.auth-form-errors p,
+.auth-messages p {
+  margin: 0;
+}
+
 .auth-name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
