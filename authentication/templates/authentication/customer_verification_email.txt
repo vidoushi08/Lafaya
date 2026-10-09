@@ -1,0 +1,6 @@
+Hello {{ user.first_name }},
+
+Verify your Lafaya account by opening this link:
+{{ url }}
+
+The link expires in {{ timeout_hours }} hours and can only be used once. If you did not create this account, you can ignore this email.

@@ -1,0 +1,6 @@
+Hello,
+
+A Lafaya superuser created a staff account for you. Use this one-time link to set your password and activate your account:
+{{ url }}
+
+The link expires in {{ timeout_hours }} hours. If you were not expecting this invitation, contact the Lafaya team.

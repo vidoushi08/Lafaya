@@ -27,6 +27,8 @@ class User(AbstractUser):
 	city = models.CharField(max_length=100, blank=True)
 	postal_code = models.CharField(max_length=20, blank=True)
 	password_reset_at = models.DateTimeField(null=True, blank=True)
+	onboarding_token_hash = models.CharField(max_length=64, blank=True)
+	onboarding_token_created_at = models.DateTimeField(null=True, blank=True)
 
 	REQUIRED_FIELDS = ["email"]
 

@@ -1,11 +1,13 @@
 import re
 from datetime import date
+from datetime import timedelta
 
 from django.contrib.auth import authenticate, get_user_model
 from django.core import mail
 from django.db import IntegrityError, transaction
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 
 
@@ -154,25 +156,150 @@ class RegisterPageTests(TestCase):
 		for value, label in get_user_model().Gender.choices:
 			self.assertContains(response, f'<option value="{value}">{label}</option>')
 
-	def test_registration_creates_a_customer_with_a_hashed_password(self):
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_registration_requires_email_verification_before_login(self):
 		response = self.client.post(
 			"/authentication/register/",
 			self.registration_data(
 				email="Customer@Example.com",
 				account_type="staff",
 			),
-			follow=True,
 		)
 
-		self.assertEqual(response.status_code, 200)
-		self.assertEqual(response.redirect_chain, [("/authentication/", 302)])
+		self.assertRedirects(response, reverse("authentication:verification_sent"))
 		user = get_user_model().objects.get(username="new-customer")
 		self.assertEqual(user.email, "customer@example.com")
 		self.assertEqual(user.account_type, "customer")
 		self.assertEqual(user.postal_code, "11302")
 		self.assertTrue(user.check_password("C0mpl3x+event-planning-2026!"))
 		self.assertNotEqual(user.password, "C0mpl3x+event-planning-2026!")
-		self.assertContains(response, "Your customer account has been created.")
+		self.assertFalse(user.is_active)
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn(user.email, mail.outbox[0].to)
+
+		login_response = self.client.post(
+			reverse("authentication:login"),
+			{
+				"identifier": user.email,
+				"password": "C0mpl3x+event-planning-2026!",
+			},
+		)
+		self.assertContains(
+			login_response,
+			"Invalid email/username or password.",
+		)
+		self.assertNotIn("_auth_user_id", self.client.session)
+
+		verify_match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(verify_match)
+		verify_path = verify_match.group(1)
+		verify_response = self.client.get(verify_path)
+		self.assertContains(verify_response, "email verified")
+		user.refresh_from_db()
+		self.assertTrue(user.is_active)
+		self.assertEqual(user.onboarding_token_hash, "")
+
+		second_verification = self.client.get(verify_path)
+		self.assertContains(second_verification, "link unavailable")
+		login_response = self.client.post(
+			reverse("authentication:login"),
+			{
+				"identifier": user.email,
+				"password": "C0mpl3x+event-planning-2026!",
+			},
+		)
+		self.assertRedirects(login_response, "/customer_dashboard/")
+
+	@override_settings(
+		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+		ONBOARDING_EMAIL_RESEND_COOLDOWN=0,
+	)
+	def test_customer_resend_replaces_previous_verification_link(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		first_message = mail.outbox[0]
+		first_match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			first_message.body,
+		)
+		self.assertIsNotNone(first_match)
+
+		response = self.client.post(
+			reverse("authentication:resend_verification"),
+			{"email": "CUSTOMER@example.com"},
+		)
+		self.assertRedirects(
+			response,
+			reverse("authentication:verification_resend_done"),
+		)
+		self.assertEqual(len(mail.outbox), 2)
+		self.assertContains(
+			self.client.get(reverse("authentication:verification_resend_done")),
+			"If that address has a pending customer account",
+		)
+		self.assertContains(
+			self.client.get(first_match.group(1)),
+			"link unavailable",
+		)
+
+		second_match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			mail.outbox[1].body,
+		)
+		self.assertIsNotNone(second_match)
+		self.assertContains(self.client.get(second_match.group(1)), "email verified")
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_customer_verification_link_expires(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		user = get_user_model().objects.get(username="new-customer")
+		match = re.search(
+			r"http://testserver(/authentication/verify/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		user.onboarding_token_created_at = timezone.now() - timedelta(days=2)
+		user.save(update_fields=("onboarding_token_created_at",))
+
+		response = self.client.get(match.group(1))
+		self.assertContains(response, "link unavailable")
+		user.refresh_from_db()
+		self.assertFalse(user.is_active)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_resend_verification_response_is_generic_and_cooldown_limits_mail(self):
+		self.client.post(
+			"/authentication/register/",
+			self.registration_data(),
+		)
+		initial_mail_count = len(mail.outbox)
+
+		pending_response = self.client.post(
+			reverse("authentication:resend_verification"),
+			{"email": "customer@example.com"},
+		)
+		unknown_response = self.client.post(
+			reverse("authentication:resend_verification"),
+			{"email": "unknown@example.com"},
+		)
+
+		self.assertRedirects(
+			pending_response,
+			reverse("authentication:verification_resend_done"),
+		)
+		self.assertRedirects(
+			unknown_response,
+			reverse("authentication:verification_resend_done"),
+		)
+		self.assertEqual(len(mail.outbox), initial_mail_count)
 
 	def test_registration_rejects_duplicate_email_case_insensitively(self):
 		get_user_model().objects.create_user(
@@ -418,13 +545,18 @@ class SuperAdminAccessTests(TestCase):
 		self.assertRedirects(response, "/admin/")
 		self.assertIn("_auth_user_id", self.client.session)
 
-	def test_superadmin_can_create_a_staff_account_without_admin_site_access(self):
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_superadmin_creates_staff_account_with_setup_invitation(self):
 		superadmin = get_user_model().objects.create_superuser(
 			username="lafaya-admin",
 			email="admin@example.com",
 			password="C0mpl3x+event-planning-2026!",
 		)
 		self.client.force_login(superadmin)
+		add_page = self.client.get("/admin/authentication/user/add/")
+		self.assertEqual(add_page.status_code, 200)
+		self.assertNotContains(add_page, 'name="password1"')
+		self.assertNotContains(add_page, 'name="password2"')
 
 		response = self.client.post(
 			"/admin/authentication/user/add/",
@@ -432,8 +564,6 @@ class SuperAdminAccessTests(TestCase):
 				"username": "assigned-staff",
 				"email": "assigned-staff@example.com",
 				"account_type": "staff",
-				"password1": "C0mpl3x+staff-password-2026!",
-				"password2": "C0mpl3x+staff-password-2026!",
 			},
 		)
 
@@ -442,7 +572,136 @@ class SuperAdminAccessTests(TestCase):
 		self.assertEqual(staff.account_type, "staff")
 		self.assertFalse(staff.is_staff)
 		self.assertFalse(staff.is_superuser)
+		self.assertFalse(staff.is_active)
+		self.assertFalse(staff.has_usable_password())
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn(staff.email, mail.outbox[0].to)
+
+		invitation_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(invitation_match)
+		invitation_path = invitation_match.group(1)
+		response = self.client.get(invitation_path)
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "set your password")
+		response = self.client.post(
+			invitation_path,
+			{
+				"new_password1": "C0mpl3x+staff-password-2026!",
+				"new_password2": "C0mpl3x+staff-password-2026!",
+			},
+		)
+		self.assertRedirects(
+			response,
+			reverse("authentication:staff_invitation_complete"),
+		)
+
+		staff.refresh_from_db()
+		self.assertTrue(staff.is_active)
+		self.assertTrue(staff.has_usable_password())
 		self.assertTrue(staff.check_password("C0mpl3x+staff-password-2026!"))
+		self.assertEqual(staff.email, "assigned-staff@example.com")
+		self.assertEqual(staff.username, "assigned-staff")
+		self.assertEqual(staff.account_type, "staff")
+		self.assertEqual(staff.onboarding_token_hash, "")
+		self.assertContains(
+			self.client.get(invitation_path),
+			"invitation link unavailable",
+		)
+
+		self.client.logout()
+		login_response = self.client.post(
+			reverse("authentication:login"),
+			{
+				"identifier": staff.username,
+				"password": "C0mpl3x+staff-password-2026!",
+			},
+		)
+		self.assertRedirects(login_response, "/staff/")
+
+	@override_settings(
+		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+		ONBOARDING_EMAIL_RESEND_COOLDOWN=0,
+	)
+	def test_superadmin_can_resend_pending_staff_invitation(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "assigned-staff",
+				"email": "assigned-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		staff = get_user_model().objects.get(username="assigned-staff")
+		first_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(first_match)
+
+		response = self.client.post(
+			"/admin/authentication/user/",
+			{
+				"action": "resend_staff_invitation",
+				"_selected_action": [str(staff.pk)],
+				"index": "0",
+			},
+			follow=True,
+		)
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(mail.outbox), 2)
+		self.assertContains(
+			self.client.get(first_match.group(1)),
+			"invitation link unavailable",
+		)
+
+		second_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[1].body,
+		)
+		self.assertIsNotNone(second_match)
+		self.assertContains(
+			self.client.get(second_match.group(1)),
+			"set your password",
+		)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_expired_staff_invitation_cannot_activate_account(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "expired-staff",
+				"email": "expired-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		staff = get_user_model().objects.get(username="expired-staff")
+		match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		staff.onboarding_token_created_at = timezone.now() - timedelta(days=4)
+		staff.save(update_fields=("onboarding_token_created_at",))
+
+		response = self.client.get(match.group(1))
+		self.assertContains(response, "invitation link unavailable")
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
 
 	def test_admin_display_uses_superuser_flag_for_superadmin_role(self):
 		superadmin = get_user_model().objects.create_superuser(

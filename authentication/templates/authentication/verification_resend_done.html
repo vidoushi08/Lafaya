@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Check Your Email | Lafaya{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">customer account</span>
+      <h1>check your email</h1>
+    </div>
+    <p>If that address has a pending customer account, a new verification link will be sent. Any earlier link is no longer valid.</p>
+    <p class="auth-switch"><a href="{% url 'authentication:login' %}">back to sign in</a></p>
+  </div>
+</section>
+{% endblock %}

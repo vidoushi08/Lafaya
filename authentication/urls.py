@@ -10,6 +10,32 @@ app_name = "authentication"
 urlpatterns = [
     path("", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
+    path("verify/sent/", views.verification_sent_view, name="verification_sent"),
+    path(
+        "verify/resend/",
+        views.resend_verification_view,
+        name="resend_verification",
+    ),
+    path(
+        "verify/resend/sent/",
+        views.verification_resend_done_view,
+        name="verification_resend_done",
+    ),
+    path(
+        "verify/<uidb64>/<token>/",
+        views.verify_email_view,
+        name="verify_email",
+    ),
+    path(
+        "staff-invitation/<uidb64>/<token>/",
+        views.staff_invitation_view,
+        name="staff_invitation",
+    ),
+    path(
+        "staff-invitation/complete/",
+        views.staff_invitation_complete_view,
+        name="staff_invitation_complete",
+    ),
     path("logout/", views.logout_view, name="logout"),
     path(
         "password/change/",

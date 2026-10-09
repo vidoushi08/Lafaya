@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Email Verification | Lafaya{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">customer account</span>
+      {% if verified %}
+        <h1>email verified</h1>
+      {% else %}
+        <h1>link unavailable</h1>
+      {% endif %}
+    </div>
+    {% if verified %}
+      <p>Your email is verified and your customer account is active. You can now sign in.</p>
+      <a class="auth-button auth-button-link" href="{% url 'authentication:login' %}">sign in</a>
+    {% else %}
+      <p>This verification link is invalid, expired, or already used. Request a new link if your account is still pending.</p>
+      <a class="auth-button auth-button-link" href="{% url 'authentication:resend_verification' %}">request a new link</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

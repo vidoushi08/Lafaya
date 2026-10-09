@@ -1,7 +1,11 @@
 from django import forms
 from django.contrib.auth import authenticate
 from django.conf import settings
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
+from django.contrib.auth.forms import (
+    PasswordResetForm,
+    SetPasswordForm,
+    UserCreationForm,
+)
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -78,6 +82,19 @@ class PasswordResetTrackingSetPasswordForm(SetPasswordForm):
                 [user.email],
             )
         return user
+
+
+class EmailAddressForm(forms.Form):
+    email = forms.EmailField(
+        label="Email address",
+        widget=forms.EmailInput(
+            attrs={
+                "autocomplete": "email",
+                "placeholder": "you@example.com",
+                "required": True,
+            }
+        ),
+    )
 
 
 class CustomerRegistrationForm(UserCreationForm):
@@ -206,6 +223,7 @@ class CustomerRegistrationForm(UserCreationForm):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         user.account_type = User.AccountType.CUSTOMER
+        user.is_active = False
         user.postal_code = self.city_postal_codes.get(user.city, "")
         if commit:
             user.save()
