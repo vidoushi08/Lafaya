@@ -1,9 +1,56 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 from common.location import load_city_postal_codes
 from .models import User
+
+
+class EmailLoginForm(forms.Form):
+    email = forms.EmailField(
+        label="Email address",
+        widget=forms.EmailInput(
+            attrs={
+                "id": "email",
+                "placeholder": "you@example.com",
+                "autocomplete": "email",
+                "required": True,
+            }
+        ),
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "id": "password",
+                "placeholder": "enter your password",
+                "autocomplete": "current-password",
+                "required": True,
+            }
+        ),
+    )
+
+    def __init__(self, request=None, *args, **kwargs):
+        self.request = request
+        self.user_cache = None
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+        if email and password:
+            self.user_cache = authenticate(
+                self.request,
+                username=email.strip(),
+                password=password,
+            )
+            if self.user_cache is None:
+                raise ValidationError("Invalid email address or password.")
+        return cleaned_data
+
+    def get_user(self):
+        return self.user_cache
 
 
 class CustomerRegistrationForm(UserCreationForm):
