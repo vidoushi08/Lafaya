@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Customer Profile | Lafaya{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/manage_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="customer-profile-shell">
+    <aside class="customer-profile-sidebar">
+      <div class="customer-profile-logo-area">
+        {% include 'includes/lafaya_logo.html' %}
+      </div>
+
+      <h2 class="customer-profile-portal-title">Customer Portal</h2>
+
+      <nav class="customer-profile-nav" aria-label="Customer portal navigation">
+        <a class="customer-profile-nav-item" href="{% url 'booking:booking' %}">
+          <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
+          <span>Booking History</span>
+        </a>
+        <a class="customer-profile-nav-item" href="#">
+          <i class="fa-regular fa-compass" aria-hidden="true"></i>
+          <span>Create Event</span>
+        </a>
+        <a class="customer-profile-nav-item" href="{% url 'reviews:reviews' %}">
+          <i class="fa-regular fa-star" aria-hidden="true"></i>
+          <span>Reviews</span>
+        </a>
+        <a class="customer-profile-nav-item" href="{% url 'booking:booking' %}">
+          <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+          <span>Booking Details</span>
+        </a>
+        <a class="customer-profile-nav-item customer-profile-nav-item-active" href="{% url 'customer_dashboard:manage_profile' %}" aria-current="page">
+          <i class="fa-regular fa-user" aria-hidden="true"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="customer-profile-main">
+      <div class="customer-profile-circle customer-profile-circle-top" aria-hidden="true"></div>
+      <div class="customer-profile-circle customer-profile-circle-bottom" aria-hidden="true"></div>
+      <img class="customer-profile-vase" src="{% static 'images/ceramic_pot.png' %}" alt="" aria-hidden="true">
+
+      <div class="customer-profile-content">
+        <header class="customer-profile-header">
+          <h1 class="customer-profile-breadcrumb">
+            <span>Customer</span>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            <strong>Manage Profile</strong>
+          </h1>
+          <button class="customer-profile-save" type="button">Save</button>
+        </header>
+
+        <section class="customer-profile-editor" aria-label="Customer profile details">
+          <div class="customer-profile-photo-column">
+            <div class="customer-profile-avatar" aria-label="Default customer profile avatar">
+              <i class="fa-regular fa-user" aria-hidden="true"></i>
+            </div>
+            <button class="customer-profile-photo-button" type="button">
+              <i class="fa-solid fa-camera" aria-hidden="true"></i>
+              <span>Change Photo</span>
+            </button>
+          </div>
+
+          <div class="customer-profile-fields">
+            <label class="customer-profile-field">
+              <span>First Name</span>
+              <input id="customer-first-name" name="first_name" type="text" value="Emma" autocomplete="given-name">
+            </label>
+            <label class="customer-profile-field">
+              <span>Last Name</span>
+              <input id="customer-last-name" name="last_name" type="text" value="Clarke" autocomplete="family-name">
+            </label>
+
+            <label class="customer-profile-field customer-profile-field-wide">
+              <span>Email</span>
+              <input id="customer-email" name="email" type="email" value="emma.clarke@email.com" autocomplete="email">
+            </label>
+
+            <label class="customer-profile-field">
+              <span>Phone</span>
+              <input id="customer-phone" name="phone" type="tel" value="+230 5 123 4567" autocomplete="tel">
+            </label>
+            <label class="customer-profile-field">
+              <span>Date of Birth</span>
+              <span class="customer-profile-date-wrap">
+                <input id="customer-date-of-birth" name="date_of_birth" type="date" value="1999-03-15" autocomplete="bday">
+              </span>
+            </label>
+
+            <label class="customer-profile-field">
+              <span>Gender</span>
+              <select id="customer-gender" name="gender">
+                <option selected>Female</option>
+                <option>Male</option>
+                <option>Prefer not to say</option>
+              </select>
+            </label>
+            <label class="customer-profile-field">
+              <span>Language</span>
+              <select id="customer-language" name="language">
+                <option selected>English</option>
+                <option>French</option>
+                <option>Creole</option>
+              </select>
+            </label>
+
+            <label class="customer-profile-field customer-profile-field-wide">
+              <span>Address</span>
+              <input id="customer-address" name="address" type="text" value="12 Oceanview Avenue, Grand Baie, Mauritius" autocomplete="street-address">
+            </label>
+
+            <label class="customer-profile-field">
+              <span>City</span>
+              <input id="customer-city" name="city" type="text" value="Grand Baie" autocomplete="address-level2">
+            </label>
+            <label class="customer-profile-field">
+              <span>Postal Code</span>
+              <input id="customer-postal-code" name="postal_code" type="text" value="30501" autocomplete="postal-code">
+            </label>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
