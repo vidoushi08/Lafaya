@@ -16,8 +16,8 @@ def account_type_required(account_type):
                 )
 
             if (
-                request.user.is_superuser
-                or request.user.account_type != account_type
+                not request.user.is_superuser
+                and request.user.account_type != account_type
             ):
                 raise PermissionDenied
 

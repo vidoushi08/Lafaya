@@ -3,6 +3,11 @@
   grid-template-columns: 280px minmax(0, 1fr);
   min-height: 100vh;
   background-color: var(--color-dashboard-background);
+  background-image:
+    radial-gradient(circle at 86% 30%, var(--color-dashboard-decoration) 0 82px, transparent 84px),
+    radial-gradient(circle at 15% 78%, var(--color-dashboard-decoration) 0 64px, transparent 66px),
+    radial-gradient(ellipse at 72% 10%, var(--color-dashboard-glow), transparent 36%),
+    linear-gradient(115deg, var(--color-dashboard-canvas-start), var(--color-dashboard-canvas-end));
 }
 
 .customer-sidebar {
@@ -58,6 +63,14 @@
 .customer-nav-link:hover,
 .customer-event-links a:hover {
   background-color: var(--color-dashboard-highlight);
+}
+
+.customer-nav-link-disabled {
+  cursor: default;
+}
+
+.customer-nav-link-disabled:hover {
+  background-color: transparent;
 }
 
 .customer-create-menu {
@@ -290,13 +303,9 @@
   color: var(--color-white);
   font-size: 0.9rem;
   font-weight: 600;
-  text-decoration: none;
+  font-family: inherit;
+  cursor: default;
   transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.customer-manage-button:hover {
-  transform: translateY(-2px);
-  background-color: var(--color-dashboard-green);
 }
 
 .customer-profile-illustration {
@@ -376,9 +385,38 @@
   color: var(--color-grey-dark);
 }
 
-.customer-event-anchor {
-  position: relative;
-  top: -1rem;
+.customer-action-create-menu {
+  display: block;
+  padding: 0;
+  overflow: visible;
+}
+
+.customer-action-create-menu summary {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  list-style: none;
+  cursor: pointer;
+}
+
+.customer-action-create-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.customer-action-menu-chevron {
+  flex: 0 0 auto;
+  color: var(--color-grey-dark);
+  transition: transform 0.2s ease;
+}
+
+.customer-action-create-menu[open] .customer-action-menu-chevron {
+  transform: rotate(180deg);
+}
+
+.customer-action-event-links {
+  margin: 0 1rem 1rem 4.7rem;
 }
 
 @media (max-width: 1100px) {

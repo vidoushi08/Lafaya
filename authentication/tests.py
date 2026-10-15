@@ -960,7 +960,7 @@ class AccountAreaAccessTests(TestCase):
 			with self.subTest(account="staff", path=path):
 				self.assertEqual(self.client.get(path).status_code, 200)
 
-	def test_superuser_is_separate_from_customer_and_staff_portals(self):
+	def test_superuser_can_access_customer_and_staff_portals(self):
 		superuser = get_user_model().objects.create_superuser(
 			username="portal-admin",
 			email="portal-admin@example.com",
@@ -977,7 +977,7 @@ class AccountAreaAccessTests(TestCase):
 			"/staff-event-details/floral-styling-review/",
 		):
 			with self.subTest(path=path):
-				self.assertEqual(self.client.get(path).status_code, 403)
+				self.assertEqual(self.client.get(path).status_code, 200)
 
 
 class AccountPasswordTests(TestCase):
