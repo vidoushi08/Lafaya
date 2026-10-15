@@ -7,6 +7,13 @@
   --color-red: #ef4444;
   --color-complement-hover: #23778a;
   --color-complement: #2a8da1;
+  --color-dashboard-background: #f3eee3;
+  --color-dashboard-green: #72805c;
+  --color-dashboard-green-dark: #4f5c38;
+  --color-dashboard-highlight: #e9e5dc;
+  --color-dashboard-icon: #817a73;
+  --color-dashboard-line: #eee9e1;
+  --color-dashboard-sidebar: #f2ece9;
   --color-dark: #333333;
   --color-etsy: #f1641e;
   --color-gold: #d4af37;
@@ -32,6 +39,7 @@
   --color-youtube: #ff0000;
 
   --radius-btn: 10px;
+  --radius-card: 18px;
   --radius-circle: 50%;
 
   --font-body:
