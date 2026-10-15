@@ -7,5 +7,6 @@ app_name = "customer_dashboard"
 
 urlpatterns = [
     path("", views.index, name="customer_dashboard"),
+    path("booking-history/", views.booking_history, name="booking_history"),
     path("manage-profile/", views.manage_profile, name="manage_profile"),
 ]
