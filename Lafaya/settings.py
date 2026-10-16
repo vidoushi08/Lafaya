@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # homepage application
     "homepage.apps.HomepageConfig",
+    # common shared utilities application
+    "common.apps.CommonConfig",
     # authentication application
     "authentication.apps.AuthenticationConfig",
     # customer dashboard application
@@ -71,10 +73,20 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+AUTH_USER_MODEL = "authentication.User"
+AUTHENTICATION_BACKENDS = [
+    "authentication.backends.EmailOrUsernameModelBackend",
+]
+LOGIN_URL = "authentication:login"
+PASSWORD_RESET_TIMEOUT = 3600
+CUSTOMER_EMAIL_VERIFICATION_TIMEOUT = 24 * 60 * 60
+ONBOARDING_EMAIL_RESEND_COOLDOWN = 60
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "authentication.middleware.CustomerVerificationOriginMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -157,8 +169,5 @@ STATIC_URL = "static/"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@lafaya.mu"

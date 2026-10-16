@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% block content %}
-<section class="auth-page">
+<section class="auth-page auth-page-register">
   <div class="auth-card auth-card-register">
-    <div class="auth-panel auth-panel-visual auth-panel-visual-alt">
+    <div class="auth-panel auth-panel-visual auth-panel-visual-alt" style="background-image: url('/static/images/register_background.png');">
       <div class="auth-badge">join lafaya</div>
       <h1>create your dream event experience.</h1>
       <p>
@@ -22,34 +22,86 @@
       <div class="auth-header">
         <span class="auth-kicker">register</span>
         <h2>create your account</h2>
+        <p class="auth-help-text">We’ll email you a verification link before you can sign in.</p>
       </div>
 
-      <form class="auth-form auth-form-register">
+      <form class="auth-form auth-form-register" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="auth-form-errors" role="alert">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
         <div class="auth-name-row">
           <label>
-            <span>first name</span>
-            <input type="text" name="first_name" placeholder="first name">
+            <span>first name *</span>
+            {{ form.first_name }}
+            {% for error in form.first_name.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
 
           <label>
-            <span>last name</span>
-            <input type="text" name="last_name" placeholder="last name">
+            <span>last name *</span>
+            {{ form.last_name }}
+            {% for error in form.last_name.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
           </label>
         </div>
 
         <label>
-          <span>email address</span>
-          <input type="email" name="email" placeholder="you@example.com">
+          <span>username *</span>
+          {{ form.username }}
+          {% for error in form.username.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
-          <span>password</span>
-          <input type="password" name="password" placeholder="create a password">
+          <span>email address *</span>
+          {{ form.email }}
+          {% for error in form.email.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+        </label>
+
+        <div class="auth-name-row">
+          <label>
+            <span>phone number</span>
+            {{ form.phone }}
+            {% for error in form.phone.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+          </label>
+
+          <label>
+            <span>date of birth</span>
+            {{ form.date_of_birth }}
+            {% for error in form.date_of_birth.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+          </label>
+        </div>
+
+        <label>
+          <span>gender</span>
+          {{ form.gender }}
+          {% for error in form.gender.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
-          <span>confirm password</span>
-          <input type="password" name="confirm_password" placeholder="confirm your password">
+          <span>address</span>
+          {{ form.address }}
+          {% for error in form.address.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+        </label>
+
+        <label>
+          <span>city</span>
+          {{ form.city }}
+          {% for error in form.city.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+        </label>
+
+        <label>
+          <span>password *</span>
+          {{ form.password1 }}
+          {% for error in form.password1.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+        </label>
+
+        <label>
+          <span>confirm password *</span>
+          {{ form.password2 }}
+          {% for error in form.password2.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <button type="submit" class="auth-button">create account</button>

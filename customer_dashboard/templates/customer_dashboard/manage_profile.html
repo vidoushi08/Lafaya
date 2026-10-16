@@ -23,9 +23,13 @@
           <i class="fa-regular fa-calendar-check" aria-hidden="true"></i>
           <span>Booking History</span>
         </a>
-        <a class="customer-profile-nav-item" href="#">
+        <a class="customer-profile-nav-item" href="{% url 'customer_dashboard:customer_dashboard' %}">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
+          <span>Dashboard</span>
+        </a>
+        <a class="customer-profile-nav-item" href="{% url 'birthday:birthday' %}">
           <i class="fa-regular fa-compass" aria-hidden="true"></i>
-          <span>Create Event</span>
+          <span>Create an Event</span>
         </a>
         <a class="customer-profile-nav-item" href="{% url 'reviews:reviews' %}">
           <i class="fa-regular fa-star" aria-hidden="true"></i>
@@ -48,91 +52,95 @@
       <img class="customer-profile-vase" src="{% static 'images/ceramic_pot.png' %}" alt="" aria-hidden="true">
 
       <div class="customer-profile-content">
-        <header class="customer-profile-header">
-          <h1 class="customer-profile-breadcrumb">
-            <span>Customer</span>
-            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-            <strong>Manage Profile</strong>
-          </h1>
-          <button class="customer-profile-save" type="button">Save</button>
-        </header>
+        {% if messages %}
+          <ul class="customer-profile-messages" role="status">
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+          </ul>
+        {% endif %}
 
-        <section class="customer-profile-editor" aria-label="Customer profile details">
-          <div class="customer-profile-photo-column">
-            <div class="customer-profile-avatar" aria-label="Default customer profile avatar">
-              <i class="fa-regular fa-user" aria-hidden="true"></i>
+        <form method="post">
+          {% csrf_token %}
+          <header class="customer-profile-header">
+            <h1 class="customer-profile-breadcrumb">
+              <span>Customer</span>
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+              <strong>Manage Profile</strong>
+            </h1>
+            <button class="customer-profile-save" type="submit">Save</button>
+          </header>
+
+          {% if form.non_field_errors %}
+            <div class="customer-profile-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <section class="customer-profile-editor" aria-label="Customer profile details">
+            <div class="customer-profile-photo-column">
+              <div class="customer-profile-avatar" aria-label="Customer profile avatar">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+              </div>
             </div>
-            <button class="customer-profile-photo-button" type="button">
-              <i class="fa-solid fa-camera" aria-hidden="true"></i>
-              <span>Change Photo</span>
-            </button>
-          </div>
 
-          <div class="customer-profile-fields">
-            <label class="customer-profile-field">
-              <span>First Name</span>
-              <input id="customer-first-name" name="first_name" type="text" value="Emma" autocomplete="given-name">
-            </label>
-            <label class="customer-profile-field">
-              <span>Last Name</span>
-              <input id="customer-last-name" name="last_name" type="text" value="Clarke" autocomplete="family-name">
-            </label>
+            <div class="customer-profile-fields">
+              <label class="customer-profile-field" for="{{ form.first_name.id_for_label }}">
+                <span>{{ form.first_name.label }}</span>
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.last_name.id_for_label }}">
+                <span>{{ form.last_name.label }}</span>
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+              </label>
 
-            <label class="customer-profile-field customer-profile-field-wide">
-              <span>Email</span>
-              <input id="customer-email" name="email" type="email" value="emma.clarke@email.com" autocomplete="email">
-            </label>
+              <label class="customer-profile-field customer-profile-field-wide" for="{{ form.email.id_for_label }}">
+                <span>{{ form.email.label }}</span>
+                {{ form.email }}
+                {{ form.email.errors }}
+              </label>
 
-            <label class="customer-profile-field">
-              <span>Phone</span>
-              <input id="customer-phone" name="phone" type="tel" value="+230 5 123 4567" autocomplete="tel">
-            </label>
-            <label class="customer-profile-field">
-              <span>Date of Birth</span>
-              <span class="customer-profile-date-wrap">
-                <input id="customer-date-of-birth" name="date_of_birth" type="date" value="1999-03-15" autocomplete="bday">
-              </span>
-            </label>
+              <label class="customer-profile-field" for="{{ form.phone.id_for_label }}">
+                <span>{{ form.phone.label }}</span>
+                {{ form.phone }}
+                {{ form.phone.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.date_of_birth.id_for_label }}">
+                <span>Date of Birth</span>
+                <span class="customer-profile-date-wrap">{{ form.date_of_birth }}</span>
+                {{ form.date_of_birth.errors }}
+              </label>
 
-            <label class="customer-profile-field">
-              <span>Gender</span>
-              <select id="customer-gender" name="gender">
-                <option selected>Female</option>
-                <option>Male</option>
-                <option>Prefer not to say</option>
-              </select>
-            </label>
-            <label class="customer-profile-field">
-              <span>Language</span>
-              <select id="customer-language" name="language">
-                <option selected>English</option>
-                <option>French</option>
-                <option>Creole</option>
-              </select>
-            </label>
+              <label class="customer-profile-field" for="{{ form.gender.id_for_label }}">
+                <span>{{ form.gender.label }}</span>
+                {{ form.gender }}
+                {{ form.gender.errors }}
+              </label>
 
-            <label class="customer-profile-field customer-profile-field-wide">
-              <span>Address</span>
-              <input id="customer-address" name="address" type="text" value="12 Oceanview Avenue, Grand Baie, Mauritius" autocomplete="street-address">
-            </label>
+              <label class="customer-profile-field customer-profile-field-wide" for="{{ form.address.id_for_label }}">
+                <span>{{ form.address.label }}</span>
+                {{ form.address }}
+                {{ form.address.errors }}
+              </label>
 
-            <label class="customer-profile-field">
-              <span>City</span>
-              <input id="customer-city" name="city" type="text" value="Grand Baie" autocomplete="address-level2">
-            </label>
-            <label class="customer-profile-field">
-              <span>Postal Code</span>
-              <input id="customer-postal-code" name="postal_code" type="text" value="30501" autocomplete="postal-code">
-            </label>
+              <label class="customer-profile-field" for="{{ form.city.id_for_label }}">
+                <span>{{ form.city.label }}</span>
+                {{ form.city }}
+                {{ form.city.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.postal_code.id_for_label }}">
+                <span>Postal Code</span>
+                {{ form.postal_code }}
+                {{ form.postal_code.errors }}
+              </label>
 
-            <div class="customer-profile-form-actions">
-              <button class="customer-profile-password-button" type="button">
-                <i class="fa-solid fa-key" aria-hidden="true"></i>
-                <span>Change Password</span>
-              </button>
+              <div class="customer-profile-form-actions">
+                <a class="customer-profile-password-button" href="{% url 'authentication:password_change' %}">
+                  <i class="fa-solid fa-key" aria-hidden="true"></i>
+                  <span>Change Password</span>
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </form>
       </div>
     </main>
   </div>

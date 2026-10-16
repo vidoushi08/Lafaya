@@ -7,7 +7,31 @@
   --color-red: #ef4444;
   --color-complement-hover: #23778a;
   --color-complement: #2a8da1;
+  --color-dashboard-background: #f3eee3;
+  --color-dashboard-canvas-start: #f7f2e9;
+  --color-dashboard-canvas-end: #eee4d4;
+  --color-dashboard-decoration: rgba(179, 83, 52, 0.025);
+  --color-dashboard-green: #72805c;
+  --color-dashboard-green-dark: #4f5c38;
+  --color-dashboard-glow: rgba(255, 255, 255, 0.3);
+  --color-dashboard-highlight: #e9e5dc;
+  --color-dashboard-icon: #817a73;
+  --color-dashboard-line: #eee9e1;
+  --color-dashboard-sidebar: #f2ece9;
   --color-dark: #333333;
+  --color-review-button: #654331;
+  --color-review-button-hover: #4f3427;
+  --color-review-copy: #987966;
+  --color-review-divider: #eadfd3;
+  --color-review-heading: #573725;
+  --color-review-input: #fbf9f6;
+  --color-review-page: #f5f0e8;
+  --color-review-panel: #cbb58c;
+  --color-review-placeholder: #b4a293;
+  --color-review-star: #b8875f;
+  --color-review-star-empty: #e7ddd3;
+  --color-review-tag: #faf7f2;
+  --color-review-track: #eee9e2;
   --color-etsy: #f1641e;
   --color-gold: #d4af37;
   --color-grey: #c9c9c9;
@@ -32,7 +56,9 @@
   --color-youtube: #ff0000;
 
   --radius-btn: 10px;
+  --radius-card: 18px;
   --radius-circle: 50%;
+  --radius-pill: 999px;
 
   --font-body:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
