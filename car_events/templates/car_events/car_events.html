@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Car Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'car_events/css/car_events.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="car-events-page">
+    <section class="car-events-hero" aria-labelledby="car-events-hero-heading">
+      <img class="car-events-hero-image" src="{% static 'images/events/cars_main.png' %}" alt="A crowd gathered around cars at an automotive meet">
+      <div class="car-events-hero-overlay"></div>
+      <div class="car-events-hero-content">
+        <p class="car-events-eyebrow">Automotive event production</p>
+        <h1 id="car-events-hero-heading">Turn your car meet into a landmark event</h1>
+        <p class="car-events-hero-copy">From venue booking and sponsorship planning to event management and marketing, we deliver unforgettable automotive experiences across Mauritius.</p>
+        <div class="car-events-hero-actions">
+          <a class="car-events-button car-events-button-primary" href="#car-events-venues">Explore venues</a>
+          <a class="car-events-button car-events-button-outline" href="#car-events-services">Explore services</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="car-events-band car-events-venues" id="car-events-venues" aria-labelledby="car-events-venues-heading">
+      <div class="car-events-section-heading car-events-section-heading-row">
+        <div>
+          <p class="car-events-eyebrow">Made for every kind of meet</p>
+          <h2 id="car-events-venues-heading">Find your perfect venue</h2>
+        </div>
+        <a class="car-events-section-link" href="#car-events-packages">Explore packages <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="car-events-card-grid">
+        <article class="car-events-venue-card">
+          <img src="{% static 'car_events/images/car_venue_svicc.png' %}" alt="SVICC event venue in Paille">
+          <div class="car-events-card-content">
+            <p class="car-events-card-location">Paille, Mauritius</p>
+            <h3>SVICC</h3>
+            <p>A spacious indoor and outdoor setting for large-scale meets, showcases, and automotive expos.</p>
+          </div>
+          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+
+        <article class="car-events-venue-card">
+          <img src="{% static 'car_events/images/car_venue_cote_dor.png' %}" alt="Côte d'Or event venue in St Pierre">
+          <div class="car-events-card-content">
+            <p class="car-events-card-location">St Pierre, Mauritius</p>
+            <h3>Côte d'Or</h3>
+            <p>A high-capacity sports and entertainment destination for energetic meets and trackside experiences.</p>
+          </div>
+          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+
+        <article class="car-events-venue-card">
+          <img src="{% static 'car_events/images/car_venue_tribeca.png' %}" alt="Tribeca Mall event venue in Trianon">
+          <div class="car-events-card-content">
+            <p class="car-events-card-location">Trianon, Mauritius</p>
+            <h3>Tribeca Mall</h3>
+            <p>A lively retail destination for community car meets, brand activations, and public showcases.</p>
+          </div>
+          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-packages" id="car-events-packages" aria-labelledby="car-events-packages-heading">
+      <div class="car-events-section-heading car-events-section-heading-row">
+        <div>
+          <p class="car-events-eyebrow">Flexible event planning</p>
+          <h2 id="car-events-packages-heading">Choose your event package</h2>
+        </div>
+        <a class="car-events-section-link" href="#car-events-enquiry">Compare packages <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="car-events-package-grid">
+        <article class="car-events-package">
+          <div class="car-events-package-heading">
+            <p>Focused assemblies</p>
+            <h3>Starter Meet</h3>
+          </div>
+          <ul>
+            <li>Venue sourcing and booking</li>
+            <li>Event-day coordination</li>
+            <li>Registration planning</li>
+            <li>Promotional support</li>
+          </ul>
+          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+
+        <article class="car-events-package car-events-package-featured">
+          <div class="car-events-package-heading">
+            <p>High-energy live events</p>
+            <h3>Premium Meet</h3>
+          </div>
+          <ul>
+            <li>Everything in Starter Meet</li>
+            <li>Sponsor coordination</li>
+            <li>Professional photo and video</li>
+            <li>Show-and-shine programming</li>
+          </ul>
+          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+
+        <article class="car-events-package">
+          <div class="car-events-package-heading">
+            <p>Built around your vision</p>
+            <h3>Festival Experience</h3>
+          </div>
+          <ul>
+            <li>Multi-zone event planning</li>
+            <li>Brand and sponsor activations</li>
+            <li>Live entertainment coordination</li>
+            <li>Full event production support</li>
+          </ul>
+          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-band car-events-services" id="car-events-services" aria-labelledby="car-events-services-heading">
+      <div class="car-events-section-heading car-events-section-heading-centered">
+        <p class="car-events-eyebrow">Make it yours</p>
+        <h2 id="car-events-services-heading">Add something extra</h2>
+        <p>Build a meet that gives drivers and fans a reason to stay longer.</p>
+      </div>
+
+      <div class="car-events-service-grid">
+        <article class="car-events-service">
+          <img src="{% static 'car_events/images/car_services_vip.png' %}" alt="VIP experience at a car event">
+          <div class="car-events-service-content">
+            <h3>VIP Experience</h3>
+            <p>Set aside premium parking, lounge access, catering, and branded passes for your special guests.</p>
+          </div>
+        </article>
+        <article class="car-events-service">
+          <img src="{% static 'car_events/images/car_services_show.png' %}" alt="Show-and-shine awards at a car meet">
+          <div class="car-events-service-content">
+            <h3>Show &amp; Shine</h3>
+            <p>Give standout builds their moment with registrations, judging, trophies, and an awards ceremony.</p>
+          </div>
+        </article>
+        <article class="car-events-service">
+          <img src="{% static 'car_events/images/car_services_jdm.png' %}" alt="JDM cars at an automotive event">
+          <div class="car-events-service-content">
+            <h3>JDM Experience</h3>
+            <p>Bring Japanese street-car culture to life with themed branding, categories, and dedicated awards.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="car-events-testimonial">
+      <blockquote>“Lafaya handled the venue, permits, sponsors, and schedules. Our crew simply showed up and enjoyed the meet.”</blockquote>
+      <cite>Car club organizer</cite>
+    </section>
+
+    <section class="car-events-enquiry" id="car-events-enquiry" aria-labelledby="car-events-enquiry-heading">
+      <div>
+        <p class="car-events-eyebrow">Ready when you are</p>
+        <h2 id="car-events-enquiry-heading">Let’s make your next meet one to remember.</h2>
+      </div>
+      <a class="car-events-button car-events-button-light" href="mailto:hello@lafaya.mu?subject=Car%20event%20enquiry">Talk to our team <i class="fa-solid fa-arrow-right"></i></a>
+    </section>
+  </div>
+{% endblock %}

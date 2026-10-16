@@ -1,0 +1,473 @@
+.car-events-page {
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+.car-events-hero {
+  position: relative;
+  display: flex;
+  min-height: 640px;
+  align-items: center;
+  overflow: hidden;
+  color: var(--color-white);
+  background-color: var(--color-dark);
+}
+
+.car-events-hero-image,
+.car-events-hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.car-events-hero-image {
+  object-fit: cover;
+}
+
+.car-events-hero-overlay {
+  background-color: var(--color-overlay);
+}
+
+.car-events-hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(var(--container-max-width), 100%);
+  margin: 0 auto;
+  padding: 6rem var(--container-padding);
+  text-align: center;
+}
+
+.car-events-eyebrow {
+  margin-bottom: 0.75rem;
+  color: var(--color-red);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.car-events-hero .car-events-eyebrow {
+  color: var(--color-white);
+}
+
+.car-events-hero h1 {
+  max-width: 900px;
+  margin: 1.2rem auto;
+  font-size: 5rem;
+  line-height: 0.98;
+}
+
+.car-events-hero-copy {
+  max-width: 780px;
+  margin: 0 auto 2rem;
+  color: var(--color-white-muted);
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.car-events-hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.car-events-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.8rem 1.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-btn);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.car-events-button:hover {
+  transform: translateY(-2px);
+}
+
+.car-events-button-primary {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.car-events-button-primary:hover {
+  background-color: var(--color-brand);
+}
+
+.car-events-button-outline {
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+.car-events-button-outline:hover {
+  background-color: var(--color-white-muted);
+  color: var(--color-dark);
+}
+
+.car-events-band,
+.car-events-packages {
+  padding: 6rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+}
+
+.car-events-band {
+  background-color: var(--color-muted);
+}
+
+.car-events-section-heading h2,
+.car-events-enquiry h2 {
+  max-width: 760px;
+  margin: 0.5rem 0 0;
+  color: var(--color-dark);
+  font-size: 3.25rem;
+  line-height: 1.05;
+}
+
+.car-events-section-heading-row {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.car-events-section-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.car-events-section-link i {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-red);
+  border-radius: var(--radius-circle);
+  color: var(--color-red);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.car-events-section-link:hover i {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.car-events-card-grid,
+.car-events-package-grid,
+.car-events-service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.car-events-venue-card,
+.car-events-package,
+.car-events-service {
+  overflow: hidden;
+  border: 1px solid var(--color-grey);
+  border-radius: var(--radius-card);
+  background-color: var(--color-white);
+}
+
+.car-events-venue-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.car-events-venue-card > img,
+.car-events-service > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.car-events-card-content {
+  padding: 1.4rem 1.4rem 1rem;
+}
+
+.car-events-card-location {
+  margin-bottom: 0.55rem;
+  color: var(--color-red);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.car-events-card-content h3,
+.car-events-service-content h3 {
+  margin-bottom: 0.65rem;
+  color: var(--color-dark);
+  font-size: 1.45rem;
+}
+
+.car-events-card-content > p:last-child,
+.car-events-service-content p {
+  color: var(--color-grey-dark);
+  line-height: 1.65;
+}
+
+.car-events-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding: 1rem 1.4rem;
+  border-top: 1px solid var(--color-grey);
+  color: var(--color-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.car-events-card-link i {
+  color: var(--color-red);
+}
+
+.car-events-packages {
+  background-color: var(--color-dark);
+}
+
+.car-events-packages .car-events-eyebrow {
+  color: var(--color-orange);
+}
+
+.car-events-packages .car-events-section-heading h2 {
+  color: var(--color-white);
+}
+
+.car-events-packages .car-events-section-link {
+  color: var(--color-white);
+}
+
+.car-events-package {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+}
+
+.car-events-package-heading {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-grey);
+}
+
+.car-events-package-heading p {
+  margin-bottom: 0.6rem;
+  color: var(--color-red);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.car-events-package-heading h3 {
+  margin: 0;
+  color: var(--color-dark);
+  font-size: 1.75rem;
+}
+
+.car-events-package ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 1.5rem 0;
+  list-style: none;
+  color: var(--color-grey-dark);
+  line-height: 1.5;
+}
+
+.car-events-package li::before {
+  margin-right: 0.6rem;
+  color: var(--color-red);
+  content: "\2713";
+}
+
+.car-events-package > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-grey);
+  color: var(--color-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.car-events-package > a i {
+  color: var(--color-red);
+}
+
+.car-events-package-featured {
+  border-color: var(--color-red);
+  background-color: var(--color-red);
+}
+
+.car-events-package-featured .car-events-package-heading,
+.car-events-package-featured > a {
+  border-color: var(--color-white-muted);
+}
+
+.car-events-package-featured .car-events-package-heading p,
+.car-events-package-featured .car-events-package-heading h3,
+.car-events-package-featured ul,
+.car-events-package-featured li::before,
+.car-events-package-featured > a,
+.car-events-package-featured > a i {
+  color: var(--color-white);
+}
+
+.car-events-services {
+  padding-bottom: 6rem;
+}
+
+.car-events-section-heading-centered {
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.car-events-section-heading-centered .car-events-eyebrow {
+  margin-bottom: 0.75rem;
+}
+
+.car-events-section-heading-centered h2 {
+  margin: 0 auto 0.8rem;
+}
+
+.car-events-section-heading-centered > p:last-child {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--color-grey-dark);
+  line-height: 1.65;
+}
+
+.car-events-service-content {
+  padding: 1.4rem;
+}
+
+.car-events-service-content h3 {
+  margin-bottom: 0.6rem;
+}
+
+.car-events-service-content p {
+  margin-bottom: 0;
+}
+
+.car-events-testimonial {
+  padding: 5rem var(--container-padding);
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  text-align: center;
+}
+
+.car-events-testimonial blockquote {
+  max-width: 900px;
+  margin: 0 auto 1.25rem;
+  font-size: 2rem;
+  line-height: 1.45;
+}
+
+.car-events-testimonial cite {
+  color: var(--color-white-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.car-events-enquiry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 4rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
+  background-color: var(--color-red);
+}
+
+.car-events-enquiry .car-events-eyebrow,
+.car-events-enquiry h2 {
+  color: var(--color-white);
+}
+
+.car-events-enquiry h2 {
+  margin-top: 0.5rem;
+}
+
+.car-events-button-light {
+  flex-shrink: 0;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+.car-events-button-light:hover {
+  background-color: var(--color-muted);
+}
+
+@media (max-width: 768px) {
+  .car-events-hero {
+    min-height: 560px;
+  }
+
+  .car-events-hero-content {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .car-events-hero h1 {
+    font-size: 3.4rem;
+  }
+
+  .car-events-hero-actions {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .car-events-band,
+  .car-events-packages {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .car-events-section-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .car-events-section-heading h2,
+  .car-events-enquiry h2 {
+    font-size: 2.5rem;
+  }
+
+  .car-events-card-grid,
+  .car-events-package-grid,
+  .car-events-service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .car-events-testimonial {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .car-events-testimonial blockquote {
+    font-size: 1.5rem;
+  }
+
+  .car-events-enquiry {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
