@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'payments/css/payment.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="payment-page">
+    <div class="payment-checkout">
+      <form id="paymentForm" class="payment-form" method="post" novalidate autocomplete="off">
+        {% csrf_token %}
+        <section class="payment-panel" aria-labelledby="payment-heading">
+          <div class="payment-section-heading">
+            <h1 id="payment-heading">Payment Method</h1>
+            <p>All transactions are safe and encrypted.</p>
+          </div>
+
+          <fieldset class="payment-options">
+            <legend class="payment-visually-hidden">Choose a payment method</legend>
+
+            <label class="payment-option payment-option-selected">
+              <input class="payment-radio" type="radio" name="paymentMethod" value="card" checked>
+              <span class="payment-custom-radio"></span>
+              <span class="payment-option-name">Credit / Debit Card</span>
+              <svg class="payment-option-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2.5" y="5" width="19" height="14" rx="2"></rect>
+                <path d="M2.5 9h19"></path>
+              </svg>
+            </label>
+
+            <label class="payment-option">
+              <input class="payment-radio" type="radio" name="paymentMethod" value="paypal">
+              <span class="payment-custom-radio"></span>
+              <span class="payment-option-name">PayPal</span>
+              <svg class="payment-option-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5V9"></path>
+                <path d="M4 7h14"></path>
+                <path d="M4 6.5v11A2.5 2.5 0 0 0 6.5 20H18"></path>
+                <rect x="15" y="11" width="7" height="6" rx="2"></rect>
+                <circle cx="19.5" cy="14" r=".7" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </label>
+
+            <label class="payment-option">
+              <input class="payment-radio" type="radio" name="paymentMethod" value="applepay">
+              <span class="payment-custom-radio"></span>
+              <span class="payment-option-name">Apple Pay</span>
+              <svg class="payment-option-icon payment-phone-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="6.5" y="2.5" width="11" height="19" rx="2"></rect>
+                <circle cx="12" cy="18.5" r=".8" fill="currentColor" stroke="none"></circle>
+              </svg>
+            </label>
+          </fieldset>
+
+          <div id="cardDetails" class="payment-card-details">
+            <h2>Enter Card Details</h2>
+
+            <div class="payment-form-group payment-full-width">
+              <label for="cardNumber">Card Number</label>
+              <div class="payment-input-with-icon">
+                <input id="cardNumber" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" aria-describedby="cardNumberError">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2.5" y="5" width="19" height="14" rx="2"></rect>
+                  <path d="M2.5 9h19"></path>
+                </svg>
+              </div>
+              <small id="cardNumberError" class="payment-error-message"></small>
+            </div>
+
+            <div class="payment-form-group payment-full-width">
+              <label for="cardholderName">Cardholder Name</label>
+              <input id="cardholderName" type="text" autocomplete="cc-name" aria-describedby="cardholderNameError">
+              <small id="cardholderNameError" class="payment-error-message"></small>
+            </div>
+
+            <div class="payment-form-row">
+              <div class="payment-form-group">
+                <label for="expiryDate">Expiry Date</label>
+                <input id="expiryDate" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="MM / YY" aria-describedby="expiryDateError">
+                <small id="expiryDateError" class="payment-error-message"></small>
+              </div>
+
+              <div class="payment-form-group">
+                <label for="cvv">Security Code (CVV)</label>
+                <input id="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" aria-describedby="cvvError">
+                <small id="cvvError" class="payment-error-message"></small>
+              </div>
+            </div>
+          </div>
+
+          <div id="alternatePayment" class="payment-alternate" hidden>
+            <p id="alternateMessage"></p>
+          </div>
+        </section>
+
+        <section class="payment-panel payment-billing-panel" aria-labelledby="billing-heading">
+          <div class="payment-section-heading">
+            <h2 id="billing-heading">Billing Address</h2>
+          </div>
+
+          <div class="payment-form-group payment-full-width">
+            <label for="streetAddress">Street Address</label>
+            <input id="streetAddress" type="text" autocomplete="street-address" aria-describedby="streetAddressError">
+            <small id="streetAddressError" class="payment-error-message"></small>
+          </div>
+
+          <div class="payment-form-row">
+            <div class="payment-form-group">
+              <label for="city">City</label>
+              <input id="city" type="text" autocomplete="address-level2" aria-describedby="cityError">
+              <small id="cityError" class="payment-error-message"></small>
+            </div>
+
+            <div class="payment-form-group">
+              <label for="postalCode">Postal Code</label>
+              <input id="postalCode" type="text" autocomplete="postal-code" placeholder="52002" aria-describedby="postalCodeError">
+              <small id="postalCodeError" class="payment-error-message"></small>
+            </div>
+          </div>
+
+          <div class="payment-form-group payment-full-width">
+            <label for="country">Country</label>
+            <div class="payment-select-wrapper">
+              <select id="country" autocomplete="country-name" aria-describedby="countryError">
+                <option value="" selected disabled>Select a country</option>
+                <option value="Mauritius">Mauritius</option>
+                <option value="France">France</option>
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="United States">United States</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <small id="countryError" class="payment-error-message"></small>
+          </div>
+        </section>
+
+        <div class="payment-actions">
+          <button type="submit" class="payment-submit-button">Continue to payment</button>
+          <p id="formStatus" class="payment-form-status" role="status" aria-live="polite"></p>
+          <p class="payment-demo-note">Demo checkout only. Payment processing is not connected.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'payments/js/payment.js' %}" defer></script>
+{% endblock %}

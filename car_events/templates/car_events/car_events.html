@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Car Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'car_events/css/car_events.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="car-events-page">
+    <section class="car-events-hero" aria-labelledby="car-events-hero-heading">
+      <img class="car-events-hero-image" src="{% static 'images/events/cars_main.png' %}" alt="A crowd gathered around cars at an automotive meet">
+      <div class="car-events-hero-overlay"></div>
+      <div class="car-events-hero-content">
+        <p class="car-events-eyebrow">Automotive event production</p>
+        <h1 id="car-events-hero-heading">Turn your car meet into a landmark event</h1>
+        <p class="car-events-hero-copy">From venue booking and sponsorship planning to event management and marketing, we deliver unforgettable automotive experiences across Mauritius.</p>
+        <div class="car-events-hero-actions">
+          <a class="car-events-button car-events-button-primary" href="#car-events-venues">Explore venues</a>
+          <a class="car-events-button car-events-button-outline" href="#car-events-services">Explore services</a>
+        </div>
+      </div>
+    </section>
+
+    {% if messages %}
+      <div class="car-events-messages" role="status" aria-live="polite">
+        {% for message in messages %}
+          <p class="car-events-message car-events-message-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <section class="car-events-band car-events-venues" id="car-events-venues" aria-labelledby="car-events-venues-heading">
+      <div class="car-events-section-heading car-events-section-heading-row">
+        <div>
+          <p class="car-events-eyebrow">Made for every kind of meet</p>
+          <h2 id="car-events-venues-heading">Find your perfect venue</h2>
+        </div>
+        <a class="car-events-section-link" href="#car-events-packages">Explore packages <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="car-events-card-grid">
+        {% for venue in venues %}
+          <article class="car-events-venue-card">
+            {% if venue.image %}
+              <img src="{% static venue.image %}" alt="{{ venue.name }} event venue in {{ venue.location }}">
+            {% endif %}
+            <div class="car-events-card-content">
+              <p class="car-events-card-location">{{ venue.location }}</p>
+              <h3>{{ venue.name }}</h3>
+              <p>{{ venue.description }}</p>
+            </div>
+            <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+        {% empty %}
+          <p>Venue options are being updated. Please contact us to discuss your event.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="car-events-packages" id="car-events-packages" aria-labelledby="car-events-packages-heading">
+      <div class="car-events-section-heading car-events-section-heading-row">
+        <div>
+          <p class="car-events-eyebrow">Flexible event planning</p>
+          <h2 id="car-events-packages-heading">Choose your event package</h2>
+        </div>
+        <a class="car-events-section-link" href="#car-events-enquiry">Compare packages <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="car-events-package-grid">
+        {% for package in packages %}
+          <article class="car-events-package{% if package.is_featured %} car-events-package-featured{% endif %}">
+            <div class="car-events-package-heading">
+              <p>{{ package.tagline }}</p>
+              <h3>{{ package.name }}</h3>
+            </div>
+            {% if package.description %}
+              <p class="car-events-package-description">{{ package.description }}</p>
+            {% endif %}
+            <ul>
+              {% for feature in package.features.all %}
+                <li>{{ feature.text }}</li>
+              {% empty %}
+                <li>Tailored planning for your event</li>
+              {% endfor %}
+            </ul>
+            <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+        {% empty %}
+          <p class="car-events-empty">Our event packages are being updated. Contact us to plan a custom event.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="car-events-band car-events-services" id="car-events-services" aria-labelledby="car-events-services-heading">
+      <div class="car-events-section-heading car-events-section-heading-centered">
+        <p class="car-events-eyebrow">Make it yours</p>
+        <h2 id="car-events-services-heading">Add something extra</h2>
+        <p>Build a meet that gives drivers and fans a reason to stay longer.</p>
+      </div>
+
+      <div class="car-events-service-grid">
+        {% for extra in extras %}
+          <article class="car-events-service">
+            {% if extra.image %}
+              <img src="{% static extra.image %}" alt="{{ extra.name }}">
+            {% endif %}
+            <div class="car-events-service-content">
+              <h3>{{ extra.name }}</h3>
+              <p>{{ extra.description }}</p>
+            </div>
+          </article>
+        {% empty %}
+          <p>No additional services are currently listed. Ask us about custom options.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="car-events-testimonial">
+      <blockquote>“Lafaya handled the venue, permits, sponsors, and schedules. Our crew simply showed up and enjoyed the meet.”</blockquote>
+      <cite>Car club organizer</cite>
+    </section>
+
+    <section class="car-events-enquiry" id="car-events-enquiry" aria-labelledby="car-events-enquiry-heading">
+      <div class="car-events-enquiry-heading">
+        <p class="car-events-eyebrow">Ready when you are</p>
+        <h2 id="car-events-enquiry-heading">Let’s make your next meet one to remember.</h2>
+        <p>Share a few details and our team will get in touch to plan your event.</p>
+      </div>
+      <form class="car-events-enquiry-form" id="car-events-enquiry-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="car-events-form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+          <div class="car-events-form-field{% if field.name == 'extras' %} car-events-form-field-extras{% endif %}">
+            {% if field.name != 'extras' %}
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% else %}
+              <span class="car-events-form-label">{{ field.label }}</span>
+            {% endif %}
+            {{ field }}
+            {% for error in field.errors %}
+              <p class="car-events-form-error" role="alert">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <button class="car-events-button car-events-button-light" type="submit">Send enquiry <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </section>
+  </div>
+{% endblock %}
