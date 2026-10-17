@@ -4,6 +4,8 @@
 {% block title %}Wedding Events | Lafaya{% endblock %}
 
 {% block extra_css %}
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Outfit:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'wedding/css/wedding.css' %}">
 {% endblock %}
 
@@ -22,18 +24,14 @@
 
             <div class="wedding-hero-content">
 
-                <p class="wedding-eyebrow">Lafaya Weddings</p>
-                <h1>Your Dream Wedding Awaits</h1>
+                <p class="wedding-eyebrow">Curating Masterpiece Celebrations</p>
+                <h1>Your Dream <span class="wedding-highlight">Wedding</span> Awaits</h1>
                 <p class="wedding-her-copy">
-                Create unforgettable moments in a setting 
-                designed especially for your special day.
+                    Experience pure luxury, tailored precision, and romantic grandeur.
+                    We breathe life into your love story across the world's most exquisite backdrops.
                 </p>  
                 
                 <div class="wedding-hero-actions">
-
-                    <a href="#wedding-venues" class="wedding-button wedding-button-primary">
-                        Explore Venues
-                    </a>
 
                     <a href="#wedding-enquiry" class="wedding-button wedding-button-outline">
                         Plan Your Wedding
@@ -42,97 +40,335 @@
             </div>
         </section>
 
-        <!--Wedding Venues Section-->
+        
+        <!-- Wedding Venues Section -->
         <section class="wedding-section wedding-venues" id="wedding-venues">
 
             <div class="wedding-section-heading">
-                <p class="wedding-eyebrow">Find Your Perfect Setting</p>
-                <h2>Our Wedding Venues</h2>
-                <p>Discover beautiful locations for your special day.</p>
-            </div>
-
-            <div class="wedding-card">
-                <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_venue_domain_abineaux.png' %}"
-                        alt="Domain Abineaux venue">
-                    <div class="wedding-card-content">
-                        <h3>Domain Abineaux</h3>
-                        <p>A charming setting for your dream wedding.</p>
-                    </div>
-                </article>
-
-                <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_venue_island_hall.png' %}"
-                        alt="Island Hall venue">
-                    <div class="wedding-card-content">
-                        <h3>Island Hall</h3>
-                        <p>An elegant space for unforgettable celebrations.</p>
-                    </div>
-                </article>
-
-                <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_venue_seven_rays.png' %}"
-                        alt="Seven Rays venue">
-                    <div class="wedding-card-content">
-                        <h3>Seven Rays</h3>
-                        <p>A beautiful location for your special occasion.</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <!-- Wedding Services Section -->
-        <section class="wedding-section wedding-services" id="wedding-services">
-
-            <div class="wedding-section-heading">
-                <p class="wedding-eyebrow">Everything You Need</p>
-                <h2>Our Wedding Services</h2>
-                <p>Every detail thoughtfully planned for your special day.</p>
+                <p class="venue-eyebrow">The collections</p>
+                <h2>Venues of Rare Splendor</h2>
             </div>
 
             <div class="wedding-card-grid">
 
+                <!-- Island View Hall -->
                 <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_services_scenes.png' %}"
-                        alt="Wedding scenery and decorations">
+                    <img src="{% static 'wedding/images/wedding_venue_island_hall.png' %}"
+                        alt="Island View Hall wedding venue">
+
                     <div class="wedding-card-content">
-                        <h3>Beautiful Settings</h3>
-                        <p>Create the perfect atmosphere for your celebration.</p>
+                        <p class="venue-address">Petit Raffray, Mauritius</p>
+                        <h3>Island View Hall</h3>
+                        <p class="venue-description">
+                            A Renaissance masterpiece cradled by cypress-lined
+                            roads and lush vineyards.
+                        </p>
+
+                        <a href="#wedding-enquiry" class="venue-button">
+                            Explore venue
+                        </a>
                     </div>
                 </article>
 
+
+                <!-- Seven Golden Rays -->
                 <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_services_gastronomy.png' %}"
-                        alt="Wedding food and dining">
+                    <img src="{% static 'wedding/images/wedding_venue_seven_rays.png' %}"
+                        alt="Seven Golden Rays wedding venue">
                     <div class="wedding-card-content">
-                        <h3>Food & Gastronomy</h3>
-                        <p>Delight your guests with memorable dining experiences.</p>
+                        <p class="venue-address">Nouvelle France, Mauritius</p>
+                        <h3>Seven Golden Rays</h3>
+                        <p class="venue-description">
+                            Epitome of French luxury featuring soaring turrets,
+                            historic ballrooms, and pristine estate walls.
+                        </p>
+
+                        <a href="#wedding-enquiry" class="venue-button">
+                            Explore venue
+                        </a>
                     </div>
                 </article>
 
+
+                <!-- Domaine Des Aubineaux -->
                 <article class="wedding-card">
-                    <img src="{% static 'wedding/images/wedding_services_entertainment.png' %}"
-                        alt="Wedding entertainment">
+                    <img src="{% static 'wedding/images/wedding_venue_domain_abineaux.png' %}"
+                         alt="Domaine Des Aubineaux wedding venue">
                     <div class="wedding-card-content">
-                        <h3>Entertainment</h3>
-                        <p>Make every moment special with wonderful entertainment.</p>
+                        <p class="venue-address">Curepipe, Mauritius</p>
+                        <h3>Domaine Des Aubineaux</h3>
+                        <p class="venue-description">
+                            Beautiful colonial tea estate surrounded by elegant
+                            gardens, making it perfect for wedding celebrations.
+                        </p>
+
+                        <a href="#wedding-enquiry" class="venue-button">
+                            Explore venue
+                        </a>
+
+                    </div>
+                </article>                
+            </div>
+
+            <!-- Decorative Controls -->
+            <div class="venue-controls" aria-hidden="true">
+                <span>+</span>
+                <span>−</span>
+            </div>
+        </section>
+
+        <!-- Wedding Packages Section -->
+        <section class="wedding-section wedding-packages"
+                 id="wedding-packages"
+                 aria-labelledby="wedding-packages-heading">
+
+            <!-- Packages Section Heading -->
+            <div class="packages-heading">
+                <div class="packages-heading-text">
+                    <p class="packages-eyebrow">Curated Packages</p>
+                    <h2 id="wedding-packages-heading">
+                        Bespoke Experiences
+                    </h2>
+                </div>
+
+                <a href="#wedding-enquiry" class="packages-compare">
+                    <span>Compare Tiers</span>
+                    <span class="packages-compare-icon" aria-hidden="true">
+                        ↗
+                    </span>
+                </a>
+            </div>
+
+            <!-- Packages Grid -->
+            <div class="packages-grid">
+                <!-- Package 1: Elopement Soirée -->
+                <article class="package-card">
+                    <div class="package-header">
+                        <p class="package-category">
+                            The Intimate Gathering
+                        </p>
+                        <h3 class="package-name">Elopement Soirée</h3>
+                    </div>
+
+                    <div class="package-features">
+                        <ul>
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Bespoke elopement planner</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Luxury floral design &amp; backdrop</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Pre-ceremony champagne toast</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Dedicated photographer (4 Hours)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="package-investment">
+                        <p class="package-price-label">Investment</p>
+                        <p class="package-price">From Rs 125,000</p>
+
+                        <a href="#wedding-enquiry" class="package-select">
+                            Select
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Package 2: Classic Heritage -->
+                <article class="package-card">
+                    <div class="package-header">
+                        <p class="package-category">Signature Grandeur</p>
+                        <h3 class="package-name">Classic Heritage</h3>
+                    </div>
+
+                    <div class="package-features">
+                        <ul>
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Full-service weekend curation</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Elite venue sourcing &amp; buyout</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Cocktail &amp; premium dining design</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Cinematography &amp; photography team</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="package-investment">
+                        <p class="package-price-label">Investment</p>
+                        <p class="package-price">From Rs 180,000</p>
+
+                        <a href="#wedding-enquiry" class="package-select">
+                            Select
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Package 3: Royal Imperial -->
+                <article class="package-card">
+                    <div class="package-header">
+                        <p class="package-category">The Masterpiece Studio </p>
+                        <h3 class="package-name">Royal Imperial</h3>
+                    </div>
+
+                    <div class="package-features">
+                        <ul>
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Multi-day celebration planning</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Celebrity guest concierge</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>3D custom floorplan &amp; renders</span>
+                            </li>
+
+                            <li>
+                                <span class="package-check" aria-hidden="true">✓</span>
+                                <span>Symphony orchestra procurement</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="package-investment">
+                        <p class="package-price-label">Investment</p>
+                        <p class="package-price">From Rs 210,000</p>
+
+                        <a href="#wedding-enquiry" class="package-select">
+                            Select
+                        </a>
                     </div>
                 </article>
             </div>
+
+            <!-- Decorative Controls -->
+            <div class="packages-controls" aria-hidden="true">
+                <span>+</span>
+                <span>−</span>
+            </div>
+        </section>
+
+
+        <!-- Wedding Services Section -->
+        <section class="wedding-section wedding-services"
+                 id="wedding-services"
+                 aria-labelledby="wedding-services-heading">
+
+            <!-- Section Heading -->
+            <div class="wedding-section-heading">
+                <p class="wedding-eyebrow">ADDITIONAL SERVICES</p>
+                <h2 id="wedding-services-heading">
+                    Bespoke Creative Services
+                </h2>
+            </div>
+
+            <!-- Services Card Grid -->
+            <div class="wedding-card-grid">
+
+                <!-- Card 1: Symphonic Entertainment -->
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_entertainment.png' %}"
+                        alt="Elegant wedding entertainment with a DJ and atmospheric lighting">
+                    <div class="wedding-card-content">
+                        <h3>Symphonic Entertainment</h3>
+                        <p> High-end acoustic experiences ranging from world-class
+                            classical harpists and string quartets to award-winning
+                            international DJs and sound curators.
+                        </p>
+
+                        <div class="wedding-service-tags">
+                            <span>Premium Soundscapes</span>
+                            <span>Elite Curators</span>
+                            <span>Live Orchestral Integration</span>
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- Card 2: Immersive Scenography -->
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_scenes.png' %}"
+                        alt="Luxury wedding table decorated with flowers and elegant lighting">
+                    <div class="wedding-card-content">
+                        <h3>Immersive Scenography</h3>
+                        <p> Complete aesthetic transformations using towering floral
+                            installations, architectural drapery, and vintage crystal
+                            lighting setups tailored to your story.
+                        </p>
+
+                        <div class="wedding-service-tags">
+                            <span>Custom Floral Art</span>
+                            <span>Lighting Mastery</span>
+                            <span>Table Curation</span>
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- Card 3: Gourmet Gastronomy -->
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_gastronomy.png' %}"
+                        alt="Exquisite gourmet cuisine presented at a wedding reception">
+                    <div class="wedding-card-content">
+                        <h3>Gourmet Gastronomy</h3>
+                        <p> Exquisite Michelin-calibre culinary arts, custom multi-course
+                            wine pairings, and artisanal wedding cake designs crafted
+                            by elite patissiers.
+                        </p>
+
+                        <div class="wedding-service-tags">
+                            <span>Bespoke Banquets</span>
+                            <span>Sommelier Selection</span>
+                            <span>Crafted Patisserie</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Decorative Controls -->
+            <div class="services-controls" aria-hidden="true">
+                <span>+</span>
+                <span>−</span>
+            </div>
         </section>        
+
 
         <!-- Wedding Enquiry Section -->
         <section class="wedding-section wedding-enquiry" id="wedding-enquiry">
 
             <div class="wedding-section-heading">
-                <p class="wedding-eyebrow">Let's Make It Special</p>
-                <h2>Plan Your Dream Wedding</h2>
-                <p>Tell us about your special day. We'd love to help bring your vision to life.</p>
+                <p class="wedding-eyebrow"> Make It Special</p>
+                <h2>"They didn't just plan a wedding. They built a breathtaking dreamscape that our family will remember forever."</h2>
             </div>
 
             <div class="wedding-enquiry-content">
-                <p>From choosing your venue to planning every little detail,
-                our team is here to help.</p>
+                <p>From choosing your venue to planning every little detail, our team is here to help.</p>
 
                 <a href="#wedding-enquiry" class="wedding-button wedding-button-primary">
                     Get in Touch
@@ -142,7 +378,5 @@
         </section>
 
     </div>
-
-
 
 {% endblock %}
