@@ -30,33 +30,6 @@
   padding: 1.5rem 1.2rem 2rem;
 }
 
-.staff-detail-logo-area {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.staff-detail-logo-area .lafaya-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.staff-detail-logo-area .lafaya-logo-circle {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  border-radius: var(--radius-circle);
-  background-color: var(--color-brand);
-}
-
-.staff-detail-logo-area .lafaya-logo-text {
-  color: var(--color-dark);
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-}
-
 .staff-detail-portal-label {
   font-size: 0.72rem;
   font-weight: 700;
@@ -121,33 +94,6 @@
 
 .staff-detail-breadcrumb i {
   font-size: 0.7rem;
-}
-
-.staff-detail-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.staff-detail-header-actions form {
-  margin: 0;
-}
-
-.staff-detail-header-actions a {
-  color: var(--detail-text);
-  font-size: 0.85rem;
-}
-
-.staff-detail-logout-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.7rem 1rem;
-  border: 1px solid rgba(87, 78, 70, 0.18);
-  border-radius: 0.8rem;
-  background: rgba(255, 255, 255, 0.22);
-  color: var(--detail-text);
-  font-size: 0.85rem;
 }
 
 .staff-detail-title-row {

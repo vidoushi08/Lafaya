@@ -3,8 +3,6 @@
 
 {% block title %}Staff Event Details | Lafaya{% endblock %}
 
-{% block navbar %}{% endblock %}
-
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'staff_event_details/css/detail.css' %}">
 {% endblock %}
@@ -12,10 +10,6 @@
 {% block content %}
   <div class="staff-detail-shell">
     <aside class="staff-detail-sidebar">
-      <div class="staff-detail-logo-area">
-        {% include 'includes/lafaya_logo.html' %}
-      </div>
-
       <div class="staff-detail-portal-label">staff portal</div>
 
       <nav class="staff-detail-nav" aria-label="staff portal navigation">
@@ -40,16 +34,6 @@
           <span>staff</span>
           <i class="fa-solid fa-angle-right"></i>
           <span>view tasks</span>
-        </div>
-        <div class="staff-detail-header-actions">
-          <a href="{% url 'authentication:password_change' %}">Change password</a>
-          <form method="post" action="{% url 'authentication:logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="staff-detail-logout-btn">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span>Log Out</span>
-            </button>
-          </form>
         </div>
       </header>
 

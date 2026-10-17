@@ -36,7 +36,7 @@ class LafayaUserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "account_type")
+        fields = ("username", "email", "first_name", "last_name", "account_type")
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
@@ -113,6 +113,8 @@ class LafayaUserAdmin(UserAdmin):
                 "fields": (
                     "username",
                     "email",
+                    "first_name",
+                    "last_name",
                     "account_type",
                 ),
             },

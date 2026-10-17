@@ -1,9 +1,9 @@
 import re
 
 
-class CustomerVerificationOriginMiddleware:
-    verification_path = re.compile(
-        r"/authentication/verify/[^/]+/[^/]+/"
+class OnboardingOriginMiddleware:
+    onboarding_path = re.compile(
+        r"/authentication/(?:verify|staff-invitation)/[^/]+/[^/]+/"
     )
 
     def __init__(self, get_response):
@@ -12,7 +12,7 @@ class CustomerVerificationOriginMiddleware:
     def __call__(self, request):
         if (
             request.method == "POST"
-            and self.verification_path.fullmatch(request.path_info)
+            and self.onboarding_path.fullmatch(request.path_info)
             and request.headers.get("Origin") == "null"
             and request.headers.get("Sec-Fetch-Site") == "same-origin"
         ):

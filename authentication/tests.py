@@ -684,12 +684,16 @@ class SuperAdminAccessTests(TestCase):
 		self.assertEqual(add_page.status_code, 200)
 		self.assertNotContains(add_page, 'name="password1"')
 		self.assertNotContains(add_page, 'name="password2"')
+		self.assertContains(add_page, 'name="first_name"')
+		self.assertContains(add_page, 'name="last_name"')
 
 		response = self.client.post(
 			"/admin/authentication/user/add/",
 			{
 				"username": "assigned-staff",
 				"email": "assigned-staff@example.com",
+				"first_name": "Samira",
+				"last_name": "Noor",
 				"account_type": "staff",
 			},
 		)
@@ -697,6 +701,8 @@ class SuperAdminAccessTests(TestCase):
 		self.assertEqual(response.status_code, 302)
 		staff = get_user_model().objects.get(username="assigned-staff")
 		self.assertEqual(staff.account_type, "staff")
+		self.assertEqual(staff.first_name, "Samira")
+		self.assertEqual(staff.last_name, "Noor")
 		self.assertFalse(staff.is_staff)
 		self.assertFalse(staff.is_superuser)
 		self.assertFalse(staff.is_active)
@@ -769,6 +775,75 @@ class SuperAdminAccessTests(TestCase):
 			},
 		)
 		self.assertRedirects(login_response, "/staff/")
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_staff_invitation_allows_null_origin_only_for_same_origin_csrf_post(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "assigned-staff",
+				"email": "assigned-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		invitation_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(invitation_match)
+		invitation_path = invitation_match.group(1)
+		staff = get_user_model().objects.get(username="assigned-staff")
+
+		client = Client(enforce_csrf_checks=True)
+		page = client.get(invitation_path)
+		csrf_token_match = re.search(
+			r'name="csrfmiddlewaretoken" value="([^"]+)"',
+			page.content.decode(),
+		)
+		self.assertIsNotNone(csrf_token_match)
+		csrf_token = csrf_token_match.group(1)
+		password_data = {
+			"new_password1": "C0mpl3x+staff-password-2026!",
+			"new_password2": "C0mpl3x+staff-password-2026!",
+		}
+
+		missing_token_response = client.post(
+			invitation_path,
+			password_data,
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+		self.assertEqual(missing_token_response.status_code, 403)
+
+		cross_site_response = client.post(
+			invitation_path,
+			{**password_data, "csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="cross-site",
+		)
+		self.assertEqual(cross_site_response.status_code, 403)
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
+
+		response = client.post(
+			invitation_path,
+			{**password_data, "csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+		self.assertRedirects(
+			response,
+			reverse("authentication:staff_invitation_complete"),
+		)
+		staff.refresh_from_db()
+		self.assertTrue(staff.is_active)
+		self.assertTrue(staff.check_password(password_data["new_password1"]))
 
 	@override_settings(
 		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
