@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'wedding/wedding.html')
+    return render(request, "wedding/wedding.html")

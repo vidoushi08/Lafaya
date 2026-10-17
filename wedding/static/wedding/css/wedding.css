@@ -1,0 +1,179 @@
+/* General Wedding Page */
+.wedding-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Hero Section */
+.wedding-hero {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    padding: 60px 10%;
+    overflow: hidden;
+}
+
+.wedding-hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.wedding-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+}
+
+.wedding-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    color: white;
+}
+
+.wedding-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.wedding-hero h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.wedding-hero-copy {
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.wedding-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.wedding-button {
+    display: inline-block;
+    padding: 14px 24px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.wedding-button-primary {
+    background: #b58b64;
+    color: white;
+}
+
+.wedding-button-primary:hover {
+    background: #96704d;
+}
+
+.wedding-button-outline {
+    border: 1px solid white;
+    color: white;
+}
+
+/* General Sections */
+.wedding-section {
+    padding: 80px 8%;
+}
+
+.wedding-section-heading {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 45px;
+}
+
+.wedding-section-heading h2 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.wedding-section-heading > p:last-child {
+    line-height: 1.7;
+}
+
+/* Venue and Service Cards */
+.wedding-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.wedding-card {
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.wedding-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.wedding-card-content {
+    padding: 24px;
+}
+
+.wedding-card-content h3 {
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.wedding-card-content p {
+    line-height: 1.7;
+    color: #666;
+}
+
+/* Enquiry Section */
+.wedding-enquiry {
+    background: #f7f2ed;
+    text-align: center;
+}
+
+.wedding-enquiry-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.wedding-enquiry-content p {
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .wedding-hero {
+        min-height: 500px;
+        padding: 50px 7%;
+    }
+
+    .wedding-section {
+        padding: 55px 7%;
+    }
+
+    .wedding-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wedding-card img {
+        height: 240px;
+    }
+
+    .wedding-section-heading h2 {
+        font-size: 29px;
+    }
+}

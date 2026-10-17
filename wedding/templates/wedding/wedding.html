@@ -1,86 +1,148 @@
-{% extends 'base.html'%}
-{% load static%}
+{% extends 'base.html' %}
+{% load static %}
 
-{%block title%}Wedding Events | Lafaya{% endblock %}
+{% block title %}Wedding Events | Lafaya{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{%static 'wedding/css/wedding.css'%}">
+    <link rel="stylesheet" href="{% static 'wedding/css/wedding.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<div class = "wedding-page">
-    <section class="wedding-hero">
-        <img class = "wedding-hero-image"
-            src ="{% static 'wedding/images/wedding_hero.png' %}"
-            alt ="Elegant wedding venue decorated with flowers">
+    <div class="wedding-page">
 
-        <div class ="wedding-hero-overlay"></div>
+        <!--Hero Section-->
+        <section class="wedding-hero">
 
-        <div class = "wedding-hero-content">
-            <p class ="wedding-eyebrow">Lafaya Weddings</p>
+            <img class="wedding-hero-image"
+                 src = "{% static 'images/events/wedding_main.png' %}"
+                 alt="Beautiful wedding setting"> 
+            
+            <div class="wedding-hero-overlay"></div>
 
-            <h1>Your Dream Wedding Awaits</h1>
+            <div class="wedding-hero-content">
 
-            <p class ="wedding-hero-copy">
-                Create unforgettable moments in a setting designed 
-                especially for your special day!
-            </p>
+                <p class="wedding-eyebrow">Lafaya Weddings</p>
+                <h1>Your Dream Wedding Awaits</h1>
+                <p class="wedding-her-copy">
+                Create unforgettable moments in a setting 
+                designed especially for your special day.
+                </p>  
+                
+                <div class="wedding-hero-actions">
 
-            <div class="wedding-hero-actions">
-                <a class="wedding-button wedding-button-primary" href="#wedding-venues" >
-                    Explore Venues
-                </a>
+                    <a href="#wedding-venues" class="wedding-button wedding-button-primary">
+                        Explore Venues
+                    </a>
 
-                <a class="wedding-button wedding-button-outline" href="#wedding-enquiry">
-                    Plan your wedding
+                    <a href="#wedding-enquiry" class="wedding-button wedding-button-outline">
+                        Plan Your Wedding
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!--Wedding Venues Section-->
+        <section class="wedding-section wedding-venues" id="wedding-venues">
+
+            <div class="wedding-section-heading">
+                <p class="wedding-eyebrow">Find Your Perfect Setting</p>
+                <h2>Our Wedding Venues</h2>
+                <p>Discover beautiful locations for your special day.</p>
+            </div>
+
+            <div class="wedding-card">
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_venue_domain_abineaux.png' %}"
+                        alt="Domain Abineaux venue">
+                    <div class="wedding-card-content">
+                        <h3>Domain Abineaux</h3>
+                        <p>A charming setting for your dream wedding.</p>
+                    </div>
+                </article>
+
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_venue_island_hall.png' %}"
+                        alt="Island Hall venue">
+                    <div class="wedding-card-content">
+                        <h3>Island Hall</h3>
+                        <p>An elegant space for unforgettable celebrations.</p>
+                    </div>
+                </article>
+
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_venue_seven_rays.png' %}"
+                        alt="Seven Rays venue">
+                    <div class="wedding-card-content">
+                        <h3>Seven Rays</h3>
+                        <p>A beautiful location for your special occasion.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Wedding Services Section -->
+        <section class="wedding-section wedding-services" id="wedding-services">
+
+            <div class="wedding-section-heading">
+                <p class="wedding-eyebrow">Everything You Need</p>
+                <h2>Our Wedding Services</h2>
+                <p>Every detail thoughtfully planned for your special day.</p>
+            </div>
+
+            <div class="wedding-card-grid">
+
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_scenes.png' %}"
+                        alt="Wedding scenery and decorations">
+                    <div class="wedding-card-content">
+                        <h3>Beautiful Settings</h3>
+                        <p>Create the perfect atmosphere for your celebration.</p>
+                    </div>
+                </article>
+
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_gastronomy.png' %}"
+                        alt="Wedding food and dining">
+                    <div class="wedding-card-content">
+                        <h3>Food & Gastronomy</h3>
+                        <p>Delight your guests with memorable dining experiences.</p>
+                    </div>
+                </article>
+
+                <article class="wedding-card">
+                    <img src="{% static 'wedding/images/wedding_services_entertainment.png' %}"
+                        alt="Wedding entertainment">
+                    <div class="wedding-card-content">
+                        <h3>Entertainment</h3>
+                        <p>Make every moment special with wonderful entertainment.</p>
+                    </div>
+                </article>
+            </div>
+        </section>        
+
+        <!-- Wedding Enquiry Section -->
+        <section class="wedding-section wedding-enquiry" id="wedding-enquiry">
+
+            <div class="wedding-section-heading">
+                <p class="wedding-eyebrow">Let's Make It Special</p>
+                <h2>Plan Your Dream Wedding</h2>
+                <p>Tell us about your special day. We'd love to help bring your vision to life.</p>
+            </div>
+
+            <div class="wedding-enquiry-content">
+                <p>From choosing your venue to planning every little detail,
+                our team is here to help.</p>
+
+                <a href="#wedding-enquiry" class="wedding-button wedding-button-primary">
+                    Get in Touch
                 </a>
             </div>
 
-        </div>
-    </section>
+        </section>
 
-    <section class="wedding-section wedding-venues" id="wedding-venues">
-        <div class="wedding-section-heading">
-            <p class="wedding-eyebrow">The Perfect Setting</p>
-            <h2>Venues of Rare Splendor</h2>
-        </div>
+    </div>
 
-        <div class="wedding-card-grid">
-            <article class="wedding-card">
-                <img src="{% static 'Lafaya\wedding\static\wedding\images\wedding_venue_domain_abineaux.png' %}"
-                    alt="Domain Abineaux wedding venue">
-                
-                <div class="wedding-card-content">
-                    <h3>Domain Abineaux</h3>
-                    <p>A beautiful setting for an unforgettable wedding celebration.</p>
-                </div>
-            </article>
 
-            <article class="wedding-card">
-                <img src="{% static 'wedding/images/wedding_services_island_hall.png' %}"
-                    alt="Island Hall wedding venue">
-                
-                <div class="wedding-card-content">
-                    <h3>Island Hall</h3>
-                    <p>An elegant venue designed for memorable celebrations.</p>
-                </div>
-            </article>
-
-            <article class="wedding-card">
-                <img src="{% static 'wedding/images/wedding_services_seven_rays.png' %}"
-                    alt="Domain Abineaux wedding venue">
-                
-                <div class="wedding-card-content">
-                    <h3>Seven Rays</h3>
-                    <p>A distinctive location for your dream wedding.</p>
-                </div>
-            </article>
-
-        </div>
-
-    </section>
-
-</div>
 
 {% endblock %}
