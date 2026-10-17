@@ -23,6 +23,14 @@
       </div>
     </section>
 
+    {% if messages %}
+      <div class="car-events-messages" role="status" aria-live="polite">
+        {% for message in messages %}
+          <p class="car-events-message car-events-message-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <section class="car-events-band car-events-venues" id="car-events-venues" aria-labelledby="car-events-venues-heading">
       <div class="car-events-section-heading car-events-section-heading-row">
         <div>
@@ -33,35 +41,21 @@
       </div>
 
       <div class="car-events-card-grid">
-        <article class="car-events-venue-card">
-          <img src="{% static 'car_events/images/car_venue_svicc.png' %}" alt="SVICC event venue in Paille">
-          <div class="car-events-card-content">
-            <p class="car-events-card-location">Paille, Mauritius</p>
-            <h3>SVICC</h3>
-            <p>A spacious indoor and outdoor setting for large-scale meets, showcases, and automotive expos.</p>
-          </div>
-          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="car-events-venue-card">
-          <img src="{% static 'car_events/images/car_venue_cote_dor.png' %}" alt="Côte d'Or event venue in St Pierre">
-          <div class="car-events-card-content">
-            <p class="car-events-card-location">St Pierre, Mauritius</p>
-            <h3>Côte d'Or</h3>
-            <p>A high-capacity sports and entertainment destination for energetic meets and trackside experiences.</p>
-          </div>
-          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="car-events-venue-card">
-          <img src="{% static 'car_events/images/car_venue_tribeca.png' %}" alt="Tribeca Mall event venue in Trianon">
-          <div class="car-events-card-content">
-            <p class="car-events-card-location">Trianon, Mauritius</p>
-            <h3>Tribeca Mall</h3>
-            <p>A lively retail destination for community car meets, brand activations, and public showcases.</p>
-          </div>
-          <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
+        {% for venue in venues %}
+          <article class="car-events-venue-card">
+            {% if venue.image %}
+              <img src="{% static venue.image %}" alt="{{ venue.name }} event venue in {{ venue.location }}">
+            {% endif %}
+            <div class="car-events-card-content">
+              <p class="car-events-card-location">{{ venue.location }}</p>
+              <h3>{{ venue.name }}</h3>
+              <p>{{ venue.description }}</p>
+            </div>
+            <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+        {% empty %}
+          <p>Venue options are being updated. Please contact us to discuss your event.</p>
+        {% endfor %}
       </div>
     </section>
 
@@ -75,47 +69,27 @@
       </div>
 
       <div class="car-events-package-grid">
-        <article class="car-events-package">
-          <div class="car-events-package-heading">
-            <p>Focused assemblies</p>
-            <h3>Starter Meet</h3>
-          </div>
-          <ul>
-            <li>Venue sourcing and booking</li>
-            <li>Event-day coordination</li>
-            <li>Registration planning</li>
-            <li>Promotional support</li>
-          </ul>
-          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="car-events-package car-events-package-featured">
-          <div class="car-events-package-heading">
-            <p>High-energy live events</p>
-            <h3>Premium Meet</h3>
-          </div>
-          <ul>
-            <li>Everything in Starter Meet</li>
-            <li>Sponsor coordination</li>
-            <li>Professional photo and video</li>
-            <li>Show-and-shine programming</li>
-          </ul>
-          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-
-        <article class="car-events-package">
-          <div class="car-events-package-heading">
-            <p>Built around your vision</p>
-            <h3>Festival Experience</h3>
-          </div>
-          <ul>
-            <li>Multi-zone event planning</li>
-            <li>Brand and sponsor activations</li>
-            <li>Live entertainment coordination</li>
-            <li>Full event production support</li>
-          </ul>
-          <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
+        {% for package in packages %}
+          <article class="car-events-package{% if package.is_featured %} car-events-package-featured{% endif %}">
+            <div class="car-events-package-heading">
+              <p>{{ package.tagline }}</p>
+              <h3>{{ package.name }}</h3>
+            </div>
+            {% if package.description %}
+              <p class="car-events-package-description">{{ package.description }}</p>
+            {% endif %}
+            <ul>
+              {% for feature in package.features.all %}
+                <li>{{ feature.text }}</li>
+              {% empty %}
+                <li>Tailored planning for your event</li>
+              {% endfor %}
+            </ul>
+            <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
+          </article>
+        {% empty %}
+          <p class="car-events-empty">Our event packages are being updated. Contact us to plan a custom event.</p>
+        {% endfor %}
       </div>
     </section>
 
@@ -127,27 +101,19 @@
       </div>
 
       <div class="car-events-service-grid">
-        <article class="car-events-service">
-          <img src="{% static 'car_events/images/car_services_vip.png' %}" alt="VIP experience at a car event">
-          <div class="car-events-service-content">
-            <h3>VIP Experience</h3>
-            <p>Set aside premium parking, lounge access, catering, and branded passes for your special guests.</p>
-          </div>
-        </article>
-        <article class="car-events-service">
-          <img src="{% static 'car_events/images/car_services_show.png' %}" alt="Show-and-shine awards at a car meet">
-          <div class="car-events-service-content">
-            <h3>Show &amp; Shine</h3>
-            <p>Give standout builds their moment with registrations, judging, trophies, and an awards ceremony.</p>
-          </div>
-        </article>
-        <article class="car-events-service">
-          <img src="{% static 'car_events/images/car_services_jdm.png' %}" alt="JDM cars at an automotive event">
-          <div class="car-events-service-content">
-            <h3>JDM Experience</h3>
-            <p>Bring Japanese street-car culture to life with themed branding, categories, and dedicated awards.</p>
-          </div>
-        </article>
+        {% for extra in extras %}
+          <article class="car-events-service">
+            {% if extra.image %}
+              <img src="{% static extra.image %}" alt="{{ extra.name }}">
+            {% endif %}
+            <div class="car-events-service-content">
+              <h3>{{ extra.name }}</h3>
+              <p>{{ extra.description }}</p>
+            </div>
+          </article>
+        {% empty %}
+          <p>No additional services are currently listed. Ask us about custom options.</p>
+        {% endfor %}
       </div>
     </section>
 
@@ -157,11 +123,31 @@
     </section>
 
     <section class="car-events-enquiry" id="car-events-enquiry" aria-labelledby="car-events-enquiry-heading">
-      <div>
+      <div class="car-events-enquiry-heading">
         <p class="car-events-eyebrow">Ready when you are</p>
         <h2 id="car-events-enquiry-heading">Let’s make your next meet one to remember.</h2>
+        <p>Share a few details and our team will get in touch to plan your event.</p>
       </div>
-      <a class="car-events-button car-events-button-light" href="mailto:hello@lafaya.mu?subject=Car%20event%20enquiry">Talk to our team <i class="fa-solid fa-arrow-right"></i></a>
+      <form class="car-events-enquiry-form" id="car-events-enquiry-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="car-events-form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+          <div class="car-events-form-field{% if field.name == 'extras' %} car-events-form-field-extras{% endif %}">
+            {% if field.name != 'extras' %}
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% else %}
+              <span class="car-events-form-label">{{ field.label }}</span>
+            {% endif %}
+            {{ field }}
+            {% for error in field.errors %}
+              <p class="car-events-form-error" role="alert">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <button class="car-events-button car-events-button-light" type="submit">Send enquiry <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
     </section>
   </div>
 {% endblock %}

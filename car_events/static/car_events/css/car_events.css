@@ -389,10 +389,10 @@
 }
 
 .car-events-enquiry {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: 3rem;
   padding: 4rem max(var(--container-padding), calc((100% - var(--container-max-width)) / 2));
   background-color: var(--color-red);
 }
@@ -404,6 +404,111 @@
 
 .car-events-enquiry h2 {
   margin-top: 0.5rem;
+}
+
+.car-events-enquiry-heading > p:last-child {
+  margin-top: 1rem;
+  color: var(--color-white-muted);
+  line-height: 1.6;
+}
+
+.car-events-enquiry-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border-radius: var(--radius-card);
+  background-color: var(--color-white);
+}
+
+.car-events-form-field {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+}
+
+.car-events-form-field label,
+.car-events-form-label {
+  color: var(--color-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.car-events-form-control {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-grey);
+  border-radius: var(--radius-btn);
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  font: inherit;
+}
+
+.car-events-form-control:focus {
+  border-color: var(--color-red);
+  outline: 2px solid color-mix(in srgb, var(--color-red) 25%, transparent);
+}
+
+.car-events-form-field-extras,
+.car-events-enquiry-form > button,
+.car-events-form-errors {
+  grid-column: 1 / -1;
+}
+
+.car-events-form-field-extras ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.car-events-form-field-extras li label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 400;
+}
+
+.car-events-form-error,
+.car-events-form-errors {
+  margin: 0;
+  color: #a00000;
+  font-size: 0.88rem;
+}
+
+.car-events-form-errors ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.car-events-enquiry-form > button {
+  justify-self: start;
+  cursor: pointer;
+}
+
+.car-events-messages {
+  padding: 1rem var(--container-padding);
+  background-color: var(--color-muted);
+}
+
+.car-events-message {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  color: var(--color-dark);
+  text-align: center;
+}
+
+.car-events-package-description {
+  margin-top: 1rem;
+  color: var(--color-grey-dark);
+  line-height: 1.5;
+}
+
+.car-events-package-featured .car-events-package-description {
+  color: var(--color-white-muted);
 }
 
 .car-events-button-light {
@@ -468,6 +573,17 @@
 
   .car-events-enquiry {
     align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .car-events-enquiry-form {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .car-events-form-field-extras,
+  .car-events-enquiry-form > button,
+  .car-events-form-errors {
+    grid-column: auto;
   }
 }
