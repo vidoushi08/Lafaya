@@ -100,12 +100,11 @@ class CustomerDashboardTests(TestCase):
         self.assertContains(response, "12 Oceanview Avenue")
         self.assertContains(response, "Grand Baie, Mauritius")
         self.assertContains(response, "customer_dashboard/css/dashboard.css")
-        self.assertContains(response, "authentication/password/change/")
         self.assertNotContains(response, '<h1>Customer Dashboard</h1>')
         self.assertNotContains(response, 'class="customer-logout-button"')
         self.assertNotContains(response, 'class="customer-sidebar-brand"')
-        self.assertContains(response, 'class="customer-password-link"')
-        self.assertContains(response, "Change password</span>")
+        self.assertNotContains(response, 'class="customer-password-link"')
+        self.assertNotContains(response, "Change password</span>")
         self.assertContains(response, 'class="navbar-auth"')
         self.assertContains(response, "Log out</button>")
 
@@ -136,6 +135,54 @@ class CustomerDashboardTests(TestCase):
         ):
             self.assertContains(response, reverse(route_name))
 
+    def test_dashboard_booking_history_links_open_customer_history(self):
+        user = get_user_model().objects.create_user(
+            username="emma",
+            email="emma@example.com",
+            password="test-password",
+            account_type="customer",
+        )
+        self.client.force_login(user)
+
+        history_url = reverse("customer_dashboard:booking_history")
+        response = self.client.get(reverse("customer_dashboard:customer_dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.count(f'href="{history_url}"'.encode()), 2)
+        self.assertNotContains(response, f'href="{reverse("booking:booking")}"')
+
+        history_response = self.client.get(history_url)
+        self.assertEqual(history_response.status_code, 200)
+        self.assertContains(history_response, "All bookings")
+
+    def test_customer_sidebar_dropdown_is_shared_across_account_pages(self):
+        user = get_user_model().objects.create_user(
+            username="emma",
+            email="emma@example.com",
+            password="test-password",
+            account_type="customer",
+        )
+        self.client.force_login(user)
+
+        for route_name in (
+            "customer_dashboard:customer_dashboard",
+            "customer_dashboard:booking_history",
+            "customer_dashboard:manage_profile",
+        ):
+            with self.subTest(route=route_name):
+                response = self.client.get(reverse(route_name))
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, 'class="customer-create-menu" open')
+                for event_route in (
+                    "car_events:car_events",
+                    "wedding:wedding",
+                    "concert:concert",
+                    "birthday:birthday",
+                    "conference:conference",
+                    "seaside:seaside",
+                ):
+                    self.assertContains(response, reverse(event_route))
+
     def test_customer_can_view_and_update_their_profile(self):
         user = get_user_model().objects.create_user(
             username="emma",
@@ -155,6 +202,12 @@ class CustomerDashboardTests(TestCase):
         self.assertContains(response, 'value="Emma"')
         self.assertContains(response, 'value="emma@example.com"')
         self.assertContains(response, 'name="csrfmiddlewaretoken"')
+        self.assertContains(response, 'class="customer-password-link"')
+        self.assertContains(response, 'class="fa-solid fa-lock"')
+        self.assertContains(
+            response,
+            f'href="{reverse("authentication:password_change")}"',
+        )
 
         response = self.client.post(
             reverse("customer_dashboard:manage_profile"),

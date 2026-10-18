@@ -3,45 +3,15 @@
 
 {% block title %}Customer Booking History | Lafaya{% endblock %}
 
-{% block navbar %}{% endblock %}
-
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'customer_dashboard/css/manage_profile.css' %}">
   <link rel="stylesheet" href="{% static 'customer_dashboard/css/booking_history.css' %}">
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/manage_profile.css' %}">
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/dashboard.css' %}">
 {% endblock %}
 
 {% block content %}
-  <div class="customer-profile-shell customer-history-shell">
-    <aside class="customer-profile-sidebar">
-      <div class="customer-profile-logo-area">
-        {% include 'includes/lafaya_logo.html' %}
-      </div>
-
-      <h2 class="customer-profile-portal-title">Customer Portal</h2>
-
-      <nav class="customer-profile-nav" aria-label="Customer portal navigation">
-        <a class="customer-profile-nav-item customer-profile-nav-item-active" href="{% url 'customer_dashboard:booking_history' %}" aria-current="page">
-          <img class="customer-history-nav-icon" src="{% static 'images/icons/booking_history.png' %}" alt="">
-          <span>Booking History</span>
-        </a>
-        <a class="customer-profile-nav-item" href="#">
-          <i class="fa-regular fa-compass" aria-hidden="true"></i>
-          <span>Create Event</span>
-        </a>
-        <a class="customer-profile-nav-item" href="{% url 'reviews:reviews' %}">
-          <i class="fa-regular fa-star" aria-hidden="true"></i>
-          <span>Reviews</span>
-        </a>
-        <a class="customer-profile-nav-item" href="{% url 'booking:booking' %}">
-          <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
-          <span>Booking Details</span>
-        </a>
-        <a class="customer-profile-nav-item" href="{% url 'customer_dashboard:manage_profile' %}">
-          <i class="fa-regular fa-user" aria-hidden="true"></i>
-          <span>Manage Profile</span>
-        </a>
-      </nav>
-    </aside>
+  <div class="customer-profile-shell customer-history-shell customer-dashboard">
+    {% include "customer_dashboard/includes/sidebar.html" %}
 
     <main class="customer-profile-main customer-history-main">
       <div class="customer-profile-circle customer-profile-circle-top" aria-hidden="true"></div>
