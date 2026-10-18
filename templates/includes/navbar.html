@@ -24,9 +24,25 @@
         </ul>
       </li>
       <li><a href="{% url 'contact:contact' %}"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+      {% if request.user.is_authenticated %}
+        {% if request.user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}"><i class="fa-solid fa-user-shield"></i> Admin Dashboard</a></li>
+        {% elif request.user.account_type == "staff" %}
+          <li><a href="{% url 'staff:staff' %}"><i class="fa-solid fa-user-tie"></i> Staff Dashboard</a></li>
+        {% elif request.user.account_type == "customer" %}
+          <li><a href="{% url 'customer_dashboard:customer_dashboard' %}"><i class="fa-solid fa-user"></i> Customer Dashboard</a></li>
+        {% endif %}
+      {% endif %}
     </ul>
 
-    <a class="navbar-auth" href="{% url 'authentication:authentication' %}">Login</a>
+    {% if request.user.is_authenticated %}
+      <form class="navbar-auth-form" method="post" action="{% url 'authentication:logout' %}">
+        {% csrf_token %}
+        <button class="navbar-auth" type="submit">Log out</button>
+      </form>
+    {% else %}
+      <a class="navbar-auth" href="{% url 'authentication:login' %}">Login</a>
+    {% endif %}
   </nav>
 </header>
 

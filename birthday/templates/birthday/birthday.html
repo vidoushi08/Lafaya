@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Birthday Events | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'birthday/css/birthday.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="birthday-page">
+    <section class="birthday-hero">
+      <div class="birthday-hero-content">
+        <p class="birthday-eyebrow">birthday celebrations</p>
+        <h1>happy birthday</h1>
+        <p class="birthday-hero-copy">
+          from intimate dinners to full-scale milestone moments, we design unforgettable birthday experiences that feel personal, polished, and joyful.
+        </p>
+        <div class="birthday-hero-actions">
+          <a href="#packages" class="birthday-button birthday-button-primary">book a celebration</a>
+          <a href="#venues" class="birthday-button birthday-button-secondary">explore venues</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="birthday-intro">
+      <div class="birthday-intro-copy">
+        <p class="birthday-section-tag">crafted with care</p>
+        <h2>birthday magic, tailored to you</h2>
+      </div>
+      <div class="birthday-intro-stats">
+        <div class="birthday-stat">
+          <strong>120+</strong>
+          <span>celebrations styled</span>
+        </div>
+        <div class="birthday-stat">
+          <strong>4.9/5</strong>
+          <span>guest experience rating</span>
+        </div>
+        <div class="birthday-stat">
+          <strong>100%</strong>
+          <span>customised planning</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="venues" class="birthday-venues">
+      <div class="birthday-section-heading">
+        <p class="birthday-section-tag">signature spaces</p>
+        <h2>venues for unforgettable moments</h2>
+      </div>
+
+      <div class="birthday-venue-grid">
+        <article class="birthday-venue-card">
+          <img src="{% static 'birthday/images/birthday_venue_ballroom.png' %}" alt="Ballroom venue">
+          <div class="birthday-venue-copy">
+            <h3>grand ballroom</h3>
+            <p>elegant interiors, ambient lighting, and refined dining for milestone celebrations.</p>
+          </div>
+        </article>
+
+        <article class="birthday-venue-card">
+          <img src="{% static 'birthday/images/birthday_venue_terrace.png' %}" alt="Terrace venue">
+          <div class="birthday-venue-copy">
+            <h3>sunset terrace</h3>
+            <p>open-air elegance with warm lights, scenic views, and a relaxed celebratory mood.</p>
+          </div>
+        </article>
+
+        <article class="birthday-venue-card">
+          <img src="{% static 'birthday/images/birthday_venue_factory.png' %}" alt="Factory venue">
+          <div class="birthday-venue-copy">
+            <h3>industrial chic</h3>
+            <p>bold textures, neon accents, and curated event design for modern birthday energy.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="packages" class="birthday-packages">
+      <div class="birthday-section-heading">
+        <p class="birthday-section-tag">packages</p>
+        <h2>choose your birthday experience</h2>
+      </div>
+
+      <div class="birthday-package-grid">
+        <article class="birthday-package-card">
+          <span class="birthday-package-name">starter</span>
+          <h3>from $850</h3>
+          <ul>
+            <li>venue styling</li>
+            <li>basic entertainment setup</li>
+            <li>light catering coordination</li>
+          </ul>
+          <a href="#cta" class="birthday-button birthday-button-primary">start planning</a>
+        </article>
+
+        <article class="birthday-package-card birthday-package-card-featured">
+          <span class="birthday-package-name">professional</span>
+          <h3>from $1,700</h3>
+          <ul>
+            <li>full event design and coordination</li>
+            <li>sound and lighting production</li>
+            <li>premium menu curation</li>
+          </ul>
+          <a href="#cta" class="birthday-button birthday-button-primary">book now</a>
+        </article>
+
+        <article class="birthday-package-card">
+          <span class="birthday-package-name">enterprise</span>
+          <h3>custom</h3>
+          <ul>
+            <li>signature event concepts</li>
+            <li>luxury guest experience design</li>
+            <li>multi-zone production support</li>
+          </ul>
+          <a href="#cta" class="birthday-button birthday-button-primary">request a quote</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="birthday-services">
+      <div class="birthday-section-heading">
+        <p class="birthday-section-tag">services</p>
+        <h2>everything your celebration needs</h2>
+      </div>
+
+      <div class="birthday-service-grid">
+        <article class="birthday-service-card">
+          <img src="{% static 'birthday/images/birthday_services_styling.png' %}" alt="Styling service">
+          <div>
+            <h3>styling</h3>
+            <p>signature decor concepts, floral installations, and guest-focused ambiance design.</p>
+          </div>
+        </article>
+
+        <article class="birthday-service-card">
+          <img src="{% static 'birthday/images/birthday_services_gastronomy.png' %}" alt="Gastronomy service">
+          <div>
+            <h3>gastronomy</h3>
+            <p>bespoke menus, cocktail bars, grazing tables, and indulgent dining experiences.</p>
+          </div>
+        </article>
+
+        <article class="birthday-service-card">
+          <img src="{% static 'birthday/images/birthday_services_entertainment.png' %}" alt="Entertainment service">
+          <div>
+            <h3>entertainment</h3>
+            <p>live music, DJ setups, immersive lighting, and seamless guest energy throughout the night.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="birthday-testimonial-band">
+      <div class="birthday-testimonial-card">
+        <p>
+          “the event felt unbelievably personal and luxurious. every detail was perfection, and our guests still talk about it.”
+        </p>
+        <span>— amelia & thomas</span>
+      </div>
+    </section>
+
+    <section id="cta" class="birthday-cta">
+      <div class="birthday-cta-copy">
+        <p class="birthday-section-tag">let’s celebrate</p>
+        <h2>ready to make your birthday unforgettable?</h2>
+      </div>
+      <a href="{% url 'contact:contact' %}" class="birthday-button birthday-button-primary">enquire now</a>
+    </section>
+  </div>
+{% endblock %}

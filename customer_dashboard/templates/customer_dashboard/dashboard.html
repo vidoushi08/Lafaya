@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Customer Dashboard | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="customer-dashboard">
+    <aside class="customer-sidebar">
+      <p class="customer-sidebar-label">customer portal</p>
+
+      <nav class="customer-nav" aria-label="Customer navigation">
+        <a class="customer-nav-link" href="{% url 'booking:booking' %}">
+          <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+          <span>Booking History</span>
+        </a>
+
+        <details class="customer-create-menu" id="create-event" open>
+          <summary class="customer-nav-link">
+            <span class="customer-nav-leading">
+              <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+              <span>Create Event</span>
+            </span>
+            <i class="fa-solid fa-chevron-down customer-menu-chevron" aria-hidden="true"></i>
+          </summary>
+          <ul class="customer-event-links">
+            <li><a href="{% url 'car_events:car_events' %}">Car Event</a></li>
+            <li><a href="{% url 'wedding:wedding' %}">Wedding</a></li>
+            <li><a href="{% url 'concert:concert' %}">Concert</a></li>
+            <li><a href="{% url 'birthday:birthday' %}">Birthday</a></li>
+            <li><a href="{% url 'conference:conference' %}">Conference</a></li>
+            <li><a href="{% url 'seaside:seaside' %}">Seaside</a></li>
+          </ul>
+        </details>
+
+        <a class="customer-nav-link customer-nav-link-spaced" href="{% url 'reviews:reviews' %}">
+          <i class="fa-regular fa-star" aria-hidden="true"></i>
+          <span>Reviews</span>
+        </a>
+        <button class="customer-nav-link customer-nav-link-disabled" type="button" aria-disabled="true">
+          <i class="fa-regular fa-user" aria-hidden="true"></i>
+          <span>Manage Profile</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="customer-main">
+      <header class="customer-header">
+        <div class="customer-header-actions">
+          <a class="customer-password-link" href="{% url 'authentication:password_change' %}">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <span>Change password</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="customer-dashboard-content">
+        <section class="customer-profile-card" id="personal-details" aria-labelledby="personal-details-heading">
+          <div class="customer-card-heading">
+            <h2 id="personal-details-heading">Personal Details</h2>
+          </div>
+
+          <div class="customer-profile-body">
+            <div class="customer-profile-content">
+              <div class="customer-identity">
+                <img
+                  class="customer-avatar"
+                  src="{% static 'images/default_profile_picture.png' %}"
+                  alt=""
+                >
+                <div class="customer-identity-text">
+                  <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+                  <a href="mailto:{{ request.user.email }}">{{ request.user.email }}</a>
+                  {% if request.user.phone %}
+                    <a href="tel:{{ request.user.phone }}">{{ request.user.phone }}</a>
+                  {% else %}
+                    <span class="customer-profile-empty">Phone number not added</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <dl class="customer-profile-fields">
+                <div class="customer-profile-field">
+                  <dt>Address</dt>
+                  <dd>
+                    {% if request.user.address or request.user.city %}
+                      {{ request.user.address }}{% if request.user.address and request.user.city %}, {% endif %}{{ request.user.city }}{% if request.user.city %}, Mauritius{% endif %}
+                    {% else %}
+                      Not provided
+                    {% endif %}
+                  </dd>
+                </div>
+                <div class="customer-profile-field">
+                  <dt>Member Since</dt>
+                  <dd>{{ request.user.date_joined|date:"j F Y" }}</dd>
+                </div>
+                <div class="customer-profile-field">
+                  <dt>Account Type</dt>
+                  <dd>{{ request.user.get_account_type_display }}</dd>
+                </div>
+              </dl>
+
+              <button class="customer-manage-button" type="button" aria-disabled="true">Manage Profile</button>
+            </div>
+
+            <img
+              class="customer-profile-illustration"
+              src="{% static 'images/ceramic_pot.png' %}"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+        </section>
+
+        <nav class="customer-action-grid" aria-label="Customer account actions">
+          <a class="customer-action-card" href="{% url 'booking:booking' %}">
+            <span class="customer-action-icon customer-action-icon-green">
+              <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+            </span>
+            <span class="customer-action-copy">
+              <strong>Booking History</strong>
+              <span>View your past and upcoming bookings.</span>
+            </span>
+            <i class="fa-solid fa-arrow-right customer-action-arrow" aria-hidden="true"></i>
+          </a>
+
+          <details class="customer-action-card customer-action-create-menu">
+            <summary>
+              <span class="customer-action-icon customer-action-icon-brand">
+                <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+              </span>
+              <span class="customer-action-copy">
+                <strong>Create Event</strong>
+                <span>Plan your perfect event with our team.</span>
+              </span>
+              <i class="fa-solid fa-chevron-down customer-action-menu-chevron" aria-hidden="true"></i>
+            </summary>
+            <ul class="customer-event-links customer-action-event-links">
+              <li><a href="{% url 'car_events:car_events' %}">Car Event</a></li>
+              <li><a href="{% url 'wedding:wedding' %}">Wedding</a></li>
+              <li><a href="{% url 'concert:concert' %}">Concert</a></li>
+              <li><a href="{% url 'birthday:birthday' %}">Birthday</a></li>
+              <li><a href="{% url 'conference:conference' %}">Conference</a></li>
+              <li><a href="{% url 'seaside:seaside' %}">Seaside</a></li>
+            </ul>
+          </details>
+
+          <a class="customer-action-card" href="{% url 'reviews:reviews' %}">
+            <span class="customer-action-icon customer-action-icon-green">
+              <i class="fa-regular fa-star" aria-hidden="true"></i>
+            </span>
+            <span class="customer-action-copy">
+              <strong>Reviews</strong>
+              <span>Write reviews and revisit your experiences.</span>
+            </span>
+            <i class="fa-solid fa-arrow-right customer-action-arrow" aria-hidden="true"></i>
+          </a>
+        </nav>
+
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

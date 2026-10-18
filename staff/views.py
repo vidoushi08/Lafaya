@@ -1,5 +1,8 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+
+from common.decorators import account_type_required
 
 
+@account_type_required("staff")
 def index(request):
-    return HttpResponse("Staff")
+   return render(request, "staff/staff.html")

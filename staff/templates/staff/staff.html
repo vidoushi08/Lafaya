@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lafaya Staff Dashboard{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff/css/staff.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="staff-dashboard-shell">
+    <aside class="staff-sidebar">
+      <div class="staff-portal-label">staff portal</div>
+
+      <nav class="staff-nav" aria-label="staff navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-nav-item staff-nav-item-active">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-nav-item">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-nav-item">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="staff-main-panel">
+      <header class="staff-header">
+        <div class="staff-header-actions">
+          <a class="staff-password-link" href="{% url 'authentication:password_change' %}">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <span>Change password</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="staff-profile-card">
+        <div class="staff-profile-head">
+          <h2>Personal Details</h2>
+        </div>
+
+        <div class="staff-profile-body">
+          <div class="staff-profile-info">
+            <div class="staff-avatar" aria-hidden="true">
+              {% if request.user.first_name and request.user.last_name %}
+                {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+              {% else %}
+                {{ request.user.username|slice:":2"|upper }}
+              {% endif %}
+            </div>
+
+            <div class="staff-details-list">
+              <div class="staff-name-block">
+                <h3>
+                  {% if request.user.get_full_name %}
+                    {{ request.user.get_full_name }}
+                  {% else %}
+                    {{ request.user.username }}
+                  {% endif %}
+                </h3>
+                <div class="staff-meta-row">
+                  <span>{{ request.user.email }}</span>
+                </div>
+                <div class="staff-meta-row">
+                  <span>{{ request.user.phone|default:"Phone not provided" }}</span>
+                </div>
+                <div class="staff-meta-row">
+                  <span>Username: {{ request.user.username }}</span>
+                </div>
+              </div>
+
+              <div class="staff-field-grid">
+                <div class="staff-field">
+                  <span class="staff-label">Address</span>
+                  <span class="staff-value">
+                    {% if request.user.address or request.user.city %}
+                      {{ request.user.address }}{% if request.user.address and request.user.city %}, {% endif %}{{ request.user.city }}
+                    {% else %}
+                      Address not provided
+                    {% endif %}
+                  </span>
+                </div>
+                <div class="staff-field">
+                  <span class="staff-label">Staff Since</span>
+                  <span class="staff-value">{{ request.user.date_joined|date:"d F Y" }}</span>
+                </div>
+                <div class="staff-field">
+                  <span class="staff-label">Staff ID</span>
+                  <span class="staff-value">{{ request.user.pk }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-illustration" aria-hidden="true">
+            <div class="staff-botanical staff-botanical-a"></div>
+            <div class="staff-botanical staff-botanical-b"></div>
+            <div class="staff-botanical staff-botanical-c"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="staff-action-grid">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-green">
+            <i class="fa-solid fa-book-open-reader"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>Booking History</h3>
+            <p>View all your past and upcoming bookings.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-red">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>View Tasks</h3>
+            <p>Plan your work.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'staff_profile:profile' %}" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-blue">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>Manage Profile</h3>
+            <p>Update your personal staff details.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
+      </section>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

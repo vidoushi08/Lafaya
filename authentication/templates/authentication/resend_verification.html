@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Resend Verification | Lafaya{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">customer account</span>
+      <h1>request a new link</h1>
+    </div>
+    <p>Enter the email address you used to register. If it has a pending customer account, we’ll send a new verification link.</p>
+    <form class="auth-form" method="post">
+      {% csrf_token %}
+      <label>
+        <span>Email address</span>
+        {{ form.email }}
+        {% for error in form.email.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
+      </label>
+      <button type="submit" class="auth-button">send verification link</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
