@@ -70,3 +70,12 @@ python manage.py runserver
 
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
+
+### Seaside catalogue images
+
+Superadmins can upload images when managing Seaside venues, packages, and
+optional services. Uploaded files are stored under the project's local `media/`
+directory; SQLite stores the file paths, not the image contents. Back up the
+`media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
+development server while `DEBUG=True`; production deployment needs an
+appropriate media-file storage and serving configuration.

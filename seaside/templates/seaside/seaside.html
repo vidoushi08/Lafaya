@@ -40,33 +40,30 @@
         <span class="seaside-section-hint">Explore locations <i class="fa-solid fa-arrow-right"></i></span>
       </div>
       <div class="seaside-card-grid">
+        {% for venue in venues %}
         <article class="seaside-card">
-          <img src="{% static 'seaside/images/seaside_venue_pavilion.png' %}" alt="Seaside pavilion venue with ocean view">
+          {% if venue.uploaded_image %}
+          <img src="{{ venue.uploaded_image.url }}" alt="{{ venue.name }}">
+          {% elif venue.image %}
+          <img src="{% static venue.image %}" alt="{{ venue.name }}">
+          {% endif %}
           <div class="seaside-card-content">
-            <p class="seaside-card-location">Northern coast, Mauritius</p>
-            <h3>The Glass Pavilion</h3>
-            <p>A bright, architectural setting for ceremonies, private dinners, and celebrations framed by white sand and blue water.</p>
+            <p class="seaside-card-location">{{ venue.location }}</p>
+            <h3>{{ venue.name }}</h3>
+            <p>{{ venue.description }}</p>
+            <p class="seaside-card-price">
+              {% if venue.price is not None %}
+              Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per guest{% else %} per booking{% endif %}
+              {% else %}
+              Price on request
+              {% endif %}
+            </p>
           </div>
           <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
         </article>
-        <article class="seaside-card">
-          <img src="{% static 'seaside/images/seaside_venue_terrace.png' %}" alt="Seaside terrace venue at sunset">
-          <div class="seaside-card-content">
-            <p class="seaside-card-location">West coast, Mauritius</p>
-            <h3>Sunset Terrace</h3>
-            <p>An easygoing waterfront terrace for sunset receptions, long-table dining, and evenings that flow into the night.</p>
-          </div>
-          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
-        <article class="seaside-card">
-          <img src="{% static 'seaside/images/seaside_venue_villa.png' %}" alt="Seaside villa venue with outdoor dining">
-          <div class="seaside-card-content">
-            <p class="seaside-card-location">Private island setting</p>
-            <h3>Oceanfront Villa</h3>
-            <p>A private escape for intimate celebrations, weekend gatherings, and hosted experiences with a view in every direction.</p>
-          </div>
-          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-        </article>
+        {% empty %}
+        <p class="seaside-empty-state">Seaside venues will be available again shortly.</p>
+        {% endfor %}
       </div>
     </section>
 
@@ -156,12 +153,132 @@
       <cite>Amara &amp; Theo, private celebration</cite>
     </section>
 
-    <section class="seaside-enquiry" id="seaside-enquiry">
-      <div>
-        <p class="seaside-eyebrow">Your day, your horizon</p>
-        <h2>Bring your next gathering to the shore.</h2>
+    <section class="seaside-enquiry" id="seaside-enquiry" aria-labelledby="seaside-enquiry-heading">
+      <img class="seaside-enquiry-background" src="{% static 'images/events/seaside_main.png' %}" alt="" aria-hidden="true">
+      <div class="seaside-enquiry-shade"></div>
+      <div class="seaside-enquiry-panel">
+        <header class="seaside-enquiry-heading">
+          <p class="seaside-eyebrow">Seaside celebrations</p>
+          <h2 id="seaside-enquiry-heading">Book your coastal event</h2>
+          <p>Let’s plan your perfect day by the waves. Fill out the details below.</p>
+        </header>
+        <form class="seaside-enquiry-form" method="post">
+          {% csrf_token %}
+          <section class="seaside-form-section" aria-labelledby="seaside-contact-heading">
+            <h3 id="seaside-contact-heading">Contact details</h3>
+            <div class="seaside-form-grid">
+              <div class="seaside-form-field">
+                <label for="first-name">First name <span aria-hidden="true">*</span></label>
+                <input class="seaside-form-control" type="text" id="first-name" name="first_name" autocomplete="given-name" value="{% if user.is_authenticated %}{{ user.first_name }}{% endif %}" required>
+              </div>
+              <div class="seaside-form-field">
+                <label for="last-name">Last name <span aria-hidden="true">*</span></label>
+                <input class="seaside-form-control" type="text" id="last-name" name="last_name" autocomplete="family-name" value="{% if user.is_authenticated %}{{ user.last_name }}{% endif %}" required>
+              </div>
+              <div class="seaside-form-field">
+                <label for="email-address">Email address <span aria-hidden="true">*</span></label>
+                <input class="seaside-form-control" type="email" id="email-address" name="email" autocomplete="email" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
+              </div>
+              <div class="seaside-form-field">
+                <label for="phone-number">Phone number <span aria-hidden="true">*</span></label>
+                <input class="seaside-form-control" type="tel" id="phone-number" name="phone" autocomplete="tel" value="{% if user.is_authenticated %}{{ user.phone }}{% endif %}" required>
+              </div>
+            </div>
+          </section>
+
+          <section class="seaside-form-section" aria-labelledby="seaside-event-heading">
+            <h3 id="seaside-event-heading">Event specifics</h3>
+            <div class="seaside-form-grid">
+              <div class="seaside-form-field">
+                <label for="event-type">Event type</label>
+                <select class="seaside-form-control" id="event-type" name="event_type">
+                  <option value="">Choose event type</option>
+                  <option value="birthday">Birthday celebration</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="corporate">Corporate event</option>
+                  <option value="private">Private celebration</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="seaside-form-field">
+                <label for="event-name">Event name</label>
+                <input class="seaside-form-control" type="text" id="event-name" name="event_name" placeholder="e.g. Tasha's seaside party">
+              </div>
+              <div class="seaside-form-field">
+                <label for="event-date">Event date</label>
+                <input class="seaside-form-control" type="date" id="event-date" name="event_date">
+              </div>
+              <div class="seaside-form-field">
+                <label for="guest-count">Expected guests</label>
+                <input class="seaside-form-control" type="number" id="guest-count" name="expected_guests" min="1" step="1" placeholder="e.g. 50">
+              </div>
+              <div class="seaside-form-field">
+                <label for="start-time">Starting time</label>
+                <input class="seaside-form-control" type="time" id="start-time" name="start_time">
+              </div>
+              <div class="seaside-form-field">
+                <label for="end-time">End time</label>
+                <input class="seaside-form-control" type="time" id="end-time" name="end_time">
+              </div>
+              <div class="seaside-form-field">
+                <label for="venue">Preferred venue</label>
+                <select class="seaside-form-control" id="venue" name="venue">
+                  <option value="">Choose a venue</option>
+                  <option value="glass-pavilion">The Glass Pavilion</option>
+                  <option value="sunset-terrace">Sunset Terrace</option>
+                  <option value="oceanfront-villa">Oceanfront Villa</option>
+                  <option value="undecided">Open to suggestions</option>
+                </select>
+              </div>
+              <div class="seaside-form-field">
+                <label for="budget">Estimated budget (MUR)</label>
+                <select class="seaside-form-control" id="budget" name="budget">
+                  <option value="">Choose a budget range</option>
+                  <option value="under-65000">Under Rs 65,000</option>
+                  <option value="65000-120000">Rs 65,000 – Rs 120,000</option>
+                  <option value="120000-200000">Rs 120,000 – Rs 200,000</option>
+                  <option value="over-200000">Over Rs 200,000</option>
+                  <option value="flexible">Flexible / open to advice</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="seaside-form-section" aria-labelledby="seaside-options-heading">
+            <h3 id="seaside-options-heading">Packages &amp; options</h3>
+            <div class="seaside-form-field seaside-form-package">
+              <label for="package">Select your package</label>
+              <select class="seaside-form-control" id="package" name="package">
+                <option value="">Choose a package</option>
+                <option value="barefoot-gathering">Barefoot Gathering</option>
+                <option value="sunset-social">Sunset Social</option>
+                <option value="private-island">Private Island</option>
+                <option value="custom">I'm not sure yet</option>
+              </select>
+            </div>
+            <fieldset class="seaside-form-field seaside-form-field-services">
+              <legend>Optional services</legend>
+              <div class="seaside-form-options">
+                <label><input type="checkbox" name="optional_services" value="coastal-styling"> Coastal styling</label>
+                <label><input type="checkbox" name="optional_services" value="photography"> Photography</label>
+                <label><input type="checkbox" name="optional_services" value="catering"> Ocean-to-table catering</label>
+                <label><input type="checkbox" name="optional_services" value="live-music"> Live music</label>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="seaside-form-section seaside-form-section-vision" aria-labelledby="seaside-vision-heading">
+            <h3 id="seaside-vision-heading">Your vision</h3>
+            <div class="seaside-form-field seaside-form-field-message">
+              <label for="expectations">Short message <span class="seaside-form-label-note">(your expectations)</span></label>
+              <textarea class="seaside-form-control" id="expectations" name="message" rows="3" placeholder="Tell us what you have in mind for your seaside event."></textarea>
+            </div>
+          </section>
+
+          <button class="seaside-button seaside-button-submit" type="button">Submit booking request <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <p class="seaside-form-required-note"><span aria-hidden="true">*</span> Required fields</p>
+        </form>
       </div>
-      <a class="seaside-button seaside-button-secondary" href="mailto:hello@lafaya.mu">Start a conversation</a>
     </section>
   </div>
 {% endblock %}
