@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Staff Account Activated | Lafaya{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">staff account</span>
+      <h1>account activated</h1>
+    </div>
+    <p>Your password has been set and your staff account is active. You can now sign in with your assigned email or username.</p>
+    <a class="auth-button auth-button-link" href="{% url 'authentication:login' %}">sign in</a>
+  </div>
+</section>
+{% endblock %}

@@ -26,6 +26,16 @@ urlpatterns = [
         views.verify_email_view,
         name="verify_email",
     ),
+    path(
+        "staff-invitation/<uidb64>/<token>/",
+        views.staff_invitation_view,
+        name="staff_invitation",
+    ),
+    path(
+        "staff-invitation/complete/",
+        views.staff_invitation_complete_view,
+        name="staff_invitation_complete",
+    ),
     path("logout/", views.logout_view, name="logout"),
     path(
         "password/change/",

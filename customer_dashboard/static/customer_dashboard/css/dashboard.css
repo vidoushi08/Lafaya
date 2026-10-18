@@ -16,10 +16,6 @@
   background-color: var(--color-dashboard-sidebar);
 }
 
-.customer-sidebar-brand {
-  margin-bottom: 3.25rem;
-}
-
 .customer-sidebar-label {
   margin-bottom: 1rem;
   color: var(--color-dark);
@@ -136,58 +132,49 @@
   display: flex;
   min-height: 80px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1.5rem;
   padding: 1rem 2.5rem;
   border-bottom: 1px solid var(--color-dashboard-line);
 }
 
-.customer-header h1 {
-  color: var(--color-dark);
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
 .customer-header-actions {
   display: flex;
+  width: 100%;
   align-items: center;
+  justify-content: flex-end;
   gap: 1rem;
 }
 
-.customer-header-actions form {
-  margin: 0;
-}
-
 .customer-password-link {
-  color: var(--color-dashboard-green-dark);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.customer-password-link:hover {
-  text-decoration: underline;
-}
-
-.customer-logout-button {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--color-dashboard-line);
-  border-radius: var(--radius-btn);
-  background-color: var(--color-white);
-  color: var(--color-grey-dark);
-  font: inherit;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-dashboard-green-dark);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-dashboard-green-dark);
+  color: var(--color-white);
   font-size: 0.85rem;
-  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.customer-logout-button:hover {
-  color: var(--color-brand);
+.customer-password-link:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+}
+
+.customer-password-link:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .customer-dashboard-content {
@@ -447,10 +434,6 @@
     border-bottom: 1px solid var(--color-dashboard-line);
   }
 
-  .customer-sidebar-brand {
-    margin-bottom: 1.25rem;
-  }
-
   .customer-sidebar-label {
     margin-bottom: 0.5rem;
   }
@@ -478,16 +461,8 @@
     padding: 0.8rem var(--container-padding);
   }
 
-  .customer-header h1 {
-    font-size: 0.9rem;
-  }
-
   .customer-header-actions {
     gap: 0.5rem;
-  }
-
-  .customer-password-link {
-    display: none;
   }
 
   .customer-dashboard-content {
@@ -541,12 +516,6 @@
   .customer-header {
     padding-right: 1rem;
     padding-left: 1rem;
-  }
-
-  .customer-logout-button {
-    min-height: 36px;
-    padding: 0.45rem 0.65rem;
-    font-size: 0.78rem;
   }
 
   .customer-dashboard-content {

@@ -1,0 +1,310 @@
+:root {
+  --profile-bg: #e7dfd5;
+  --profile-panel: rgba(255, 255, 255, 0.22);
+  --profile-border: rgba(78, 72, 64, 0.12);
+  --profile-text: #2f2b28;
+  --profile-muted: #6c625d;
+  --profile-soft: #eee5dd;
+  --profile-shadow: rgba(73, 55, 46, 0.07);
+}
+
+.staff-profile-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--profile-bg);
+  color: var(--profile-text);
+}
+
+.staff-profile-sidebar {
+  width: 255px;
+  background: rgba(255, 255, 255, 0.12);
+  border-right: 1px solid var(--profile-border);
+  padding: 1.5rem 1.1rem 2rem;
+}
+
+.staff-profile-portal-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14rem;
+  text-transform: uppercase;
+  color: #4b4b4b;
+  margin-bottom: 1.5rem;
+}
+
+.staff-profile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.staff-profile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 0.85rem;
+  border-radius: 0.85rem;
+  color: #2d2d2d;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.staff-profile-nav-item i {
+  width: 1.1rem;
+  text-align: center;
+  color: #4b4b4b;
+}
+
+.staff-profile-nav-item-active {
+  background: rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(48, 42, 38, 0.06);
+  color: #2d2d2d;
+}
+
+.staff-profile-nav-item-active i {
+  color: #4b4b4b;
+}
+
+.staff-profile-main-panel {
+  flex: 1;
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 1.8rem 2rem 2.2rem;
+}
+
+.staff-profile-content {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--profile-border);
+  border-radius: 1.2rem;
+  box-shadow: 0 10px 22px rgba(93, 76, 63, 0.04);
+  padding: 1.2rem 1.5rem 1.4rem;
+}
+
+.staff-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0 1.4rem;
+}
+
+.staff-profile-kicker {
+  margin: 0 0 0.3rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.14rem;
+  text-transform: uppercase;
+  color: var(--profile-muted);
+}
+
+.staff-profile-header h1 {
+  margin: 0;
+  font-size: 2.3rem;
+  line-height: 1.2;
+  color: var(--profile-text);
+}
+
+.staff-profile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.staff-profile-password-link {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-dashboard-green-dark);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-dashboard-green-dark);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.staff-profile-password-link:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+}
+
+.staff-profile-password-link:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.staff-profile-save-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(87, 78, 70, 0.16);
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 0.8rem;
+  color: var(--profile-text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.staff-profile-editor {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  align-items: start;
+  gap: 2rem;
+  padding: 0.5rem 0.2rem 0;
+}
+
+.staff-profile-photo-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.55rem;
+}
+
+.staff-profile-photo {
+  width: 120px;
+  height: 120px;
+  border: 4px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 5px 16px var(--profile-shadow);
+  object-fit: cover;
+}
+
+.staff-profile-photo-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid rgba(87, 78, 70, 0.18);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.28);
+  color: var(--profile-text);
+  font-size: 0.74rem;
+  cursor: pointer;
+}
+
+.staff-profile-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.2rem;
+}
+
+.staff-profile-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--profile-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.staff-profile-field-wide {
+  grid-column: 1 / -1;
+}
+
+.staff-profile-field input,
+.staff-profile-field select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid rgba(86, 77, 69, 0.16);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.24);
+  color: var(--profile-text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.staff-profile-field input:focus,
+.staff-profile-field select:focus {
+  outline: none;
+  border-color: rgba(116, 89, 64, 0.35);
+  box-shadow: 0 0 0 3px rgba(116, 89, 64, 0.08);
+}
+
+.staff-profile-field input.staff-profile-readonly {
+  border-color: rgba(86, 77, 69, 0.12);
+  background: rgba(86, 77, 69, 0.08);
+  color: rgba(70, 64, 58, 0.78);
+  cursor: not-allowed;
+}
+
+.staff-profile-field select {
+  appearance: auto;
+}
+
+@media (max-width: 980px) {
+  .staff-profile-shell {
+    flex-direction: column;
+  }
+
+  .staff-profile-sidebar {
+    width: auto;
+    padding: 1.2rem 1.4rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--profile-border);
+  }
+
+  .staff-profile-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .staff-profile-main-panel {
+    padding: 1.3rem 1rem 1.8rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .staff-profile-sidebar {
+    padding: 1rem;
+  }
+
+  .staff-profile-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+
+  .staff-profile-nav-item {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.78rem;
+  }
+
+  .staff-profile-header {
+    margin-bottom: 1.2rem;
+  }
+
+  .staff-profile-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .staff-profile-editor {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+    padding: 0;
+  }
+
+  .staff-profile-fields {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .staff-profile-field-wide {
+    grid-column: auto;
+  }
+}

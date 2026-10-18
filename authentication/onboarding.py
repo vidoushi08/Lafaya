@@ -11,6 +11,9 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from .models import User
+
+
 def _issue_token(user):
     token = secrets.token_hex(15)
     user.onboarding_token_hash = _token_digest(user, token)
@@ -54,6 +57,17 @@ def send_customer_verification(user, request):
     )
 
 
+def send_staff_invitation(user, request):
+    _send_onboarding_email(
+        user,
+        request,
+        "authentication:staff_invitation",
+        "authentication/staff_invitation_email.txt",
+        "Set up your Lafaya staff account",
+        settings.STAFF_INVITATION_TIMEOUT,
+    )
+
+
 def onboarding_token_is_valid(user, token, account_type, timeout):
     return onboarding_token_failure_reason(user, token, account_type, timeout) is None
 
@@ -69,8 +83,10 @@ def onboarding_token_failure_reason(user, token, account_type, timeout):
         return "token_not_recorded"
     if user.onboarding_token_created_at is None:
         return "token_timestamp_missing"
-    if not user.has_usable_password():
+    if account_type == User.AccountType.CUSTOMER and not user.has_usable_password():
         return "customer_password_missing"
+    if account_type == User.AccountType.STAFF and user.has_usable_password():
+        return "staff_password_already_set"
     if user.onboarding_token_created_at + timedelta(seconds=timeout) <= timezone.now():
         return "token_expired"
     token_hash = _token_digest(user, token)

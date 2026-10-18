@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.conf import settings
 from django.db import transaction
@@ -32,11 +33,7 @@ logger = logging.getLogger(__name__)
 
 def login_view(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:
-            return redirect("admin:index")
-        if request.user.account_type == User.AccountType.CUSTOMER:
-            return redirect("customer_dashboard:customer_dashboard")
-        logout(request)
+        return redirect(_role_destination(request.user))
 
     form = EmailLoginForm(
         request,
@@ -46,6 +43,8 @@ def login_view(request):
         user = form.get_user()
         if user.is_superuser:
             destination = reverse("admin:index")
+        elif user.account_type == user.AccountType.STAFF:
+            destination = reverse("staff:staff")
         elif user.account_type == user.AccountType.CUSTOMER:
             destination = reverse("customer_dashboard:customer_dashboard")
         else:
@@ -74,6 +73,14 @@ def login_view(request):
             "next": request.POST.get("next") or request.GET.get("next", ""),
         },
     )
+
+
+def _role_destination(user):
+    if user.is_superuser:
+        return "admin:index"
+    if user.account_type == user.AccountType.STAFF:
+        return "staff:staff"
+    return "customer_dashboard:customer_dashboard"
 
 
 def register_view(request):
@@ -169,12 +176,73 @@ def verify_email_view(request, uidb64, token):
     return response
 
 
+@never_cache
+def staff_invitation_view(request, uidb64, token):
+    user = _get_user_from_uid(uidb64)
+    if not _valid_staff_invitation(user, token):
+        response = render(request, "authentication/staff_invitation_invalid.html")
+        response["Referrer-Policy"] = "no-referrer"
+        return response
+
+    form = SetPasswordForm(
+        user,
+        request.POST if request.method == "POST" else None,
+    )
+    if request.method == "POST" and form.is_valid():
+        with transaction.atomic():
+            locked_user = User.objects.select_for_update().filter(pk=user.pk).first()
+            if not _valid_staff_invitation(locked_user, token):
+                response = render(
+                    request,
+                    "authentication/staff_invitation_invalid.html",
+                )
+                response["Referrer-Policy"] = "no-referrer"
+                return response
+            locked_user.set_password(form.cleaned_data["new_password1"])
+            locked_user.is_active = True
+            locked_user.onboarding_token_hash = ""
+            locked_user.onboarding_token_created_at = None
+            locked_user.save(
+                update_fields=(
+                    "password",
+                    "is_active",
+                    "onboarding_token_hash",
+                    "onboarding_token_created_at",
+                )
+            )
+        return redirect("authentication:staff_invitation_complete")
+
+    response = render(
+        request,
+        "authentication/staff_invitation_setup.html",
+        {"form": form},
+    )
+    response["Referrer-Policy"] = "no-referrer"
+    return response
+
+
+def staff_invitation_complete_view(request):
+    return render(request, "authentication/staff_invitation_complete.html")
+
+
 def _get_user_from_uid(uidb64):
     try:
         user_id = force_str(urlsafe_base64_decode(uidb64))
         return User.objects.filter(pk=user_id).first()
     except (TypeError, ValueError, OverflowError):
         return None
+
+
+def _valid_staff_invitation(user, token):
+    return bool(
+        user
+        and onboarding_token_is_valid(
+            user,
+            token,
+            User.AccountType.STAFF,
+            settings.STAFF_INVITATION_TIMEOUT,
+        )
+    )
 
 
 def logout_view(request):

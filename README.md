@@ -43,6 +43,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+- Configure email by filling in the `.env` file in the project root. Set
+  `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, and `DEFAULT_FROM_EMAIL` to your Gmail
+  address, Google App Password, and sender address. The App Password is a secret:
+  keep it in `.env` and do not commit or share it.
+
+  Gmail SMTP uses `smtp.gmail.com` on port `587` with TLS. The project loads these
+  values from `.env`; it uses Django's console email backend until both the Gmail
+  address and App Password are set.
+
 ## Usage
 
 - Apply database migrations:

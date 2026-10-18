@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Staff Profile | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'staff_profile/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="staff-profile-shell">
+    <aside class="staff-profile-sidebar">
+      <div class="staff-profile-portal-label">staff portal</div>
+
+      <nav class="staff-profile-nav" aria-label="Staff portal navigation">
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-profile-nav-item">
+          <i class="fa-solid fa-book-bookmark" aria-hidden="true"></i>
+          <span>Booking History</span>
+        </a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-profile-nav-item">
+          <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+          <span>View Tasks</span>
+        </a>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-profile-nav-item staff-profile-nav-item-active" aria-current="page">
+          <i class="fa-solid fa-user-gear" aria-hidden="true"></i>
+          <span>Manage Profile</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="staff-profile-main-panel">
+      <div class="staff-profile-content">
+        <form method="post">
+          {% csrf_token %}
+          <header class="staff-profile-header">
+            <div>
+              <p class="staff-profile-kicker">staff account</p>
+              <h1>Manage Profile</h1>
+              <p>Username: {{ request.user.username }}</p>
+              <p>Your assigned email is managed by your administrator and cannot be changed here.</p>
+            </div>
+            <div class="staff-profile-header-actions">
+              <button type="submit" class="staff-profile-save-button">Save</button>
+              <a class="staff-profile-password-link" href="{% url 'authentication:password_change' %}">
+                <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                <span>Change password</span>
+              </a>
+            </div>
+          </header>
+
+          {% if messages %}
+            {% for message in messages %}
+              <p role="status">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+
+          <section class="staff-profile-editor" aria-label="Staff profile details">
+            <div class="staff-profile-photo-column">
+              <img class="staff-profile-photo" src="{% static 'images/default_profile_picture.png' %}" alt="Default staff profile photo">
+            </div>
+
+            <div class="staff-profile-fields">
+              <label class="staff-profile-field staff-profile-field-wide">
+                <span>Email (set by admin; cannot be changed)</span>
+                <input class="staff-profile-readonly" type="email" value="{{ request.user.email }}" autocomplete="email" readonly aria-readonly="true">
+              </label>
+              {% for field in form %}
+                <label class="staff-profile-field{% if field.name == 'address' %} staff-profile-field-wide{% endif %}">
+                  <span>{{ field.label }}</span>
+                  {{ field }}
+                  {% for error in field.errors %}
+                    <span role="alert">{{ error }}</span>
+                  {% endfor %}
+                </label>
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <p role="alert">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </section>
+        </form>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

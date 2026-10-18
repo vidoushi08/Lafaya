@@ -613,7 +613,9 @@ class SuperAdminAccessTests(TestCase):
 		self.assertContains(response, "Users")
 		self.assertContains(response, "Superadmin")
 		add_response = self.client.get("/admin/authentication/user/add/")
-		self.assertEqual(add_response.status_code, 403)
+		self.assertEqual(add_response.status_code, 200)
+		self.assertNotContains(add_response, 'name="password1"')
+		self.assertNotContains(add_response, 'name="password2"')
 
 	def test_admin_login_accepts_superadmin_email(self):
 		get_user_model().objects.create_superuser(
@@ -633,6 +635,261 @@ class SuperAdminAccessTests(TestCase):
 
 		self.assertRedirects(response, "/admin/")
 		self.assertIn("_auth_user_id", self.client.session)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_superadmin_creates_staff_account_with_setup_invitation(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		add_page = self.client.get("/admin/authentication/user/add/")
+		self.assertEqual(add_page.status_code, 200)
+		self.assertNotContains(add_page, 'name="password1"')
+		self.assertNotContains(add_page, 'name="password2"')
+		self.assertContains(add_page, 'name="first_name"')
+		self.assertContains(add_page, 'name="last_name"')
+
+		response = self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "assigned-staff",
+				"email": "assigned-staff@example.com",
+				"first_name": "Samira",
+				"last_name": "Noor",
+				"account_type": "staff",
+			},
+		)
+
+		self.assertEqual(response.status_code, 302)
+		staff = get_user_model().objects.get(username="assigned-staff")
+		self.assertEqual(staff.account_type, "staff")
+		self.assertEqual(staff.first_name, "Samira")
+		self.assertEqual(staff.last_name, "Noor")
+		self.assertFalse(staff.is_staff)
+		self.assertFalse(staff.is_superuser)
+		self.assertFalse(staff.is_active)
+		self.assertFalse(staff.has_usable_password())
+		self.assertEqual(len(mail.outbox), 1)
+		self.assertIn(staff.email, mail.outbox[0].to)
+
+		invitation_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(invitation_match)
+		invitation_path = invitation_match.group(1)
+		token_parts = re.search(
+			r"/authentication/staff-invitation/([^/]+)/([^/\s]+)",
+			invitation_path,
+		)
+		self.assertIsNotNone(token_parts)
+		customer_verification_path = reverse(
+			"authentication:verify_email",
+			kwargs={
+				"uidb64": token_parts.group(1),
+				"token": token_parts.group(2),
+			},
+		)
+		self.assertContains(
+			self.client.get(customer_verification_path),
+			"link unavailable",
+		)
+		response = self.client.get(invitation_path)
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, "set your password")
+		self.assertEqual(response["Referrer-Policy"], "no-referrer")
+		self.assertIn("no-store", response["Cache-Control"])
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
+		self.assertFalse(staff.has_usable_password())
+		self.assertTrue(staff.onboarding_token_hash)
+		response = self.client.post(
+			invitation_path,
+			{
+				"new_password1": "C0mpl3x+staff-password-2026!",
+				"new_password2": "C0mpl3x+staff-password-2026!",
+			},
+		)
+		self.assertRedirects(
+			response,
+			reverse("authentication:staff_invitation_complete"),
+		)
+
+		staff.refresh_from_db()
+		self.assertTrue(staff.is_active)
+		self.assertTrue(staff.has_usable_password())
+		self.assertTrue(staff.check_password("C0mpl3x+staff-password-2026!"))
+		self.assertEqual(staff.email, "assigned-staff@example.com")
+		self.assertEqual(staff.username, "assigned-staff")
+		self.assertEqual(staff.account_type, "staff")
+		self.assertEqual(staff.onboarding_token_hash, "")
+		self.assertContains(
+			self.client.get(invitation_path),
+			"invitation link unavailable",
+		)
+
+		self.client.logout()
+		login_response = self.client.post(
+			reverse("authentication:login"),
+			{
+				"identifier": staff.username,
+				"password": "C0mpl3x+staff-password-2026!",
+			},
+		)
+		self.assertRedirects(login_response, "/staff/")
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_staff_invitation_allows_null_origin_only_for_same_origin_csrf_post(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "assigned-staff",
+				"email": "assigned-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		invitation_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(invitation_match)
+		invitation_path = invitation_match.group(1)
+		staff = get_user_model().objects.get(username="assigned-staff")
+
+		client = Client(enforce_csrf_checks=True)
+		page = client.get(invitation_path)
+		csrf_token_match = re.search(
+			r'name="csrfmiddlewaretoken" value="([^"]+)"',
+			page.content.decode(),
+		)
+		self.assertIsNotNone(csrf_token_match)
+		csrf_token = csrf_token_match.group(1)
+		password_data = {
+			"new_password1": "C0mpl3x+staff-password-2026!",
+			"new_password2": "C0mpl3x+staff-password-2026!",
+		}
+
+		missing_token_response = client.post(
+			invitation_path,
+			password_data,
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+		self.assertEqual(missing_token_response.status_code, 403)
+
+		cross_site_response = client.post(
+			invitation_path,
+			{**password_data, "csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="cross-site",
+		)
+		self.assertEqual(cross_site_response.status_code, 403)
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
+
+		response = client.post(
+			invitation_path,
+			{**password_data, "csrfmiddlewaretoken": csrf_token},
+			HTTP_ORIGIN="null",
+			HTTP_SEC_FETCH_SITE="same-origin",
+		)
+		self.assertRedirects(
+			response,
+			reverse("authentication:staff_invitation_complete"),
+		)
+		staff.refresh_from_db()
+		self.assertTrue(staff.is_active)
+		self.assertTrue(staff.check_password(password_data["new_password1"]))
+
+	@override_settings(
+		EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+		ONBOARDING_EMAIL_RESEND_COOLDOWN=0,
+	)
+	def test_superadmin_can_resend_pending_staff_invitation(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "assigned-staff",
+				"email": "assigned-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		staff = get_user_model().objects.get(username="assigned-staff")
+		first_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(first_match)
+
+		response = self.client.post(
+			"/admin/authentication/user/",
+			{
+				"action": "resend_staff_invitation",
+				"_selected_action": [str(staff.pk)],
+				"index": "0",
+			},
+			follow=True,
+		)
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(mail.outbox), 2)
+		self.assertContains(
+			self.client.get(first_match.group(1)),
+			"invitation link unavailable",
+		)
+
+		second_match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[1].body,
+		)
+		self.assertIsNotNone(second_match)
+		self.assertContains(
+			self.client.get(second_match.group(1)),
+			"set your password",
+		)
+
+	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+	def test_expired_staff_invitation_cannot_activate_account(self):
+		superadmin = get_user_model().objects.create_superuser(
+			username="lafaya-admin",
+			email="admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superadmin)
+		self.client.post(
+			"/admin/authentication/user/add/",
+			{
+				"username": "expired-staff",
+				"email": "expired-staff@example.com",
+				"account_type": "staff",
+			},
+		)
+		staff = get_user_model().objects.get(username="expired-staff")
+		match = re.search(
+			r"http://testserver(/authentication/staff-invitation/[^\s]+)",
+			mail.outbox[0].body,
+		)
+		self.assertIsNotNone(match)
+		staff.onboarding_token_created_at = timezone.now() - timedelta(days=4)
+		staff.save(update_fields=("onboarding_token_created_at",))
+
+		response = self.client.get(match.group(1))
+		self.assertContains(response, "invitation link unavailable")
+		staff.refresh_from_db()
+		self.assertFalse(staff.is_active)
 
 	def test_admin_display_uses_superuser_flag_for_superadmin_role(self):
 		superadmin = get_user_model().objects.create_superuser(
