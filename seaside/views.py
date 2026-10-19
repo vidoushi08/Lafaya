@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from .forms import MAX_DAYS_AHEAD, SeasideBookingForm, bookable
 from .models import SeasidePackage, SeasideService, SeasideVenue
+from .notifications import notify_admins_of_booking
 
 
 def is_customer(user):
@@ -29,7 +30,8 @@ def index(request):
             )
         form = SeasideBookingForm(request.POST, customer=customer)
         if form.is_valid():
-            form.save()
+            booking = form.save()
+            notify_admins_of_booking(booking, request)
             messages.success(
                 request,
                 "Your booking request has been submitted and is awaiting approval.",

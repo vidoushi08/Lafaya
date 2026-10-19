@@ -206,6 +206,39 @@ class SeasideBookingSubmissionTests(TestCase):
         if field:
             self.assertIn(field, response.context["form"].errors)
 
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_admins_are_emailed_when_a_request_is_submitted(self):
+        from django.core import mail
+
+        get_user_model().objects.create_superuser(
+            username="boss", email="boss@example.com", password="pw-12345-xyz"
+        )
+        self.client.post(self.url, self.payload())
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["boss@example.com"])
+        self.assertIn("Tasha Noor", mail.outbox[0].body)
+        self.assertIn("/seasidebookingrequest/", mail.outbox[0].body)
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_invalid_request_sends_no_admin_email(self):
+        from django.core import mail
+
+        get_user_model().objects.create_superuser(
+            username="boss", email="boss@example.com", password="pw-12345-xyz"
+        )
+        self.client.post(self.url, self.payload(end_time="15:00"))
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_email_failure_does_not_block_the_booking(self):
+        get_user_model().objects.create_superuser(
+            username="boss", email="boss@example.com", password="pw-12345-xyz"
+        )
+        with patch("seaside.notifications.send_mail", side_effect=OSError("down")):
+            response = self.client.post(self.url, self.payload(), follow=True)
+        self.assertContains(response, "awaiting approval")
+        self.assertEqual(SeasideBookingRequest.objects.count(), 1)
+
     def test_valid_request_is_saved_with_server_calculated_estimate(self):
         response = self.client.post(self.url, self.payload(), follow=True)
 
