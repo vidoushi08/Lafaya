@@ -690,17 +690,83 @@
   outline-offset: 3px;
 }
 
-.conference-form-required-note,
-.conference-form-preview-note {
+.conference-form-required-note {
   margin: -0.55rem 0 0;
   color: #52748e;
   font-size: 0.75rem;
   text-align: center;
 }
 
-.conference-form-preview-note {
-  margin-top: -0.9rem;
-  font-style: italic;
+.conference-form-control[readonly] {
+  background: rgba(214, 228, 240, 0.6);
+  cursor: not-allowed;
+}
+
+.conference-form-options label.is-unavailable,
+.conference-form-control option:disabled {
+  opacity: 0.4;
+}
+
+.conference-enquiry-form > .conference-button-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.conference-form-field .errorlist,
+.conference-form-errors .errorlist {
+  margin: 0.3rem 0 0;
+  padding: 0;
+  color: #a1332b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.conference-form-errors,
+.conference-form-success {
+  margin: 0 0 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.conference-form-success {
+  border-left: 4px solid #347fae;
+  color: #183b56;
+}
+
+.conference-form-errors {
+  border-left: 4px solid #a1332b;
+}
+
+.conference-estimate {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #b9d3e8;
+  border-radius: 9px;
+  background: #e0edf9;
+  color: #183b56;
+}
+
+.conference-estimate p {
+  margin: 0;
+}
+
+.conference-estimate-total strong {
+  font-size: 1.15rem;
+}
+
+.conference-estimate-note {
+  margin-top: 0.3rem !important;
+  color: #52748e;
+  font-size: 0.82rem;
+}
+
+.conference-empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
