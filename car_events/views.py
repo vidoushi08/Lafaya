@@ -1,43 +1,75 @@
-from django.contrib import messages
-from django.shortcuts import redirect, render
+from datetime import timedelta
 
-from .forms import CarEventEnquiryForm
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils import timezone
+
+from .forms import MAX_DAYS_AHEAD, CarEventBookingForm, bookable
 from .models import EventPackage, ExtraService, Venue
+from .notifications import notify_admins_of_booking
+
+
+def is_customer(user):
+    return (
+        user.is_authenticated
+        and not user.is_superuser
+        and user.account_type == user.AccountType.CUSTOMER
+    )
 
 
 def index(request):
-    venues = Venue.objects.filter(is_active=True)
-    packages = EventPackage.objects.filter(is_active=True).prefetch_related("features")
-    extras = ExtraService.objects.filter(is_active=True)
+    customer = request.user if is_customer(request.user) else None
+    form = None
 
     if request.method == "POST":
-        form = CarEventEnquiryForm(request.POST)
+        if customer is None:
+            return HttpResponseForbidden(
+                "Only signed-in customers can make a car event booking request."
+            )
+        form = CarEventBookingForm(request.POST, customer=customer)
         if form.is_valid():
-            enquiry = form.save(commit=False)
-            if request.user.is_authenticated:
-                enquiry.customer = request.user
-            enquiry.save()
-            form.save_m2m()
+            booking = form.save()
+            notify_admins_of_booking(booking, request)
             messages.success(
                 request,
-                "Your car event enquiry was submitted successfully. "
-                "Our team will contact you soon.",
+                "Your car event booking request has been submitted and is awaiting approval.",
             )
-            return redirect("car_events:car_events")
-    else:
-        initial = {}
-        if request.user.is_authenticated:
-            initial["full_name"] = request.user.get_full_name()
-            initial["email"] = request.user.email
-        form = CarEventEnquiryForm(initial=initial)
+            return redirect(f"{reverse('car_events:car_events')}#car-events-enquiry")
+    elif customer is not None:
+        form = CarEventBookingForm(
+            initial={
+                "first_name": customer.first_name,
+                "last_name": customer.last_name,
+                "phone": customer.phone,
+            },
+            customer=customer,
+        )
 
     return render(
         request,
         "car_events/car_events.html",
         {
-            "venues": venues,
-            "packages": packages,
-            "extras": extras,
+            "venues": Venue.objects.filter(is_active=True),
+            "packages": EventPackage.objects.filter(is_active=True).prefetch_related(
+                "features"
+            ),
+            "extras": ExtraService.objects.filter(is_active=True),
+            "bookable_venues": bookable(Venue),
+            "bookable_packages": bookable(EventPackage),
+            "bookable_services": bookable(ExtraService),
             "form": form,
+            "selected_services": (
+                form.data.getlist("optional_services")
+                if form is not None and form.is_bound
+                else []
+            ),
+            "is_customer": customer is not None,
+            "min_event_date": timezone.localdate().isoformat(),
+            "max_event_date": (
+                timezone.localdate() + timedelta(days=MAX_DAYS_AHEAD)
+            ).isoformat(),
+            "login_next": f"{reverse('car_events:car_events')}#car-events-enquiry",
         },
     )
