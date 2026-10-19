@@ -93,3 +93,12 @@ python manage.py migrate
 This preserves existing accounts and admin history while moving the project
 to the custom customer account model. New databases only need the standard
 `python manage.py migrate` command.
+
+### Seaside catalogue images
+
+Superadmins can upload images when managing Seaside venues, packages, and
+optional services. Uploaded files are stored under the project's local `media/`
+directory; SQLite stores the file paths, not the image contents. Back up the
+`media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
+development server while `DEBUG=True`; production deployment needs an
+appropriate media-file storage and serving configuration.

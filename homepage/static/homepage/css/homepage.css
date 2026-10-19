@@ -20,20 +20,31 @@
   margin-bottom: 2rem;
 }
 
-.homepage-welcome button {
+.homepage-welcome button,
+.homepage-welcome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
   background-color: var(--color-complement);
   color: var(--color-white);
-  border: none;
-  padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-btn);
+  border: 2px solid var(--color-complement);
+  padding: 0.9rem 2.5rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px var(--color-shadow);
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.homepage-welcome button:hover {
+.homepage-welcome button:hover,
+.homepage-welcome-cta:hover {
   background-color: var(--color-complement-hover);
+  transform: translateY(-2px);
 }
 
 .homepage-events-hero {
