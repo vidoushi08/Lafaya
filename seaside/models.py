@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
@@ -48,18 +49,35 @@ class SeasideVenue(PricedCatalogItem):
         blank=True,
         help_text="Optional uploaded image; takes precedence over the existing static image path.",
     )
+    capacity = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Maximum guests this venue holds. Leave empty for no limit.",
+    )
 
     class Meta:
         ordering = ["position", "name"]
         verbose_name = "Seaside venue"
         verbose_name_plural = "Seaside venues"
-        constraints = [price_nonnegative_constraint("seasidevenue")]
+        constraints = [
+            price_nonnegative_constraint("seasidevenue"),
+            models.CheckConstraint(
+                condition=Q(capacity__isnull=True) | Q(capacity__gte=1),
+                name="seaside_seasidevenue_capacity_positive",
+            ),
+        ]
 
 
 class SeasidePackage(PricedCatalogItem):
     name = models.CharField(max_length=120, unique=True)
     tagline = models.CharField(max_length=160)
     description = models.TextField(blank=True)
+    image = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Optional path to an image in the project's static files.",
+    )
     features = models.TextField(
         blank=True,
         help_text="Enter one package feature per line.",
@@ -70,10 +88,39 @@ class SeasidePackage(PricedCatalogItem):
         help_text="Optional image shown with this package.",
     )
     is_featured = models.BooleanField(default=False)
+    min_guests = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text="Smallest number of guests this package accepts.",
+    )
+    max_guests = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)],
+        help_text="Largest number of guests this package accepts. Leave empty for no limit.",
+    )
 
     class Meta:
         ordering = ["position", "id"]
-        constraints = [price_nonnegative_constraint("seasidepackage")]
+        constraints = [
+            price_nonnegative_constraint("seasidepackage"),
+            models.CheckConstraint(
+                condition=Q(min_guests__gte=1),
+                name="seaside_seasidepackage_min_guests_positive",
+            ),
+            models.CheckConstraint(
+                condition=Q(max_guests__isnull=True)
+                | Q(max_guests__gte=models.F("min_guests")),
+                name="seaside_seasidepackage_guest_range_valid",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        if self.max_guests is not None and self.max_guests < self.min_guests:
+            raise ValidationError(
+                {"max_guests": "Maximum guests cannot be less than minimum guests."}
+            )
 
     @property
     def feature_list(self):

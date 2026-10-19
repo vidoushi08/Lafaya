@@ -41,8 +41,8 @@ PACKAGES = (
         "description": "",
         "features": (
             "Seaside setup for up to 30 guests\n"
-            "Curated styling and ambient lighting\n"
-            "Welcome drinks and sunset service"
+            "On-site service team\n"
+            "Sunset timeline and event coordination"
         ),
         "is_featured": False,
     },
@@ -52,8 +52,8 @@ PACKAGES = (
         "description": "",
         "features": (
             "Host up to 100 guests by the water\n"
-            "Styled dining, music, and full service team\n"
-            "Fresh coastal menu and networking bar"
+            "Music and sound system\n"
+            "Full service team and event coordination"
         ),
         "is_featured": True,
     },
@@ -63,8 +63,8 @@ PACKAGES = (
         "description": "",
         "features": (
             "Exclusive venue hosting for up to 250 guests\n"
-            "Custom styling, entertainment, and production\n"
-            "Multi-course dining and hosted hospitality"
+            "Custom entertainment and production\n"
+            "Hosted hospitality and full event coordination"
         ),
         "is_featured": False,
     },
@@ -101,6 +101,13 @@ SERVICES = (
 )
 
 
+DEFAULT_GUEST_LIMITS = {
+    "Barefoot Gathering": {"min_guests": 1, "max_guests": 30},
+    "Sunset Social": {"min_guests": 1, "max_guests": 100},
+    "Private Island": {"min_guests": 1, "max_guests": 250},
+}
+
+
 class Command(BaseCommand):
     help = (
         "Create or refresh the default Seaside catalogue without overwriting "
@@ -119,6 +126,7 @@ class Command(BaseCommand):
                     name=entry["name"],
                     defaults={
                         **entry,
+                        **DEFAULT_GUEST_LIMITS.get(entry["name"], {}),
                         "position": position,
                     },
                 )

@@ -37,9 +37,11 @@
           <p class="seaside-eyebrow">The right shoreline</p>
           <h2 id="seaside-venues-heading">Find your perfect seaside setting.</h2>
         </div>
-        <span class="seaside-section-hint">Explore locations <i class="fa-solid fa-arrow-right"></i></span>
+        <button class="seaside-explore-button" type="button" data-explore-toggle="seaside-venue-list" data-label-more="Explore locations" data-label-less="Show fewer locations" aria-expanded="false" aria-controls="seaside-venue-list" hidden>
+          <span>Explore locations</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="seaside-card-grid">
+      <div class="seaside-card-grid" id="seaside-venue-list" data-explore-list>
         {% for venue in venues %}
         <article class="seaside-card">
           {% if venue.uploaded_image %}
@@ -59,7 +61,6 @@
               {% endif %}
             </p>
           </div>
-          <a class="seaside-card-link" href="#seaside-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
         </article>
         {% empty %}
         <p class="seaside-empty-state">Seaside venues will be available again shortly.</p>
@@ -73,78 +74,84 @@
           <p class="seaside-eyebrow">Simple, considered packages</p>
           <h2 id="seaside-packages-heading">Choose your kind of escape.</h2>
         </div>
-        <span class="seaside-section-hint">Compare experiences <i class="fa-solid fa-arrow-right"></i></span>
+        <button class="seaside-explore-button" type="button" data-explore-toggle="seaside-package-list" data-label-more="Explore experiences" data-label-less="Show fewer experiences" aria-expanded="false" aria-controls="seaside-package-list" hidden>
+          <span>Explore experiences</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="seaside-package-grid">
-        <article class="seaside-package seaside-package-barefoot">
+      <div class="seaside-package-grid" id="seaside-package-list" data-explore-list>
+        {% for package in packages %}
+        <article class="seaside-package{% if package.is_featured %} seaside-package-featured{% endif %}">
+          {% if package.uploaded_image %}
+          <img class="seaside-package-image" src="{{ package.uploaded_image.url }}" alt="{{ package.name }}">
+          {% elif package.image %}
+          <img class="seaside-package-image" src="{% static package.image %}" alt="{{ package.name }}">
+          {% endif %}
           <div class="seaside-package-heading">
-            <p>Relaxed celebrations</p>
-            <h3>Barefoot Gathering</h3>
+            <p>{{ package.tagline }}</p>
+            <h3>{{ package.name }}</h3>
           </div>
+          {% if package.description %}
+          <p class="seaside-package-description">{{ package.description }}</p>
+          {% endif %}
           <ul>
-            <li>Seaside setup for up to 30 guests</li>
-            <li>Curated styling and ambient lighting</li>
-            <li>Welcome drinks and sunset service</li>
+            {% for feature in package.feature_list %}
+            <li>{{ feature }}</li>
+            {% empty %}
+            <li>Event details can be tailored to your celebration.</li>
+            {% endfor %}
           </ul>
-          <div class="seaside-package-footer"><strong>From Rs 65,000</strong><a href="#seaside-enquiry">Enquire</a></div>
-        </article>
-        <article class="seaside-package seaside-package-sunset">
-          <div class="seaside-package-heading">
-            <p>Signature celebrations</p>
-            <h3>Sunset Social</h3>
+          <div class="seaside-package-footer">
+            <strong>
+              {% if package.price is not None %}
+              Rs {{ package.price|floatformat:0 }}{% if package.price_basis == "per_guest" %} per guest{% else %} per booking{% endif %}
+              {% else %}
+              Price on request
+              {% endif %}
+            </strong>
           </div>
-          <ul>
-            <li>Host up to 100 guests by the water</li>
-            <li>Styled dining, music, and full service team</li>
-            <li>Fresh coastal menu and networking bar</li>
-          </ul>
-          <div class="seaside-package-footer"><strong>From Rs 120,000</strong><a href="#seaside-enquiry">Enquire</a></div>
         </article>
-        <article class="seaside-package seaside-package-private">
-          <div class="seaside-package-heading">
-            <p>Unforgettable occasions</p>
-            <h3>Private Island</h3>
-          </div>
-          <ul>
-            <li>Exclusive venue hosting for up to 250 guests</li>
-            <li>Custom styling, entertainment, and production</li>
-            <li>Multi-course dining and hosted hospitality</li>
-          </ul>
-          <div class="seaside-package-footer"><strong>From Rs 200,000</strong><a href="#seaside-enquiry">Enquire</a></div>
-        </article>
+        {% empty %}
+        <p class="seaside-empty-state">Seaside packages will be available again shortly.</p>
+        {% endfor %}
       </div>
     </section>
 
     <section class="seaside-section seaside-services" aria-labelledby="seaside-services-heading">
-      <div class="seaside-section-heading seaside-section-heading-centered">
-        <p class="seaside-eyebrow">Every detail, beautifully handled</p>
-        <h2 id="seaside-services-heading">Seaside event enhancements.</h2>
+      <div class="seaside-section-heading">
+        <div>
+          <p class="seaside-eyebrow">Every detail, beautifully handled</p>
+          <h2 id="seaside-services-heading">Seaside event enhancements.</h2>
+        </div>
+        <button class="seaside-explore-button" type="button" data-explore-toggle="seaside-service-list" data-label-more="Explore additional services" data-label-less="Show fewer services" aria-expanded="false" aria-controls="seaside-service-list" hidden>
+          <span>Explore additional services</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="seaside-service-grid">
+      <div class="seaside-service-grid" id="seaside-service-list" data-explore-list>
+        {% for service in services %}
         <article class="seaside-service">
-          <img src="{% static 'seaside/images/seaside_services_styling.png' %}" alt="Styled seaside event table setting">
+          {% if service.uploaded_image %}
+          <img src="{{ service.uploaded_image.url }}" alt="{{ service.name }}">
+          {% elif service.image %}
+          <img src="{% static service.image %}" alt="{{ service.name }}">
+          {% endif %}
           <div class="seaside-service-content">
-            <h3>Coastal styling</h3>
-            <p>Natural textures, considered florals, candlelight, and tablescapes that belong to the landscape.</p>
-            <div class="seaside-service-tags"><span>Tablescapes</span><span>Florals</span></div>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            {% if service.highlight_list %}
+            <div class="seaside-service-tags">
+              {% for highlight in service.highlight_list %}
+              <span>{{ highlight }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
         </article>
-        <article class="seaside-service">
-          <img src="{% static 'seaside/images/seaside_services_photography.png' %}" alt="Seaside event photography at sunset">
-          <div class="seaside-service-content">
-            <h3>Photography</h3>
-            <p>Thoughtful coverage of the people, atmosphere, and small unscripted moments that make the day yours.</p>
-            <div class="seaside-service-tags"><span>Editorial Coverage</span><span>Golden Hour</span></div>
-          </div>
-        </article>
-        <article class="seaside-service">
-          <img src="{% static 'seaside/images/seaside_services_catering.png' %}" alt="Seafood catering spread for a seaside event">
-          <div class="seaside-service-content">
-            <h3>Ocean-to-table catering</h3>
-            <p>Fresh, generous menus served with an easy rhythm from welcome aperitifs to the last toast.</p>
-            <div class="seaside-service-tags"><span>Fresh Menus</span><span>Beach Bar</span></div>
-          </div>
-        </article>
+        {% empty %}
+        <p class="seaside-empty-state">Seaside services will be available again shortly.</p>
+        {% endfor %}
+      </div>
+      <div class="seaside-book-cta">
+        <a class="seaside-button seaside-button-primary" href="#seaside-enquiry">Want to book with Lafaya? <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </section>
 
@@ -281,4 +288,8 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'seaside/js/seaside.js' %}"></script>
 {% endblock %}

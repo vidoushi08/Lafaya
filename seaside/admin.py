@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.templatetags.static import static
 from django.utils.html import format_html
 
 from authentication.admin_site import superadmin_site
@@ -20,17 +21,20 @@ class PricedCatalogItemAdmin(admin.ModelAdmin):
                 '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
                 obj.uploaded_image.url,
             )
-        return (
-            "Using the static image path"
-            if getattr(obj, "image", "")
-            else "No image uploaded"
-        )
+        static_image = getattr(obj, "image", "")
+        if static_image:
+            return format_html(
+                '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
+                static(static_image),
+            )
+        return "No image uploaded"
 
 
 class SeasideVenueAdmin(PricedCatalogItemAdmin):
     list_display = (
         "name",
         "location",
+        "capacity",
         "price",
         "price_basis",
         "is_active",
@@ -45,6 +49,7 @@ class SeasideVenueAdmin(PricedCatalogItemAdmin):
         "image",
         "image_preview",
         "uploaded_image",
+        "capacity",
         "price",
         "price_basis",
         "is_active",
@@ -56,20 +61,26 @@ class SeasidePackageAdmin(PricedCatalogItemAdmin):
     list_display = (
         "name",
         "tagline",
+        "min_guests",
+        "max_guests",
         "price",
         "price_basis",
         "is_featured",
         "is_active",
         "position",
+        "image_preview",
     )
     list_editable = ("price", "price_basis", "is_featured", "is_active", "position")
     fields = (
         "name",
         "tagline",
         "description",
+        "image",
         "features",
         "image_preview",
         "uploaded_image",
+        "min_guests",
+        "max_guests",
         "price",
         "price_basis",
         "is_featured",
@@ -79,6 +90,14 @@ class SeasidePackageAdmin(PricedCatalogItemAdmin):
 
 
 class SeasideServiceAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+        "image_preview",
+    )
     fields = (
         "name",
         "description",

@@ -173,7 +173,7 @@ STATICFILES_DIRS = [
 
 # generation of URLs based on the static directory
 STATIC_URL = "static/"
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 

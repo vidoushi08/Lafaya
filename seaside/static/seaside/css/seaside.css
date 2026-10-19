@@ -173,7 +173,8 @@
   font-weight: 700;
 }
 
-.seaside-section-hint i {
+.seaside-section-hint i,
+.seaside-explore-button i {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -182,6 +183,47 @@
   border: 2px solid var(--color-complement);
   border-radius: var(--radius-circle);
   color: var(--color-complement);
+}
+
+.seaside-explore-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-grey-dark);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.seaside-explore-button[hidden] {
+  display: none;
+}
+
+.seaside-explore-button:hover i,
+.seaside-explore-button:focus-visible i {
+  background-color: var(--color-complement);
+  color: var(--color-white);
+}
+
+.seaside-explore-button.is-expanded i {
+  transform: rotate(-90deg);
+}
+
+.seaside-book-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.seaside-card-grid > [hidden],
+.seaside-package-grid > [hidden],
+.seaside-service-grid > [hidden] {
+  display: none;
 }
 
 .seaside-card-grid,
@@ -208,6 +250,7 @@
 }
 
 .seaside-card img,
+.seaside-package-image,
 .seaside-service img {
   display: block;
   width: 100%;
@@ -268,19 +311,37 @@
 
 .seaside-packages .seaside-eyebrow,
 .seaside-packages .seaside-section-heading h2,
-.seaside-packages .seaside-section-hint {
+.seaside-packages .seaside-section-hint,
+.seaside-packages .seaside-explore-button {
   color: var(--color-white);
 }
 
-.seaside-packages .seaside-section-hint i {
+.seaside-packages .seaside-section-hint i,
+.seaside-packages .seaside-explore-button i {
   border-color: var(--color-white);
   color: var(--color-white);
+}
+
+.seaside-packages .seaside-explore-button:hover i,
+.seaside-packages .seaside-explore-button:focus-visible i {
+  background-color: var(--color-white);
+  color: var(--color-accent);
 }
 
 .seaside-package {
   display: flex;
   flex-direction: column;
   min-height: 420px;
+}
+
+.seaside-package-featured {
+  outline: 2px solid var(--color-yellow-dark);
+  outline-offset: 3px;
+}
+
+.seaside-package-image {
+  aspect-ratio: 1.8 / 1;
+  object-fit: cover;
 }
 
 .seaside-package-heading {
@@ -302,6 +363,12 @@
   margin: 0;
   padding: 1.75rem 1.5rem;
   list-style: none;
+}
+
+.seaside-package-description {
+  margin: 1.25rem 1.5rem 0;
+  color: var(--color-grey-dark);
+  line-height: 1.5;
 }
 
 .seaside-package li {
