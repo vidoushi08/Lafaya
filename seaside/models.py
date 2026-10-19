@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -158,3 +161,96 @@ class SeasideService(PricedCatalogItem):
             for highlight in self.highlights.splitlines()
             if highlight.strip()
         ]
+
+
+class SeasideBookingRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending approval"
+        APPROVED = "approved", "Approved"
+        REJECTED = "rejected", "Rejected"
+
+    EVENT_TYPE = "Seaside"
+
+    customer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="seaside_booking_requests",
+    )
+    status = models.CharField(
+        max_length=16,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    event_type = models.CharField(max_length=32, default=EVENT_TYPE, editable=False)
+
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone = models.CharField(max_length=32)
+
+    event_name = models.CharField(max_length=120, blank=True)
+    event_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    expected_guests = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    venue = models.ForeignKey(
+        SeasideVenue,
+        on_delete=models.PROTECT,
+        related_name="booking_requests",
+    )
+    package = models.ForeignKey(
+        SeasidePackage,
+        on_delete=models.PROTECT,
+        related_name="booking_requests",
+    )
+    services = models.ManyToManyField(
+        SeasideService,
+        blank=True,
+        related_name="booking_requests",
+    )
+    budget = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.01"))],
+    )
+    estimated_total = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        validators=[MinValueValidator(0)],
+    )
+    price_breakdown = models.JSONField(
+        default=list,
+        help_text="Prices as they were when the request was made.",
+    )
+    message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Seaside booking request"
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(expected_guests__gte=1),
+                name="seaside_request_guests_positive",
+            ),
+            models.CheckConstraint(
+                condition=Q(budget__gt=0),
+                name="seaside_request_budget_positive",
+            ),
+            models.CheckConstraint(
+                condition=Q(estimated_total__gte=0),
+                name="seaside_request_total_nonnegative",
+            ),
+            models.CheckConstraint(
+                condition=~Q(end_time=models.F("start_time")),
+                name="seaside_request_end_differs_from_start",
+            ),
+            models.UniqueConstraint(
+                fields=["venue", "event_date"],
+                condition=Q(status__in=["pending", "approved"]),
+                name="seaside_one_active_request_per_venue_day",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.event_date}"

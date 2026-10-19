@@ -4,7 +4,12 @@ from django.utils.html import format_html
 
 from authentication.admin_site import superadmin_site
 
-from .models import SeasidePackage, SeasideService, SeasideVenue
+from .models import (
+    SeasideBookingRequest,
+    SeasidePackage,
+    SeasideService,
+    SeasideVenue,
+)
 
 
 class PricedCatalogItemAdmin(admin.ModelAdmin):
@@ -112,9 +117,50 @@ class SeasideServiceAdmin(PricedCatalogItemAdmin):
     )
 
 
+class SeasideBookingRequestAdmin(admin.ModelAdmin):
+    list_display = (
+        "event_date",
+        "first_name",
+        "last_name",
+        "venue",
+        "package",
+        "expected_guests",
+        "estimated_total",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status", "event_date")
+    search_fields = ("first_name", "last_name", "email", "event_name")
+    readonly_fields = (
+        "customer",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "event_name",
+        "event_date",
+        "start_time",
+        "end_time",
+        "expected_guests",
+        "venue",
+        "package",
+        "services",
+        "budget",
+        "estimated_total",
+        "price_breakdown",
+        "message",
+        "created_at",
+    )
+    fields = ("status", *readonly_fields)
+
+    def has_add_permission(self, request):
+        return False
+
+
 for model, model_admin in (
     (SeasideVenue, SeasideVenueAdmin),
     (SeasidePackage, SeasidePackageAdmin),
     (SeasideService, SeasideServiceAdmin),
+    (SeasideBookingRequest, SeasideBookingRequestAdmin),
 ):
     superadmin_site.register(model, model_admin)

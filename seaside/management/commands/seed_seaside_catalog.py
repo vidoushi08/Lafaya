@@ -40,9 +40,12 @@ PACKAGES = (
         "tagline": "Relaxed celebrations",
         "description": "",
         "features": (
-            "Seaside setup for up to 30 guests\n"
-            "On-site service team\n"
-            "Sunset timeline and event coordination"
+            "Seaside setup for up to 150 guests\n"
+            "Tables, chairs and relaxed beachside seating\n"
+            "Team on site to welcome guests, set up and clear away afterwards\n"
+            "Event coordinator to run your timeline on the day\n"
+            "Arrival and key moments planned around sunset\n"
+            "Food and drinks not included (add Ocean-to-table catering)"
         ),
         "is_featured": False,
     },
@@ -51,9 +54,12 @@ PACKAGES = (
         "tagline": "Signature celebrations",
         "description": "",
         "features": (
-            "Host up to 100 guests by the water\n"
-            "Music and sound system\n"
-            "Full service team and event coordination"
+            "Seaside setup for up to 250 guests\n"
+            "Tables, chairs and lounge-style seating\n"
+            "Sound system, background music and a microphone for speeches\n"
+            "Team on site to welcome guests, serve, assist and clear away\n"
+            "Event coordinator from setup to close\n"
+            "Food and drinks not included (add Ocean-to-table catering)"
         ),
         "is_featured": True,
     },
@@ -62,9 +68,11 @@ PACKAGES = (
         "tagline": "Unforgettable occasions",
         "description": "",
         "features": (
-            "Exclusive venue hosting for up to 250 guests\n"
-            "Custom entertainment and production\n"
-            "Hosted hospitality and full event coordination"
+            "Exclusive use of the venue for up to 250 guests, with no other events\n"
+            "Entertainment and production planned with you: live music or DJ, stage and lighting\n"
+            "Dedicated team to welcome guests, serve, assist and clear away\n"
+            "Event coordinator who plans with you beforehand and runs the day\n"
+            "Food and drinks not included (add Ocean-to-table catering)"
         ),
         "is_featured": False,
     },
@@ -102,8 +110,8 @@ SERVICES = (
 
 
 DEFAULT_GUEST_LIMITS = {
-    "Barefoot Gathering": {"min_guests": 1, "max_guests": 30},
-    "Sunset Social": {"min_guests": 1, "max_guests": 100},
+    "Barefoot Gathering": {"min_guests": 1, "max_guests": 150},
+    "Sunset Social": {"min_guests": 1, "max_guests": 250},
     "Private Island": {"min_guests": 1, "max_guests": 250},
 }
 
