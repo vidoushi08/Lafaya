@@ -7,4 +7,5 @@ app_name = "birthday"
 
 urlpatterns = [
     path("", views.index, name="birthday"),
+    path("enquiry/", views.enquiry, name="enquiry"),
 ]

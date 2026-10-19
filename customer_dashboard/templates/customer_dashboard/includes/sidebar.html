@@ -1,0 +1,47 @@
+{% load static %}
+
+<aside class="customer-sidebar">
+  <p class="customer-sidebar-label">customer portal</p>
+
+  <nav class="customer-nav" aria-label="Customer navigation">
+    <a
+      class="customer-nav-link{% if request.resolver_match.url_name == 'booking_history' %} customer-nav-link-active{% endif %}"
+      href="{% url 'customer_dashboard:booking_history' %}"
+      {% if request.resolver_match.url_name == 'booking_history' %}aria-current="page"{% endif %}
+    >
+      <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+      <span>Booking History</span>
+    </a>
+
+    <details class="customer-create-menu" open>
+      <summary class="customer-nav-link">
+        <span class="customer-nav-leading">
+          <i class="fa-solid fa-circle-plus" aria-hidden="true"></i>
+          <span>Create Event</span>
+        </span>
+        <i class="fa-solid fa-chevron-down customer-menu-chevron" aria-hidden="true"></i>
+      </summary>
+      <ul class="customer-event-links">
+        <li><a href="{% url 'car_events:car_events' %}">Car Event</a></li>
+        <li><a href="{% url 'wedding:wedding' %}">Wedding</a></li>
+        <li><a href="{% url 'concert:concert' %}">Concert</a></li>
+        <li><a href="{% url 'birthday:birthday' %}">Birthday</a></li>
+        <li><a href="{% url 'conference:conference' %}">Conference</a></li>
+        <li><a href="{% url 'seaside:seaside' %}">Seaside</a></li>
+      </ul>
+    </details>
+
+    <a class="customer-nav-link customer-nav-link-spaced" href="{% url 'reviews:reviews' %}">
+      <i class="fa-regular fa-star" aria-hidden="true"></i>
+      <span>Reviews</span>
+    </a>
+    <a
+      class="customer-nav-link{% if request.resolver_match.url_name == 'manage_profile' %} customer-nav-link-active{% endif %}"
+      href="{% url 'customer_dashboard:manage_profile' %}"
+      {% if request.resolver_match.url_name == 'manage_profile' %}aria-current="page"{% endif %}
+    >
+      <i class="fa-regular fa-user" aria-hidden="true"></i>
+      <span>Manage Profile</span>
+    </a>
+  </nav>
+</aside>

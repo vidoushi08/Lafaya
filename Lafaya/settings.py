@@ -44,13 +44,10 @@ INSTALLED_APPS = [
     "customer_dashboard.apps.CustomerDashboardConfig",
     # staff application
     "staff.apps.StaffConfig",
-    # staff booking history application
+    # staff portal applications
     "staff_booking_history.apps.StaffBookingHistoryConfig",
-    # staff profile application
     "staff_profile.apps.StaffProfileConfig",
-    # staff task assignment application
     "staff_task_assignment.apps.StaffTaskAssignmentConfig",
-    # staff event details application
     "staff_event_details.apps.StaffEventDetailsConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
@@ -72,6 +69,10 @@ INSTALLED_APPS = [
     "booking.apps.BookingConfig",
     # contact application
     "contact.apps.ContactConfig",
+
+    # venues application
+    "venues.apps.VenuesConfig",
+
     # django default applications
     "django.contrib.admin",
     "django.contrib.auth",
@@ -173,6 +174,8 @@ STATICFILES_DIRS = [
 
 # generation of URLs based on the static directory
 STATIC_URL = "static/"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Email

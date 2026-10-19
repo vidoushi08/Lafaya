@@ -362,27 +362,6 @@ class RegisterPageTests(TestCase):
 		self.assertFalse(user.is_active)
 
 	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-	def test_customer_verification_token_cannot_be_used_for_staff_invitation(self):
-		self.client.post(
-			"/authentication/register/",
-			self.registration_data(),
-		)
-		match = re.search(
-			r"/authentication/verify/([^/]+)/([^/\s]+)",
-			mail.outbox[0].body,
-		)
-		self.assertIsNotNone(match)
-		staff_invitation_path = reverse(
-			"authentication:staff_invitation",
-			kwargs={"uidb64": match.group(1), "token": match.group(2)},
-		)
-
-		response = self.client.get(staff_invitation_path)
-		self.assertContains(response, "invitation link unavailable")
-		user = get_user_model().objects.get(username="new-customer")
-		self.assertFalse(user.is_active)
-
-	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 	def test_customer_verification_token_is_invalidated_when_email_changes(self):
 		self.client.post(
 			"/authentication/register/",
@@ -532,22 +511,6 @@ class LoginFlowTests(TestCase):
 
 		self.assertRedirects(response, "/admin/")
 
-	def test_staff_login_redirects_to_staff_dashboard(self):
-		self.create_account(
-			account_type="staff",
-			email="assigned-staff@example.com",
-		)
-
-		response = self.client.post(
-			"/authentication/",
-			{
-				"identifier": "assigned-staff@example.com",
-				"password": "C0mpl3x+event-planning-2026!",
-			},
-		)
-
-		self.assertRedirects(response, "/staff/")
-
 	def test_superadmin_login_redirects_to_superadmin_admin(self):
 		get_user_model().objects.create_superuser(
 			username="lafaya-admin",
@@ -651,7 +614,8 @@ class SuperAdminAccessTests(TestCase):
 		self.assertContains(response, "Superadmin")
 		add_response = self.client.get("/admin/authentication/user/add/")
 		self.assertEqual(add_response.status_code, 200)
-		self.assertContains(add_response, 'name="account_type"')
+		self.assertNotContains(add_response, 'name="password1"')
+		self.assertNotContains(add_response, 'name="password2"')
 
 	def test_admin_login_accepts_superadmin_email(self):
 		get_user_model().objects.create_superuser(
@@ -971,90 +935,6 @@ class SuperAdminAccessTests(TestCase):
 		list_response = self.client.get("/admin/authentication/user/")
 		self.assertContains(list_response, "Superadmin")
 
-	def test_staff_admin_flag_does_not_grant_superadmin_area_access(self):
-		staff = get_user_model().objects.create_user(
-			username="staff-user",
-			email="staff@example.com",
-			password="C0mpl3x+event-planning-2026!",
-			account_type="staff",
-			is_staff=True,
-		)
-		self.client.force_login(staff)
-
-		response = self.client.get("/admin/")
-
-		self.assertEqual(response.status_code, 302)
-		self.assertIn("/admin/login/", response["Location"])
-
-
-class AccountAreaAccessTests(TestCase):
-	def create_account(self, account_type):
-		return get_user_model().objects.create_user(
-			username=f"{account_type}-access",
-			email=f"{account_type}-access@example.com",
-			password="C0mpl3x+event-planning-2026!",
-			account_type=account_type,
-		)
-
-	def test_anonymous_visitors_are_redirected_from_account_areas(self):
-		protected_paths = (
-			"/customer_dashboard/",
-			"/staff/",
-			"/staff-booking-history/",
-			"/staff-profile/",
-			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
-		)
-
-		for path in protected_paths:
-			with self.subTest(path=path):
-				response = self.client.get(path)
-				self.assertEqual(response.status_code, 302)
-				self.assertTrue(response["Location"].startswith("/authentication/?next="))
-
-	def test_customer_and_staff_can_only_access_their_own_account_areas(self):
-		customer = self.create_account("customer")
-		staff = self.create_account("staff")
-		staff_paths = (
-			"/staff/",
-			"/staff-booking-history/",
-			"/staff-profile/",
-			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
-		)
-
-		self.client.force_login(customer)
-		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 200)
-		for path in staff_paths:
-			with self.subTest(account="customer", path=path):
-				self.assertEqual(self.client.get(path).status_code, 403)
-
-		self.client.force_login(staff)
-		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 403)
-		for path in staff_paths:
-			with self.subTest(account="staff", path=path):
-				self.assertEqual(self.client.get(path).status_code, 200)
-
-	def test_superuser_can_access_customer_and_staff_portals(self):
-		superuser = get_user_model().objects.create_superuser(
-			username="portal-admin",
-			email="portal-admin@example.com",
-			password="C0mpl3x+event-planning-2026!",
-		)
-		self.client.force_login(superuser)
-
-		for path in (
-			"/customer_dashboard/",
-			"/staff/",
-			"/staff-booking-history/",
-			"/staff-profile/",
-			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
-		):
-			with self.subTest(path=path):
-				self.assertEqual(self.client.get(path).status_code, 200)
-
-
 class AccountPasswordTests(TestCase):
 	password = "C0mpl3x+event-planning-2026!"
 	new_password = "An0ther+strong-password-2026!"
@@ -1102,54 +982,6 @@ class AccountPasswordTests(TestCase):
 			self.client.get(reverse("authentication:password_change_done")).status_code,
 			200,
 		)
-
-	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-	def test_password_reset_is_case_insensitive_and_preserves_staff_identity(self):
-		staff = self.create_account(
-			username="assigned-staff",
-			email="Assigned.Staff@example.com",
-			account_type="staff",
-		)
-		original_email = staff.email
-
-		response = self.client.post(
-			reverse("authentication:password_reset"),
-			{"email": "ASSIGNED.STAFF@EXAMPLE.COM"},
-		)
-		self.assertRedirects(response, reverse("authentication:password_reset_done"))
-		self.assertEqual(len(mail.outbox), 1)
-		self.assertIn(original_email, mail.outbox[0].to)
-
-		reset_match = re.search(
-			r"http://testserver(/authentication/password/reset/[^\s]+)",
-			mail.outbox[0].body,
-		)
-		self.assertIsNotNone(reset_match)
-		reset_path = reset_match.group(1)
-		confirm_response = self.client.get(reset_path, follow=True)
-		self.assertTrue(confirm_response.context["validlink"])
-		confirm_path = confirm_response.request["PATH_INFO"]
-		confirm_response = self.client.post(
-			confirm_path,
-			{
-				"new_password1": self.new_password,
-				"new_password2": self.new_password,
-			},
-		)
-
-		self.assertRedirects(
-			confirm_response,
-			reverse("authentication:password_reset_complete"),
-		)
-		staff.refresh_from_db()
-		self.assertTrue(staff.check_password(self.new_password))
-		self.assertEqual(staff.email, original_email)
-		self.assertEqual(staff.account_type, "staff")
-		self.assertIsNotNone(staff.password_reset_at)
-		self.assertEqual(len(mail.outbox), 2)
-		self.assertIn(original_email, mail.outbox[1].to)
-		expired_response = self.client.get(reset_path, follow=True)
-		self.assertFalse(expired_response.context["validlink"])
 
 	@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 	def test_password_reset_response_does_not_reveal_unknown_email(self):

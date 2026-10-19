@@ -1,8 +1,18 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 
 class StaffEventDetailsRouteTests(TestCase):
+    def setUp(self):
+        staff_user = get_user_model().objects.create_user(
+            username="staff-member",
+            email="staff@example.com",
+            account_type="staff",
+            is_active=True,
+        )
+        self.client.force_login(staff_user)
+
     def test_known_task_slug_renders_matching_detail(self):
         response = self.client.get(
             reverse(

@@ -61,6 +61,17 @@
   background-color: var(--color-dashboard-highlight);
 }
 
+.customer-nav-link-active {
+  background-color: var(--color-dashboard-highlight);
+  color: var(--color-brand);
+}
+
+.customer-nav-link:focus-visible,
+.customer-event-links a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .customer-nav-link-disabled {
   cursor: default;
 }
@@ -291,8 +302,19 @@
   font-size: 0.9rem;
   font-weight: 600;
   font-family: inherit;
-  cursor: default;
+  text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.customer-manage-button:hover {
+  background-color: var(--color-dashboard-green);
+  transform: translateY(-1px);
+}
+
+.customer-manage-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .customer-profile-illustration {

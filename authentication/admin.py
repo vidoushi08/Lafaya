@@ -4,6 +4,7 @@ from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+
 from .admin_site import superadmin_site
 from .models import User
 from .onboarding import can_resend_onboarding_email, send_staff_invitation
@@ -11,7 +12,7 @@ from .onboarding import can_resend_onboarding_email, send_staff_invitation
 
 class LafayaUserChangeForm(UserChangeForm):
     account_type = forms.ChoiceField(
-        choices=[("", "---------"), *User.AccountType.choices],
+        choices=[("", "---------"), (User.AccountType.CUSTOMER, "Customer")],
         required=False,
     )
 
@@ -22,7 +23,7 @@ class LafayaUserChangeForm(UserChangeForm):
         elif not cleaned_data.get("account_type"):
             self.add_error(
                 "account_type",
-                "Choose whether this account is a customer or staff member.",
+                "Choose the customer account type.",
             )
         return cleaned_data
 

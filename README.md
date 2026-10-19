@@ -54,6 +54,12 @@ pip install -r requirements.txt
 
 ## Usage
 
+- Apply database migrations:
+
+```bash
+python manage.py migrate
+```
+
 - Create a Django admin superuser:
 
 ```bash
@@ -70,3 +76,29 @@ python manage.py runserver
 
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
+
+### Existing database created before the custom customer account model
+
+If this project database already has `auth_user` and the built-in admin
+migrations recorded, but does not have `authentication_user`, back up
+`db.sqlite3` before migrating. Then run:
+
+```bash
+python manage.py shell -c 'from django.db import connection; connection.cursor().execute("DELETE FROM django_migrations WHERE app = %s", ["admin"])'
+python manage.py migrate authentication 0001_initial
+python manage.py migrate admin 0003_logentry_add_action_flag_choices --fake
+python manage.py migrate
+```
+
+This preserves existing accounts and admin history while moving the project
+to the custom customer account model. New databases only need the standard
+`python manage.py migrate` command.
+
+### Seaside catalogue images
+
+Superadmins can upload images when managing Seaside venues, packages, and
+optional services. Uploaded files are stored under the project's local `media/`
+directory; SQLite stores the file paths, not the image contents. Back up the
+`media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
+development server while `DEBUG=True`; production deployment needs an
+appropriate media-file storage and serving configuration.

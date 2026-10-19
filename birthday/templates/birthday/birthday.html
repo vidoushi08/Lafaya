@@ -5,168 +5,299 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'birthday/css/birthday.css' %}">
+  {% if request.path == '/birthday/enquiry/' %}
+    <link rel="stylesheet" href="{% static 'birthday/css/birthday_enquiry.css' %}">
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-  <div class="birthday-page">
-    <section class="birthday-hero">
-      <div class="birthday-hero-content">
-        <p class="birthday-eyebrow">birthday celebrations</p>
-        <h1>happy birthday</h1>
-        <p class="birthday-hero-copy">
-          from intimate dinners to full-scale milestone moments, we design unforgettable birthday experiences that feel personal, polished, and joyful.
-        </p>
-        <div class="birthday-hero-actions">
-          <a href="#packages" class="birthday-button birthday-button-primary">book a celebration</a>
-          <a href="#venues" class="birthday-button birthday-button-secondary">explore venues</a>
+  {% if request.path == '/birthday/enquiry/' %}
+    <div class="enquiry-page">
+      <section class="enquiry-container">
+        <header class="enquiry-intro">
+          <p class="enquiry-kicker">BIRTHDAY ENQUIRY</p>
+          <h1>Let’s plan your celebration</h1>
+        </header>
+
+        <div class="enquiry-grid">
+          <aside class="enquiry-package-card">
+            <div class="enquiry-package-header">
+              {% if selected_package.package_type == 'custom' %}
+                <span class="enquiry-package-label">Custom package</span>
+                <h2>Custom package</h2>
+                <div class="enquiry-price">Price to be confirmed</div>
+              {% else %}
+                <span class="enquiry-package-label">{{ selected_package.name }}</span>
+                <h2>{{ selected_package.name }}</h2>
+                <div class="enquiry-price">${{ selected_package.price }}</div>
+              {% endif %}
+            </div>
+
+            <p class="enquiry-description">
+              {% if selected_package.package_type == 'custom' %}
+                Custom event requirements
+              {% else %}
+                {{ selected_package.description }}
+              {% endif %}
+            </p>
+
+            <ul class="enquiry-features">
+              {% if selected_package.package_type == 'custom' %}
+                <li>Custom event requirements</li>
+                <li>Bespoke venue and styling concept</li>
+                <li>Tailored guest experience planning</li>
+              {% else %}
+                {% for feature in selected_package.features.splitlines %}
+                  {% if feature %}
+                    <li>{{ feature }}</li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </ul>
+
+            <a href="{% url 'birthday:birthday' %}#packages" class="enquiry-change-link">Change package</a>
+          </aside>
+
+          <div class="enquiry-form-card">
+            <h2>Tell us about your celebration</h2>
+            <p class="enquiry-form-copy">Share your preferred date, venue, and details, and we’ll tailor the experience to your celebration.</p>
+
+            {% if form.errors %}
+              <div class="enquiry-form-errors">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'birthday:enquiry' %}" class="enquiry-form" novalidate>
+              {% csrf_token %}
+              <input type="hidden" name="package" value="{{ selected_package.slug }}">
+
+              <div class="enquiry-form-grid">
+                <div class="enquiry-field">
+                  <label for="customer_name">Customer name<span class="required-indicator">*</span></label>
+                  <input class="enquiry-input" type="text" id="customer_name" name="customer_name" value="{{ form.customer_name.value|default_if_none:'' }}" required>
+                  {% if form.customer_name.errors %}<div class="enquiry-error">{{ form.customer_name.errors|join:', ' }}</div>{% endif %}
+                </div>
+
+                <div class="enquiry-field">
+                  <label for="email">Email<span class="required-indicator">*</span></label>
+                  <input class="enquiry-input" type="email" id="email" name="email" value="{{ form.email.value|default_if_none:'' }}" required>
+                  {% if form.email.errors %}<div class="enquiry-error">{{ form.email.errors|join:', ' }}</div>{% endif %}
+                </div>
+
+                <div class="enquiry-field">
+                  <label for="phone">Phone<span class="required-indicator">*</span></label>
+                  <input class="enquiry-input" type="text" id="phone" name="phone" value="{{ form.phone.value|default_if_none:'' }}" required>
+                  {% if form.phone.errors %}<div class="enquiry-error">{{ form.phone.errors|join:', ' }}</div>{% endif %}
+                </div>
+
+                <div class="enquiry-field">
+                  <label for="event_date">Event date<span class="required-indicator">*</span></label>
+                  <input class="enquiry-input" type="date" id="event_date" name="event_date" value="{{ form.event_date.value|default_if_none:'' }}" required>
+                  {% if form.event_date.errors %}<div class="enquiry-error">{{ form.event_date.errors|join:', ' }}</div>{% endif %}
+                </div>
+
+                {% if selected_package.default_venue %}
+                  <div class="enquiry-field enquiry-field-full">
+                    <label for="venue">Venue</label>
+                    <div class="enquiry-readonly-box">{{ selected_package.default_venue.name }}</div>
+                    <input type="hidden" name="venue" value="{{ selected_package.default_venue.id }}">
+                  </div>
+                {% else %}
+                  <div class="enquiry-field enquiry-field-full">
+                    <label for="venue">Venue<span class="required-indicator">*</span></label>
+                    <select class="enquiry-input" id="venue" name="venue" required>
+                      <option value="">Select an option</option>
+                      {% for venue in birthday_venues %}
+                        <option value="{{ venue.id }}" {% if form.venue.value|stringformat:'s' == venue.id|stringformat:'s' %}selected{% endif %}>{{ venue.name }}</option>
+                      {% endfor %}
+                    </select>
+                    {% if form.venue.errors %}<div class="enquiry-error">{{ form.venue.errors|join:', ' }}</div>{% endif %}
+                  </div>
+                {% endif %}
+
+                {% if selected_package.package_type == 'custom' %}
+                  <div class="enquiry-field enquiry-field-full">
+                    <label for="custom_requirements">Requirements<span class="required-indicator">*</span></label>
+                    <textarea class="enquiry-textarea" id="custom_requirements" name="custom_requirements" rows="5" required>{{ form.custom_requirements.value|default_if_none:'' }}</textarea>
+                    {% if form.custom_requirements.errors %}<div class="enquiry-error">{{ form.custom_requirements.errors|join:', ' }}</div>{% endif %}
+                  </div>
+                {% endif %}
+
+                <div class="enquiry-field enquiry-field-full">
+                  <label for="notes">Notes</label>
+                  <textarea class="enquiry-textarea" id="notes" name="notes" rows="4">{{ form.notes.value|default_if_none:'' }}</textarea>
+                  {% if form.notes.errors %}<div class="enquiry-error">{{ form.notes.errors|join:', ' }}</div>{% endif %}
+                </div>
+              </div>
+
+              <button class="enquiry-submit" type="submit">SUBMIT ENQUIRY</button>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="birthday-intro">
-      <div class="birthday-intro-copy">
-        <p class="birthday-section-tag">crafted with care</p>
-        <h2>birthday magic, tailored to you</h2>
-      </div>
-      <div class="birthday-intro-stats">
-        <div class="birthday-stat">
-          <strong>120+</strong>
-          <span>celebrations styled</span>
+      </section>
+    </div>
+  {% else %}
+    <div class="birthday-page">
+      <section class="birthday-hero">
+        <div class="birthday-hero-content">
+          <p class="birthday-eyebrow">birthday celebrations</p>
+          <h1>happy birthday</h1>
+          <p class="birthday-hero-copy">
+            from intimate dinners to full-scale milestone moments, we design unforgettable birthday experiences that feel personal, polished, and joyful.
+          </p>
+          <div class="birthday-hero-actions">
+            <a href="#packages" class="birthday-button birthday-button-primary">book a celebration</a>
+            <a href="#venues" class="birthday-button birthday-button-secondary">explore venues</a>
+          </div>
         </div>
-        <div class="birthday-stat">
-          <strong>4.9/5</strong>
-          <span>guest experience rating</span>
+      </section>
+
+      <section class="birthday-intro">
+        <div class="birthday-intro-copy">
+          <p class="birthday-section-tag">crafted with care</p>
+          <h2>birthday magic, tailored to you</h2>
         </div>
-        <div class="birthday-stat">
-          <strong>100%</strong>
-          <span>customised planning</span>
+        <div class="birthday-intro-stats">
+          <div class="birthday-stat">
+            <strong>120+</strong>
+            <span>celebrations styled</span>
+          </div>
+          <div class="birthday-stat">
+            <strong>4.9/5</strong>
+            <span>guest experience rating</span>
+          </div>
+          <div class="birthday-stat">
+            <strong>100%</strong>
+            <span>customised planning</span>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="venues" class="birthday-venues">
-      <div class="birthday-section-heading">
-        <p class="birthday-section-tag">signature spaces</p>
-        <h2>venues for unforgettable moments</h2>
-      </div>
+      <section id="venues" class="birthday-venues">
+        <div class="birthday-section-heading">
+          <p class="birthday-section-tag">signature spaces</p>
+          <h2>venues for unforgettable moments</h2>
+        </div>
 
-      <div class="birthday-venue-grid">
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_ballroom.png' %}" alt="Ballroom venue">
-          <div class="birthday-venue-copy">
-            <h3>grand ballroom</h3>
-            <p>elegant interiors, ambient lighting, and refined dining for milestone celebrations.</p>
-          </div>
-        </article>
+        <div class="birthday-venue-grid">
+          <article class="birthday-venue-card">
+            <img src="{% static 'birthday/images/birthday_venue_ballroom.png' %}" alt="Ballroom venue">
+            <div class="birthday-venue-copy">
+              <h3>grand ballroom</h3>
+              <p>elegant interiors, ambient lighting, and refined dining for milestone celebrations.</p>
+            </div>
+          </article>
 
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_terrace.png' %}" alt="Terrace venue">
-          <div class="birthday-venue-copy">
-            <h3>sunset terrace</h3>
-            <p>open-air elegance with warm lights, scenic views, and a relaxed celebratory mood.</p>
-          </div>
-        </article>
+          <article class="birthday-venue-card">
+            <img src="{% static 'birthday/images/birthday_venue_terrace.png' %}" alt="Terrace venue">
+            <div class="birthday-venue-copy">
+              <h3>sunset terrace</h3>
+              <p>open-air elegance with warm lights, scenic views, and a relaxed celebratory mood.</p>
+            </div>
+          </article>
 
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_factory.png' %}" alt="Factory venue">
-          <div class="birthday-venue-copy">
-            <h3>industrial chic</h3>
-            <p>bold textures, neon accents, and curated event design for modern birthday energy.</p>
-          </div>
-        </article>
-      </div>
-    </section>
+          <article class="birthday-venue-card">
+            <img src="{% static 'birthday/images/birthday_venue_factory.png' %}" alt="Factory venue">
+            <div class="birthday-venue-copy">
+              <h3>industrial chic</h3>
+              <p>bold textures, neon accents, and curated event design for modern birthday energy.</p>
+            </div>
+          </article>
+        </div>
+      </section>
 
-    <section id="packages" class="birthday-packages">
-      <div class="birthday-section-heading">
-        <p class="birthday-section-tag">packages</p>
-        <h2>choose your birthday experience</h2>
-      </div>
+      <section id="packages" class="birthday-packages">
+        <div class="birthday-section-heading">
+          <p class="birthday-section-tag">packages</p>
+          <h2>choose your birthday experience</h2>
+        </div>
 
-      <div class="birthday-package-grid">
-        <article class="birthday-package-card">
-          <span class="birthday-package-name">starter</span>
-          <h3>from $850</h3>
-          <ul>
-            <li>venue styling</li>
-            <li>basic entertainment setup</li>
-            <li>light catering coordination</li>
-          </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">start planning</a>
-        </article>
+        <div class="birthday-package-grid">
+          <article class="birthday-package-card">
+            <span class="birthday-package-name">starter</span>
+            <h3>from $850</h3>
+            <ul>
+              <li>venue styling</li>
+              <li>basic entertainment setup</li>
+              <li>light catering coordination</li>
+            </ul>
+            <a href="{% url 'birthday:enquiry' %}?package=starter#cta" class="birthday-button birthday-button-primary">start planning</a>
+          </article>
 
-        <article class="birthday-package-card birthday-package-card-featured">
-          <span class="birthday-package-name">professional</span>
-          <h3>from $1,700</h3>
-          <ul>
-            <li>full event design and coordination</li>
-            <li>sound and lighting production</li>
-            <li>premium menu curation</li>
-          </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">book now</a>
-        </article>
+          <article class="birthday-package-card birthday-package-card-featured">
+            <span class="birthday-package-name">professional</span>
+            <h3>from $1,700</h3>
+            <ul>
+              <li>full event design and coordination</li>
+              <li>sound and lighting production</li>
+              <li>premium menu curation</li>
+            </ul>
+            <a href="{% url 'birthday:enquiry' %}?package=professional#cta" class="birthday-button birthday-button-primary">book now</a>
+          </article>
 
-        <article class="birthday-package-card">
-          <span class="birthday-package-name">enterprise</span>
-          <h3>custom</h3>
-          <ul>
-            <li>signature event concepts</li>
-            <li>luxury guest experience design</li>
-            <li>multi-zone production support</li>
-          </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">request a quote</a>
-        </article>
-      </div>
-    </section>
+          <article class="birthday-package-card">
+            <span class="birthday-package-name">enterprise</span>
+            <h3>custom</h3>
+            <ul>
+              <li>signature event concepts</li>
+              <li>luxury guest experience design</li>
+              <li>multi-zone production support</li>
+            </ul>
+            <a href="{% url 'birthday:enquiry' %}?package=custom#cta" class="birthday-button birthday-button-primary">request a quote</a>
+          </article>
+        </div>
+      </section>
 
-    <section class="birthday-services">
-      <div class="birthday-section-heading">
-        <p class="birthday-section-tag">services</p>
-        <h2>everything your celebration needs</h2>
-      </div>
+      <section class="birthday-services">
+        <div class="birthday-section-heading">
+          <p class="birthday-section-tag">services</p>
+          <h2>everything your celebration needs</h2>
+        </div>
 
-      <div class="birthday-service-grid">
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_styling.png' %}" alt="Styling service">
-          <div>
-            <h3>styling</h3>
-            <p>signature decor concepts, floral installations, and guest-focused ambiance design.</p>
-          </div>
-        </article>
+        <div class="birthday-service-grid">
+          <article class="birthday-service-card">
+            <img src="{% static 'birthday/images/birthday_services_styling.png' %}" alt="Styling service">
+            <div>
+              <h3>styling</h3>
+              <p>signature decor concepts, floral installations, and guest-focused ambiance design.</p>
+            </div>
+          </article>
 
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_gastronomy.png' %}" alt="Gastronomy service">
-          <div>
-            <h3>gastronomy</h3>
-            <p>bespoke menus, cocktail bars, grazing tables, and indulgent dining experiences.</p>
-          </div>
-        </article>
+          <article class="birthday-service-card">
+            <img src="{% static 'birthday/images/birthday_services_gastronomy.png' %}" alt="Gastronomy service">
+            <div>
+              <h3>gastronomy</h3>
+              <p>bespoke menus, cocktail bars, grazing tables, and indulgent dining experiences.</p>
+            </div>
+          </article>
 
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_entertainment.png' %}" alt="Entertainment service">
-          <div>
-            <h3>entertainment</h3>
-            <p>live music, DJ setups, immersive lighting, and seamless guest energy throughout the night.</p>
-          </div>
-        </article>
-      </div>
-    </section>
+          <article class="birthday-service-card">
+            <img src="{% static 'birthday/images/birthday_services_entertainment.png' %}" alt="Entertainment service">
+            <div>
+              <h3>entertainment</h3>
+              <p>live music, DJ setups, immersive lighting, and seamless guest energy throughout the night.</p>
+            </div>
+          </article>
+        </div>
+      </section>
 
-    <section class="birthday-testimonial-band">
-      <div class="birthday-testimonial-card">
-        <p>
-          “the event felt unbelievably personal and luxurious. every detail was perfection, and our guests still talk about it.”
-        </p>
-        <span>— amelia & thomas</span>
-      </div>
-    </section>
+      <section class="birthday-testimonial-band">
+        <div class="birthday-testimonial-card">
+          <p>
+            “the event felt unbelievably personal and luxurious. every detail was perfection, and our guests still talk about it.”
+          </p>
+          <span>— amelia & thomas</span>
+        </div>
+      </section>
 
-    <section id="cta" class="birthday-cta">
-      <div class="birthday-cta-copy">
-        <p class="birthday-section-tag">let’s celebrate</p>
-        <h2>ready to make your birthday unforgettable?</h2>
-      </div>
-      <a href="{% url 'contact:contact' %}" class="birthday-button birthday-button-primary">enquire now</a>
-    </section>
-  </div>
+      <section id="cta" class="birthday-cta">
+        <div class="birthday-cta-copy">
+          <p class="birthday-section-tag">let’s celebrate</p>
+          <h2>ready to make your birthday unforgettable?</h2>
+        </div>
+        <a href="{% url 'birthday:enquiry' %}?package=starter#cta" class="birthday-button birthday-button-primary">enquire now</a>
+      </section>
+    </div>
+  {% endif %}
 {% endblock %}
