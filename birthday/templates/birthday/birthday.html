@@ -10,163 +10,302 @@
 {% block content %}
   <div class="birthday-page">
     <section class="birthday-hero">
+      <img class="birthday-hero-image" src="{% static 'images/events/birthday_main.png' %}" alt="A beautifully styled birthday celebration">
+      <div class="birthday-hero-overlay"></div>
       <div class="birthday-hero-content">
-        <p class="birthday-eyebrow">birthday celebrations</p>
-        <h1>happy birthday</h1>
-        <p class="birthday-hero-copy">
-          from intimate dinners to full-scale milestone moments, we design unforgettable birthday experiences that feel personal, polished, and joyful.
-        </p>
+        <p class="birthday-eyebrow">Lafaya birthday celebrations</p>
+        <h1>Make their day unforgettable.</h1>
+        <p class="birthday-hero-copy">From intimate family gatherings to milestone celebrations, we bring together thoughtful details, a welcoming setting, and the people who make the day special.</p>
         <div class="birthday-hero-actions">
-          <a href="#packages" class="birthday-button birthday-button-primary">book a celebration</a>
-          <a href="#venues" class="birthday-button birthday-button-secondary">explore venues</a>
+          <a class="birthday-button birthday-button-primary" href="#birthday-venues">Explore venues</a>
+          <a class="birthday-button birthday-button-outline" href="#birthday-enquiry">Plan your event</a>
         </div>
       </div>
     </section>
 
-    <section class="birthday-intro">
-      <div class="birthday-intro-copy">
-        <p class="birthday-section-tag">crafted with care</p>
-        <h2>birthday magic, tailored to you</h2>
+    <section class="birthday-introduction">
+      <div>
+        <p class="birthday-eyebrow">Made for the moment</p>
+        <h2>A little more magic in every detail.</h2>
       </div>
-      <div class="birthday-intro-stats">
-        <div class="birthday-stat">
-          <strong>120+</strong>
-          <span>celebrations styled</span>
-        </div>
-        <div class="birthday-stat">
-          <strong>4.9/5</strong>
-          <span>guest experience rating</span>
-        </div>
-        <div class="birthday-stat">
-          <strong>100%</strong>
-          <span>customised planning</span>
-        </div>
-      </div>
+      <p class="birthday-introduction-copy">Lafaya makes it easy to celebrate your way. Choose a venue and package, add the finishing touches, and let our team take care of the planning so you can be there for every memory.</p>
     </section>
 
-    <section id="venues" class="birthday-venues">
+    <section class="birthday-section birthday-venues" id="birthday-venues" aria-labelledby="birthday-venues-heading">
       <div class="birthday-section-heading">
-        <p class="birthday-section-tag">signature spaces</p>
-        <h2>venues for unforgettable moments</h2>
+        <div>
+          <p class="birthday-eyebrow">The right setting</p>
+          <h2 id="birthday-venues-heading">Find your perfect celebration space.</h2>
+        </div>
+        <button class="birthday-explore-button" type="button" data-explore-toggle="birthday-venue-list" data-label-more="Explore venues" data-label-less="Show fewer venues" aria-expanded="false" aria-controls="birthday-venue-list" hidden>
+          <span>Explore venues</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="birthday-venue-grid">
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_ballroom.png' %}" alt="Ballroom venue">
-          <div class="birthday-venue-copy">
-            <h3>grand ballroom</h3>
-            <p>elegant interiors, ambient lighting, and refined dining for milestone celebrations.</p>
+      <div class="birthday-card-grid" id="birthday-venue-list" data-explore-list>
+        {% for venue in venues %}
+        <article class="birthday-card">
+          {% if venue.uploaded_image %}
+          <img src="{{ venue.uploaded_image.url }}" alt="{{ venue.name }}">
+          {% elif venue.image %}
+          <img src="{% static venue.image %}" alt="{{ venue.name }}">
+          {% endif %}
+          <div class="birthday-card-content">
+            <p class="birthday-card-location">{{ venue.location }}</p>
+            <h3>{{ venue.name }}</h3>
+            <p>{{ venue.description }}</p>
+          </div>
+          <div class="birthday-package-footer">
+            <strong>{% if venue.price is not None %}Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per guest{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
           </div>
         </article>
-
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_terrace.png' %}" alt="Terrace venue">
-          <div class="birthday-venue-copy">
-            <h3>sunset terrace</h3>
-            <p>open-air elegance with warm lights, scenic views, and a relaxed celebratory mood.</p>
-          </div>
-        </article>
-
-        <article class="birthday-venue-card">
-          <img src="{% static 'birthday/images/birthday_venue_factory.png' %}" alt="Factory venue">
-          <div class="birthday-venue-copy">
-            <h3>industrial chic</h3>
-            <p>bold textures, neon accents, and curated event design for modern birthday energy.</p>
-          </div>
-        </article>
+        {% empty %}
+        <p class="birthday-empty-state">Birthday venues will be available again shortly.</p>
+        {% endfor %}
       </div>
     </section>
 
-    <section id="packages" class="birthday-packages">
+    <section class="birthday-section birthday-packages" aria-labelledby="birthday-packages-heading">
       <div class="birthday-section-heading">
-        <p class="birthday-section-tag">packages</p>
-        <h2>choose your birthday experience</h2>
+        <div>
+          <p class="birthday-eyebrow">Simple, considered packages</p>
+          <h2 id="birthday-packages-heading">Choose your kind of celebration.</h2>
+        </div>
+        <button class="birthday-explore-button" type="button" data-explore-toggle="birthday-package-list" data-label-more="Explore packages" data-label-less="Show fewer packages" aria-expanded="false" aria-controls="birthday-package-list" hidden>
+          <span>Explore packages</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="birthday-package-grid">
-        <article class="birthday-package-card">
-          <span class="birthday-package-name">starter</span>
-          <h3>from $850</h3>
+      <div class="birthday-package-grid" id="birthday-package-list" data-explore-list>
+        {% for package in packages %}
+        <article class="birthday-package{% if package.is_featured %} birthday-package-featured{% endif %}">
+          {% if package.uploaded_image %}
+          <img class="birthday-package-image" src="{{ package.uploaded_image.url }}" alt="{{ package.name }}">
+          {% elif package.image %}
+          <img class="birthday-package-image" src="{% static package.image %}" alt="{{ package.name }}">
+          {% endif %}
+          <div class="birthday-package-heading">
+            <p>{{ package.tagline }}</p>
+            <h3>{{ package.name }}</h3>
+          </div>
+          {% if package.description %}
+          <p class="birthday-package-description">{{ package.description }}</p>
+          {% endif %}
           <ul>
-            <li>venue styling</li>
-            <li>basic entertainment setup</li>
-            <li>light catering coordination</li>
+            {% for feature in package.feature_list %}
+            <li>{{ feature }}</li>
+            {% empty %}
+            <li>Event details can be tailored to your celebration.</li>
+            {% endfor %}
           </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">start planning</a>
+          <div class="birthday-package-footer">
+            <strong>{% if package.price is not None %}Rs {{ package.price|floatformat:0 }}{% if package.price_basis == "per_guest" %} per guest{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
+          </div>
         </article>
-
-        <article class="birthday-package-card birthday-package-card-featured">
-          <span class="birthday-package-name">professional</span>
-          <h3>from $1,700</h3>
-          <ul>
-            <li>full event design and coordination</li>
-            <li>sound and lighting production</li>
-            <li>premium menu curation</li>
-          </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">book now</a>
-        </article>
-
-        <article class="birthday-package-card">
-          <span class="birthday-package-name">enterprise</span>
-          <h3>custom</h3>
-          <ul>
-            <li>signature event concepts</li>
-            <li>luxury guest experience design</li>
-            <li>multi-zone production support</li>
-          </ul>
-          <a href="#cta" class="birthday-button birthday-button-primary">request a quote</a>
-        </article>
+        {% empty %}
+        <p class="birthday-empty-state">Birthday packages will be available again shortly.</p>
+        {% endfor %}
       </div>
     </section>
 
-    <section class="birthday-services">
+    <section class="birthday-section birthday-services" aria-labelledby="birthday-services-heading">
       <div class="birthday-section-heading">
-        <p class="birthday-section-tag">services</p>
-        <h2>everything your celebration needs</h2>
+        <div>
+          <p class="birthday-eyebrow">Every detail, beautifully handled</p>
+          <h2 id="birthday-services-heading">Birthday celebration enhancements.</h2>
+        </div>
+        <button class="birthday-explore-button" type="button" data-explore-toggle="birthday-service-list" data-label-more="Explore services" data-label-less="Show fewer services" aria-expanded="false" aria-controls="birthday-service-list" hidden>
+          <span>Explore services</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="birthday-service-grid">
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_styling.png' %}" alt="Styling service">
-          <div>
-            <h3>styling</h3>
-            <p>signature decor concepts, floral installations, and guest-focused ambiance design.</p>
+      <div class="birthday-service-grid" id="birthday-service-list" data-explore-list>
+        {% for service in services %}
+        <article class="birthday-service">
+          {% if service.uploaded_image %}
+          <img src="{{ service.uploaded_image.url }}" alt="{{ service.name }}">
+          {% elif service.image %}
+          <img src="{% static service.image %}" alt="{{ service.name }}">
+          {% endif %}
+          <div class="birthday-service-content">
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            {% if service.highlight_list %}
+            <div class="birthday-service-tags">
+              {% for highlight in service.highlight_list %}
+              <span>{{ highlight }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="birthday-package-footer">
+            <strong>{% if service.price is not None %}Rs {{ service.price|floatformat:0 }}{% if service.price_basis == "per_guest" %} per guest{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
           </div>
         </article>
-
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_gastronomy.png' %}" alt="Gastronomy service">
-          <div>
-            <h3>gastronomy</h3>
-            <p>bespoke menus, cocktail bars, grazing tables, and indulgent dining experiences.</p>
-          </div>
-        </article>
-
-        <article class="birthday-service-card">
-          <img src="{% static 'birthday/images/birthday_services_entertainment.png' %}" alt="Entertainment service">
-          <div>
-            <h3>entertainment</h3>
-            <p>live music, DJ setups, immersive lighting, and seamless guest energy throughout the night.</p>
-          </div>
-        </article>
+        {% empty %}
+        <p class="birthday-empty-state">Birthday services will be available again shortly.</p>
+        {% endfor %}
+      </div>
+      <div class="birthday-book-cta">
+        <a class="birthday-button birthday-button-primary" href="#birthday-enquiry">Want to book with Lafaya? <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </section>
 
-    <section class="birthday-testimonial-band">
-      <div class="birthday-testimonial-card">
-        <p>
-          “the event felt unbelievably personal and luxurious. every detail was perfection, and our guests still talk about it.”
-        </p>
-        <span>— amelia & thomas</span>
-      </div>
+    <section class="birthday-testimonial">
+      <blockquote>“Every detail felt personal and effortless. We got to enjoy the celebration with our family, and our guests are still talking about it.”</blockquote>
+      <cite>Birthday celebration hosts</cite>
     </section>
 
-    <section id="cta" class="birthday-cta">
-      <div class="birthday-cta-copy">
-        <p class="birthday-section-tag">let’s celebrate</p>
-        <h2>ready to make your birthday unforgettable?</h2>
+    <section class="birthday-enquiry" id="birthday-enquiry" aria-labelledby="birthday-enquiry-heading">
+      <img class="birthday-enquiry-background" src="{% static 'images/events/birthday_main.png' %}" alt="" aria-hidden="true">
+      <div class="birthday-enquiry-shade"></div>
+      <div class="birthday-enquiry-panel">
+        <header class="birthday-enquiry-heading">
+          <p class="birthday-eyebrow">Birthday celebrations</p>
+          <h2 id="birthday-enquiry-heading">Book your birthday event</h2>
+          <p>Tell us a little about the celebration, and we’ll help bring it to life.</p>
+        </header>
+        {% if not is_customer %}
+        <div class="birthday-access-notice" role="status">
+          <h3>Sign in to book your event</h3>
+          {% if user.is_authenticated %}
+          <p>Birthday booking requests can only be made from a customer account. Please sign in with your customer account to continue.</p>
+          {% else %}
+          <p>You need a customer account to make a booking request. Sign in or create an account, then you’ll come straight back here.</p>
+          {% endif %}
+          <div class="birthday-access-actions">
+            <a class="birthday-button birthday-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
+            {% if not user.is_authenticated %}
+            <a class="birthday-button birthday-button-outline" href="{% url 'authentication:register' %}">Create an account</a>
+            {% endif %}
+          </div>
+        </div>
+        {% else %}
+        {% for message in messages %}
+        <p class="birthday-form-success" role="status">{{ message }}</p>
+        {% endfor %}
+        {% if form.non_field_errors %}
+        <div class="birthday-form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <form class="birthday-enquiry-form" method="post" action="{% url 'birthday:birthday' %}#birthday-enquiry" data-booking-form>
+          {% csrf_token %}
+          <section class="birthday-form-section" aria-labelledby="birthday-contact-heading">
+            <h3 id="birthday-contact-heading">Contact details</h3>
+            <div class="birthday-form-grid">
+              <div class="birthday-form-field">
+                <label for="first-name">First name <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="text" id="first-name" name="first_name" autocomplete="given-name" value="{{ form.first_name.value|default_if_none:'' }}" maxlength="150" required>
+                {{ form.first_name.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="last-name">Last name <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="text" id="last-name" name="last_name" autocomplete="family-name" value="{{ form.last_name.value|default_if_none:'' }}" maxlength="150" required>
+                {{ form.last_name.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="email-address">Email address <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="email" id="email-address" autocomplete="email" value="{{ user.email }}" readonly>
+              </div>
+              <div class="birthday-form-field">
+                <label for="phone-number">Phone number <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="tel" id="phone-number" name="phone" autocomplete="tel" value="{{ form.phone.value|default_if_none:'' }}" maxlength="32" {% if form.phone_locked %}readonly{% endif %} required>
+                {{ form.phone.errors }}
+              </div>
+            </div>
+          </section>
+
+          <section class="birthday-form-section" aria-labelledby="birthday-event-heading">
+            <h3 id="birthday-event-heading">Event specifics</h3>
+            <div class="birthday-form-grid">
+              <div class="birthday-form-field">
+                <label for="event-type">Event type</label>
+                <input class="birthday-form-control" type="text" id="event-type" value="Birthday" readonly>
+              </div>
+              <div class="birthday-form-field">
+                <label for="event-name">Celebration name</label>
+                <input class="birthday-form-control" type="text" id="event-name" name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="e.g. Maya's 10th birthday">
+                {{ form.event_name.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="event-date">Event date <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="date" id="event-date" name="event_date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>
+                {{ form.event_date.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="guest-count">Expected guests <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="number" id="guest-count" name="expected_guests" min="1" max="10000" step="1" value="{{ form.expected_guests.value|default_if_none:'' }}" placeholder="e.g. 50" required>
+                {{ form.expected_guests.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="start-time">Starting time <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="time" id="start-time" name="start_time" value="{{ form.start_time.value|default_if_none:'' }}" required>
+                {{ form.start_time.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="end-time">End time <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="time" id="end-time" name="end_time" value="{{ form.end_time.value|default_if_none:'' }}" required>
+                {{ form.end_time.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="venue">Preferred venue <span aria-hidden="true">*</span></label>
+                <select class="birthday-form-control" id="venue" name="venue" required>
+                  <option value="">Choose a venue</option>
+                  {% for venue in bookable_venues %}
+                  <option value="{{ venue.pk }}" data-price="{{ venue.price }}" data-basis="{{ venue.price_basis }}" data-capacity="{{ venue.capacity|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} (Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per guest{% endif %})</option>
+                  {% endfor %}
+                </select>
+                {{ form.venue.errors }}
+              </div>
+              <div class="birthday-form-field">
+                <label for="budget">Your budget (Rs) <span aria-hidden="true">*</span></label>
+                <input class="birthday-form-control" type="number" id="budget" name="budget" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" placeholder="e.g. 150000" required>
+                {{ form.budget.errors }}
+              </div>
+            </div>
+          </section>
+
+          <section class="birthday-form-section" aria-labelledby="birthday-options-heading">
+            <h3 id="birthday-options-heading">Packages &amp; options</h3>
+            <div class="birthday-form-field birthday-form-package">
+              <label for="package">Select your package <span aria-hidden="true">*</span></label>
+              <select class="birthday-form-control" id="package" name="package" required>
+                <option value="">Choose a package</option>
+                {% for package in bookable_packages %}
+                <option value="{{ package.pk }}" data-price="{{ package.price }}" data-basis="{{ package.price_basis }}" data-min-guests="{{ package.min_guests }}" data-max-guests="{{ package.max_guests|default_if_none:'' }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' %}selected{% endif %}>{{ package.name }} (Rs {{ package.price|floatformat:0 }}{% if package.price_basis == "per_guest" %} per guest{% endif %})</option>
+                {% endfor %}
+              </select>
+              {{ form.package.errors }}
+            </div>
+            <fieldset class="birthday-form-field birthday-form-field-services">
+              <legend>Optional services</legend>
+              <div class="birthday-form-options">
+                {% for service in bookable_services %}
+                <label><input type="checkbox" name="optional_services" value="{{ service.pk }}" data-price="{{ service.price }}" data-basis="{{ service.price_basis }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} (Rs {{ service.price|floatformat:0 }}{% if service.price_basis == "per_guest" %} per guest{% endif %})</label>
+                {% endfor %}
+              </div>
+              {{ form.optional_services.errors }}
+            </fieldset>
+            <div class="birthday-estimate" data-estimate aria-live="polite">
+              <p class="birthday-estimate-total">Estimated total: <strong data-estimate-total>Rs 0</strong></p>
+              <p class="birthday-estimate-note" data-estimate-note>Choose a venue and package to see your estimate.</p>
+            </div>
+          </section>
+
+          <section class="birthday-form-section birthday-form-section-vision" aria-labelledby="birthday-vision-heading">
+            <h3 id="birthday-vision-heading">Your vision</h3>
+            <div class="birthday-form-field birthday-form-field-message">
+              <label for="expectations">Short message <span class="birthday-form-label-note">(your expectations)</span></label>
+              <textarea class="birthday-form-control" id="expectations" name="message" rows="3" maxlength="1000" placeholder="Tell us what you have in mind for the birthday celebration.">{{ form.message.value|default_if_none:'' }}</textarea>
+              {{ form.message.errors }}
+            </div>
+          </section>
+
+          <button class="birthday-button birthday-button-submit" type="submit">Submit booking request <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <p class="birthday-form-required-note"><span aria-hidden="true">*</span> Required fields</p>
+        </form>
+        {% endif %}
       </div>
-      <a href="{% url 'contact:contact' %}" class="birthday-button birthday-button-primary">enquire now</a>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'birthday/js/birthday.js' %}"></script>
 {% endblock %}
