@@ -17,6 +17,10 @@
           <i class="fa-regular fa-calendar" aria-hidden="true"></i>
           <span>Booking History</span>
         </a>
+        <a class="customer-nav-link" href="{% url 'payments:payments' %}">
+          <i class="fa-regular fa-credit-card" aria-hidden="true"></i>
+          <span>Payments</span>
+        </a>
 
         <details class="customer-create-menu" id="create-event" open>
           <summary class="customer-nav-link">
@@ -123,6 +127,17 @@
             <span class="customer-action-copy">
               <strong>Booking History</strong>
               <span>View your past and upcoming bookings.</span>
+            </span>
+            <i class="fa-solid fa-arrow-right customer-action-arrow" aria-hidden="true"></i>
+          </a>
+
+          <a class="customer-action-card" href="{% url 'payments:payments' %}">
+            <span class="customer-action-icon customer-action-icon-brand">
+              <i class="fa-regular fa-credit-card" aria-hidden="true"></i>
+            </span>
+            <span class="customer-action-copy">
+              <strong>Payments</strong>
+              <span>View payment instructions and submitted references.</span>
             </span>
             <i class="fa-solid fa-arrow-right customer-action-arrow" aria-hidden="true"></i>
           </a>

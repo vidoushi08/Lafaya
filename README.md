@@ -52,6 +52,23 @@ pip install -r requirements.txt
   values from `.env`; it uses Django's console email backend until both the Gmail
   address and App Password are set.
 
+  ### Booking approval and demo payments
+
+  Booking requests appear in the superadmin site's **Bookings** queue. Add the
+  approved amount to the booking's payment record, then use the booking action to
+  approve or reject it. Customers can mark an approved booking as paid using the
+  credit/debit card demo from **Payments** in their account area. This demo does
+  not collect card details or charge a real card.
+  After a successful demo payment, the customer receives a receipt email with
+  the booking reference, event date, and amount. Card data is never included in
+  that email or sent to the server. If email delivery fails, the customer can
+  retry sending the receipt from the payment page.
+
+  Individual amounts can be adjusted for each pending booking in the admin.
+  Payment approval and email delivery are separate: if an email cannot be sent,
+  the saved booking decision is retained and the admin reports the delivery
+  failure.
+
 ## Usage
 
 - Create a Django admin superuser:

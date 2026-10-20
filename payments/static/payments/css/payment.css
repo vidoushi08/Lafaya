@@ -329,6 +329,100 @@
   color: var(--payment-muted);
 }
 
+.payment-booking {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--payment-border);
+}
+
+.payment-booking h2 {
+  margin: 0;
+  color: var(--payment-text);
+  font-size: 1.1rem;
+}
+
+.payment-booking p {
+  margin: 0.35rem 0 0;
+  color: var(--payment-muted);
+}
+
+.payment-booking-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.payment-booking-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--payment-border);
+  border-bottom: 1px solid var(--payment-border);
+}
+
+.payment-booking-details div {
+  min-width: 0;
+}
+
+.payment-booking-details dt {
+  color: var(--payment-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.payment-booking-details dd {
+  margin: 0.25rem 0 0;
+}
+
+.payment-notice,
+.payment-total,
+.payment-demo-info {
+  margin: 1rem 0;
+}
+
+.payment-notice {
+  padding: 1rem;
+  border-radius: var(--radius-btn);
+  background-color: var(--payment-input-background);
+  color: var(--payment-text);
+}
+
+.payment-notice-success {
+  color: var(--payment-success);
+}
+
+.payment-instructions {
+  padding: 1rem;
+  border: 1px solid var(--payment-border);
+  border-radius: var(--radius-btn);
+  background-color: var(--payment-input-background);
+}
+
+.payment-demo-info p:first-child {
+  margin-top: 0;
+}
+
+.payment-demo-info p:last-child {
+  margin-bottom: 0;
+}
+
+.payment-form-errors {
+  margin-bottom: 1rem;
+  color: var(--payment-danger);
+}
+
+.payment-back-link {
+  margin: 1.5rem 0 0;
+}
+
 @media (max-width: 760px) {
   .payment-page {
     min-height: auto;
@@ -356,5 +450,14 @@
 
   .payment-submit-button {
     width: 100%;
+  }
+
+  .payment-booking {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .payment-booking-details {
+    grid-template-columns: 1fr;
   }
 }

@@ -7,4 +7,10 @@ app_name = "payments"
 
 urlpatterns = [
     path("", views.index, name="payments"),
+    path("<int:booking_id>/", views.payment_detail, name="payment_detail"),
+    path(
+        "<int:booking_id>/demo-payment/",
+        views.demo_payment,
+        name="demo_payment",
+    ),
 ]

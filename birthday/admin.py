@@ -3,6 +3,7 @@ from django.templatetags.static import static
 from django.utils.html import format_html
 
 from authentication.admin_site import superadmin_site
+from booking.admin import BookingRequestAdminActions
 
 from .models import (
     BirthdayBookingRequest,
@@ -116,7 +117,7 @@ class BirthdayServiceAdmin(PricedCatalogItemAdmin):
     )
 
 
-class BirthdayBookingRequestAdmin(admin.ModelAdmin):
+class BirthdayBookingRequestAdmin(BookingRequestAdminActions, admin.ModelAdmin):
     list_display = (
         "event_date",
         "first_name",
@@ -131,6 +132,7 @@ class BirthdayBookingRequestAdmin(admin.ModelAdmin):
     list_filter = ("status", "event_date")
     search_fields = ("first_name", "last_name", "email", "event_name")
     readonly_fields = (
+        "status",
         "customer",
         "event_type",
         "first_name",
@@ -151,7 +153,7 @@ class BirthdayBookingRequestAdmin(admin.ModelAdmin):
         "message",
         "created_at",
     )
-    fields = ("status", *readonly_fields)
+    fields = readonly_fields
 
     def has_add_permission(self, request):
         return False

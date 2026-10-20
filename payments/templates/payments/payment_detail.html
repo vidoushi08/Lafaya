@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment {{ booking.reference }} | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'payments/css/payment.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="payment-page">
+    <div class="payment-checkout">
+      <section class="payment-panel" aria-labelledby="payment-heading">
+        <div class="payment-section-heading">
+          <h1 id="payment-heading">{{ booking.event_type }} booking</h1>
+          <p>Booking reference: <strong>{{ booking.reference }}</strong></p>
+        </div>
+
+        {% if messages %}
+          {% for message in messages %}
+            <p class="payment-form-status{% if message.tags == 'error' %} payment-form-status-error{% else %} payment-form-status-success{% endif %}" role="status">{{ message }}</p>
+          {% endfor %}
+        {% endif %}
+
+        <dl class="payment-booking-details">
+          <div><dt>Event date</dt><dd>{{ booking.event_date|date:"j M Y" }}</dd></div>
+          <div><dt>Time</dt><dd>{{ booking.start_time|time:"H:i" }}–{{ booking.end_time|time:"H:i" }}</dd></div>
+          <div><dt>Venue</dt><dd>{{ booking.venue_name }}</dd></div>
+          <div><dt>Package</dt><dd>{{ booking.package_name }}</dd></div>
+          <div><dt>Booking status</dt><dd>{{ booking.get_status_display }}</dd></div>
+        </dl>
+
+        {% if booking.status == "pending" %}
+          <p class="payment-notice">Your booking request is waiting for Lafaya's review. No payment is due yet.</p>
+        {% elif booking.status == "rejected" %}
+          <p class="payment-notice">This booking request was not approved. Contact Lafaya if you need more information.</p>
+        {% elif booking.status == "confirmed" or payment.status == "verified" or payment.status == "demo_paid" %}
+          <p class="payment-notice payment-notice-success">
+            {% if payment.status == "demo_paid" %}
+              Demo payment completed. No real card was charged.
+            {% else %}
+              Payment verified. Your booking is confirmed.
+            {% endif %}
+            Your booking is confirmed.
+          </p>
+          {% if payment.paid_at %}
+            <p>Payment date: {{ payment.paid_at|date:"j M Y, H:i" }}</p>
+          {% endif %}
+          {% if not payment.receipt_email_sent_at %}
+            <p class="payment-notice">The payment receipt email has not been sent yet.</p>
+            <form class="payment-form" method="post" action="{% url 'payments:demo_payment' booking.id %}">
+              {% csrf_token %}
+              <button type="submit" class="payment-submit-button">Retry receipt email</button>
+            </form>
+          {% else %}
+            <p>Receipt email sent to {{ booking.customer.email }}.</p>
+          {% endif %}
+        {% elif booking.status != "approved" %}
+          <p class="payment-notice">Payment will be available after Lafaya approves this booking.</p>
+        {% elif payment.amount <= 0 %}
+          <p class="payment-notice">Payment is not available yet. Please contact Lafaya about this booking.</p>
+        {% else %}
+          <p class="payment-total">Amount due: <strong>{{ payment.currency }} {{ payment.amount|floatformat:2 }}</strong></p>
+          <div class="payment-demo-info">
+            <h2>Credit / Debit Card</h2>
+            <p>Enter card details to try the checkout. For a valid demo number, use 4242 4242 4242 4242. This is a simulation only: card details stay in your browser and are not sent to or stored by Lafaya. No real charge will be made.</p>
+          </div>
+
+          <form id="demoPaymentForm" class="payment-form" method="post" action="{% url 'payments:demo_payment' booking.id %}" autocomplete="off" novalidate>
+            {% csrf_token %}
+            <div class="payment-form-group" id="demoCardNumberGroup">
+              <label for="demoCardNumber">Card number</label>
+              <input id="demoCardNumber" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="4242 4242 4242 4242" aria-describedby="demoCardNumberError" required>
+              <small id="demoCardNumberError" class="payment-error-message"></small>
+            </div>
+
+            <div class="payment-form-group">
+              <label for="demoCardholderName">Name on card</label>
+              <input id="demoCardholderName" type="text" autocomplete="cc-name" maxlength="100" aria-describedby="demoCardholderNameError" required>
+              <small id="demoCardholderNameError" class="payment-error-message"></small>
+            </div>
+
+            <div class="payment-form-row">
+              <div class="payment-form-group">
+                <label for="demoCardExpiry">Expiry date</label>
+                <input id="demoCardExpiry" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="9" placeholder="MM / YY" aria-describedby="demoCardExpiryError" required>
+                <small id="demoCardExpiryError" class="payment-error-message"></small>
+              </div>
+              <div class="payment-form-group">
+                <label for="demoCardCvv">Security code (CVV)</label>
+                <input id="demoCardCvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" aria-describedby="demoCardCvvError" required>
+                <small id="demoCardCvvError" class="payment-error-message"></small>
+              </div>
+            </div>
+
+            <p id="demoPaymentStatus" class="payment-form-status" role="status" aria-live="polite"></p>
+            <button type="submit" class="payment-submit-button">Pay {{ payment.currency }} {{ payment.amount|floatformat:2 }} (demo)</button>
+          </form>
+        {% endif %}
+
+        <p class="payment-back-link"><a href="{% url 'payments:payments' %}">Back to your bookings</a></p>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'payments/js/payment.js' %}" defer></script>
+{% endblock %}

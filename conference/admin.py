@@ -1,5 +1,6 @@
 from authentication.admin_site import superadmin_site
 from django.contrib import admin
+from booking.admin import BookingRequestAdminActions
 from seaside.admin import PricedCatalogItemAdmin
 
 from .models import (
@@ -91,7 +92,7 @@ class ConferenceServiceAdmin(PricedCatalogItemAdmin):
     )
 
 
-class ConferenceBookingRequestAdmin(admin.ModelAdmin):
+class ConferenceBookingRequestAdmin(BookingRequestAdminActions, admin.ModelAdmin):
     list_display = (
         "event_date",
         "first_name",
@@ -106,6 +107,7 @@ class ConferenceBookingRequestAdmin(admin.ModelAdmin):
     list_filter = ("status", "event_date")
     search_fields = ("first_name", "last_name", "email", "event_name")
     readonly_fields = (
+        "status",
         "customer",
         "first_name",
         "last_name",
@@ -125,7 +127,7 @@ class ConferenceBookingRequestAdmin(admin.ModelAdmin):
         "message",
         "created_at",
     )
-    fields = ("status", *readonly_fields)
+    fields = readonly_fields
 
     def has_add_permission(self, request):
         return False
