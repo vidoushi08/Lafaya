@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Outfit:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'wedding/css/wedding.css' %}">
+    <link rel="stylesheet" href="{% static 'seaside/css/seaside.css' %}">
 {% endblock %}
 
 {% block extra_js %}
@@ -363,71 +364,70 @@
         </section>        
 
 
-        <!-- Wedding Enquiry Section -->
-        <section class="wedding-section wedding-enquiry" id="wedding-enquiry">
-            <div class="wedding-section-heading">
-                <p class="wedding-eyebrow">Make It Special</p>
-                <h2 id="wedding-enquiry-heading">Book your wedding</h2>
-                <p>Choose your date, venue, and package. We’ll review your request and follow up.</p>
-            </div>
-
-            <div class="wedding-enquiry-content">
+        <!-- Wedding Booking Section -->
+        <section class="seaside-enquiry wedding-booking-enquiry" id="wedding-enquiry" aria-labelledby="wedding-enquiry-heading">
+            <img class="seaside-enquiry-background" src="{% static 'images/events/wedding_main.png' %}" alt="" aria-hidden="true">
+            <div class="seaside-enquiry-shade"></div>
+            <div class="seaside-enquiry-panel">
+                <header class="seaside-enquiry-heading">
+                    <p class="seaside-eyebrow">Wedding celebrations</p>
+                    <h2 id="wedding-enquiry-heading">Plan your wedding</h2>
+                    <p>Tell us about your celebration and our team will help bring it together.</p>
+                </header>
                 {% if not is_customer %}
-                    <div class="wedding-booking-access" role="status">
-                        <h3>Sign in to book your wedding</h3>
-                        {% if user.is_authenticated %}
-                            <p>Wedding booking requests can only be made from a customer account.</p>
-                        {% else %}
-                            <p>Sign in or create a customer account to submit a wedding booking request.</p>
-                        {% endif %}
-                        <a class="wedding-button wedding-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
-                        {% if not user.is_authenticated %}
-                            <a class="wedding-button wedding-button-outline" href="{% url 'authentication:register' %}">Create an account</a>
-                        {% endif %}
+                <div class="seaside-access-notice" role="status">
+                    <h3>Sign in to book your wedding</h3>
+                    {% if user.is_authenticated %}
+                    <p>Wedding booking requests can only be made from a customer account. Sign in with your customer account to continue.</p>
+                    {% else %}
+                    <p>You need a customer account to make a wedding booking request. Sign in or create an account, then you will come straight back here.</p>
+                    {% endif %}
+                    <div class="seaside-access-actions">
+                        <a class="seaside-button seaside-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
+                        {% if not user.is_authenticated %}<a class="seaside-button seaside-button-outline" href="{% url 'authentication:register' %}">Create an account</a>{% endif %}
                     </div>
+                </div>
                 {% else %}
-                    {% for message in messages %}
-                        <p class="wedding-booking-success" role="status">{{ message }}</p>
-                    {% endfor %}
-                    <form class="wedding-booking-form" method="post" action="{% url 'wedding:wedding' %}#wedding-enquiry" data-wedding-booking-form>
-                        {% csrf_token %}
-                        {% if form.non_field_errors %}<div class="wedding-booking-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
-                        <h3>Contact details</h3>
-                        <div class="wedding-booking-grid">
-                            <label>First name *<input name="first_name" maxlength="150" value="{{ form.first_name.value|default_if_none:'' }}" required>{{ form.first_name.errors }}</label>
-                            <label>Last name *<input name="last_name" maxlength="150" value="{{ form.last_name.value|default_if_none:'' }}" required>{{ form.last_name.errors }}</label>
-                            <label>Email address<input type="email" value="{{ user.email }}" readonly></label>
-                            <label>Phone number *<input name="phone" type="tel" maxlength="32" value="{{ form.phone.value|default_if_none:'' }}" {% if form.phone_locked %}readonly{% endif %} required>{{ form.phone.errors }}</label>
+                {% for message in messages %}<p class="seaside-form-success" role="status">{{ message }}</p>{% endfor %}
+                {% if form.non_field_errors %}<div class="seaside-form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+                <form class="seaside-enquiry-form" method="post" action="{% url 'wedding:wedding' %}#wedding-enquiry" data-wedding-booking-form>
+                    {% csrf_token %}
+                    <section class="seaside-form-section" aria-labelledby="wedding-contact-heading">
+                        <h3 id="wedding-contact-heading">Contact details</h3>
+                        <div class="seaside-form-grid">
+                            <div class="seaside-form-field"><label for="wedding-first-name">First name <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-first-name" name="first_name" autocomplete="given-name" maxlength="150" value="{{ form.first_name.value|default_if_none:'' }}" required>{{ form.first_name.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-last-name">Last name <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-last-name" name="last_name" autocomplete="family-name" maxlength="150" value="{{ form.last_name.value|default_if_none:'' }}" required>{{ form.last_name.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-email">Email address <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-email" type="email" autocomplete="email" value="{{ user.email }}" readonly></div>
+                            <div class="seaside-form-field"><label for="wedding-phone">Phone number <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-phone" name="phone" type="tel" autocomplete="tel" maxlength="32" value="{{ form.phone.value|default_if_none:'' }}" {% if form.phone_locked %}readonly{% endif %} required>{{ form.phone.errors }}</div>
                         </div>
-
-                        <h3>Wedding details</h3>
-                        <div class="wedding-booking-grid">
-                            <label>Event name<input name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="e.g. Aisha and Ravi's wedding">{{ form.event_name.errors }}</label>
-                            <label>Event date *<input name="event_date" type="date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>{{ form.event_date.errors }}</label>
-                            <label>Expected guests *<input name="expected_guests" type="number" min="1" max="10000" value="{{ form.expected_guests.value|default_if_none:'' }}" required>{{ form.expected_guests.errors }}</label>
-                            <label>Starting time *<input name="start_time" type="time" value="{{ form.start_time.value|default_if_none:'' }}" required>{{ form.start_time.errors }}</label>
-                            <label>End time *<input name="end_time" type="time" value="{{ form.end_time.value|default_if_none:'' }}" required>{{ form.end_time.errors }}</label>
-                            <label>Preferred venue *<select name="venue" required><option value="">Choose a venue</option>{% for venue in venues %}<option value="{{ venue.pk }}" data-capacity="{{ venue.capacity|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} — {{ venue.location }}</option>{% endfor %}</select>{{ form.venue.errors }}</label>
-                            <label>Your budget (Rs) *<input name="budget" type="number" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" required>{{ form.budget.errors }}</label>
-                            <label>Wedding package *<select name="package" required data-wedding-package><option value="">Choose a package</option>{% for package in packages %}<option value="{{ package.pk }}" data-price="{{ package.price }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' or not form.is_bound and selected_package.pk == package.pk %}selected{% endif %}>{{ package.name }} — Rs {{ package.price|floatformat:0 }} starting price</option>{% endfor %}</select>{{ form.package.errors }}</label>
+                    </section>
+                    <section class="seaside-form-section" aria-labelledby="wedding-event-heading">
+                        <h3 id="wedding-event-heading">Wedding details</h3>
+                        <div class="seaside-form-grid">
+                            <div class="seaside-form-field"><label for="wedding-event-type">Event type</label><input class="seaside-form-control" id="wedding-event-type" value="Wedding" readonly></div>
+                            <div class="seaside-form-field"><label for="wedding-event-name">Event name</label><input class="seaside-form-control" id="wedding-event-name" name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="e.g. Aisha and Ravi's wedding">{{ form.event_name.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-event-date">Event date <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-event-date" name="event_date" type="date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>{{ form.event_date.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-guests">Expected guests <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-guests" name="expected_guests" type="number" min="1" max="10000" step="1" value="{{ form.expected_guests.value|default_if_none:'' }}" required>{{ form.expected_guests.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-start-time">Starting time <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-start-time" name="start_time" type="time" value="{{ form.start_time.value|default_if_none:'' }}" required>{{ form.start_time.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-end-time">End time <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-end-time" name="end_time" type="time" value="{{ form.end_time.value|default_if_none:'' }}" required>{{ form.end_time.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-venue">Preferred venue <span aria-hidden="true">*</span></label><select class="seaside-form-control" id="wedding-venue" name="venue" required><option value="">Choose a venue</option>{% for venue in venues %}<option value="{{ venue.pk }}" data-capacity="{{ venue.capacity|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} ({{ venue.location }})</option>{% endfor %}</select>{{ form.venue.errors }}</div>
+                            <div class="seaside-form-field"><label for="wedding-budget">Your budget (Rs) <span aria-hidden="true">*</span></label><input class="seaside-form-control" id="wedding-budget" name="budget" type="number" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" required>{{ form.budget.errors }}</div>
                         </div>
-
-                        <fieldset class="wedding-booking-services">
-                            <legend>Optional services</legend>
-                            {% for service in services %}
-                                <label><input type="checkbox" name="optional_services" value="{{ service.pk }}" data-price="{{ service.price }}" data-basis="{{ service.price_basis }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} — Rs {{ service.price|floatformat:0 }}{% if service.price_basis == 'per_guest' %} per guest{% endif %}</label>
-                            {% empty %}
-                                <p>Optional services will appear here when they have a price set.</p>
-                            {% endfor %}
-                            {{ form.optional_services.errors }}
-                        </fieldset>
-                        <div class="wedding-booking-estimate" aria-live="polite">Starting estimate: <strong data-wedding-estimate>Choose a package</strong><p>Final pricing is confirmed by our team after reviewing your request.</p></div>
-                        <label class="wedding-booking-message">Your plans<textarea name="message" rows="4" maxlength="1000" placeholder="Tell us about your wedding plans">{{ form.message.value|default_if_none:'' }}</textarea>{{ form.message.errors }}</label>
-                        <button class="wedding-button wedding-button-primary" type="submit">Submit wedding booking request</button>
-                    </form>
+                    </section>
+                    <section class="seaside-form-section" aria-labelledby="wedding-options-heading">
+                        <h3 id="wedding-options-heading">Packages &amp; options</h3>
+                        <div class="seaside-form-field seaside-form-package"><label for="wedding-package">Select your package <span aria-hidden="true">*</span></label><select class="seaside-form-control" id="wedding-package" name="package" data-wedding-package required><option value="">Choose a package</option>{% for package in packages %}<option value="{{ package.pk }}" data-price="{{ package.price }}" data-min-guests="{{ package.min_guests }}" data-max-guests="{{ package.max_guests|default_if_none:'' }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' or not form.is_bound and selected_package.pk == package.pk %}selected{% endif %}>{{ package.name }} (Rs {{ package.price|floatformat:0 }})</option>{% endfor %}</select>{{ form.package.errors }}</div>
+                        <fieldset class="seaside-form-field seaside-form-field-services"><legend>Optional services</legend><div class="seaside-form-options">
+                            {% for service in services %}<label><input type="checkbox" name="optional_services" value="{{ service.pk }}" data-price="{{ service.price }}" data-basis="{{ service.price_basis }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} (Rs {{ service.price|floatformat:0 }}{% if service.price_basis == 'per_guest' %} per guest{% endif %})</label>{% empty %}<p>Optional services will appear here when they have a price set.</p>{% endfor %}
+                        </div>{{ form.optional_services.errors }}</fieldset>
+                        <div class="seaside-estimate" aria-live="polite"><p class="seaside-estimate-total">Estimated package and services: <strong data-wedding-estimate>Rs 0</strong></p><p class="seaside-estimate-note" data-wedding-estimate-note>Choose a package to see your estimate. Venue costs and final pricing are confirmed by our team.</p></div>
+                    </section>
+                    <section class="seaside-form-section seaside-form-section-vision" aria-labelledby="wedding-vision-heading"><h3 id="wedding-vision-heading">Your vision</h3><div class="seaside-form-field seaside-form-field-message"><label for="wedding-message">Short message <span class="seaside-form-label-note">(your expectations)</span></label><textarea class="seaside-form-control" id="wedding-message" name="message" rows="3" maxlength="1000" placeholder="Tell us what you have in mind for your wedding.">{{ form.message.value|default_if_none:'' }}</textarea>{{ form.message.errors }}</div></section>
+                    <button class="seaside-button seaside-button-submit" type="submit" data-wedding-submit>Submit wedding booking request <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    <p class="seaside-form-required-note"><span aria-hidden="true">*</span> Required fields</p>
+                </form>
                 {% endif %}
             </div>
-
         </section>
 
     </div>

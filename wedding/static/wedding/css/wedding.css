@@ -874,3 +874,35 @@
 
 
 
+
+/* Wedding booking accents */
+.wedding-booking-enquiry .seaside-enquiry-heading .seaside-eyebrow,
+.wedding-booking-enquiry .seaside-form-section h3,
+.wedding-booking-enquiry .seaside-form-required-note span {
+    color: #d4af37;
+}
+
+.wedding-booking-enquiry .seaside-enquiry-form > .seaside-button-submit,
+.wedding-booking-enquiry .seaside-enquiry-form > .seaside-button-submit:hover {
+    background: #d4af37;
+}
+
+.wedding-booking-enquiry .seaside-form-control:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgb(212 175 55 / 20%);
+}
+
+.wedding-booking-enquiry .seaside-form-options input {
+    accent-color: #d4af37;
+}
+
+.wedding-hero-actions .wedding-button-outline {
+    background-color: #d4af37;
+    border: 1px solid #d4af37;
+    color: white;
+}
+
+.wedding-hero-actions .wedding-button-outline:hover {
+    background-color: #d4af37;
+    border-color: #d4af37;
+}
