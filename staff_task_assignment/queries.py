@@ -29,12 +29,14 @@ def assignments_for(user):
 
 def task_counts(user):
     today = timezone.localdate()
+    # Tasks on closed events keep their status but are no longer live work.
+    live = Q(assignment__booking__status=Booking.Status.CONFIRMED)
     counts = tasks_for(user).aggregate(
         total=Count("pk"),
-        pending=Count("pk", filter=Q(status=StaffTask.Status.PENDING)),
-        in_progress=Count("pk", filter=Q(status=StaffTask.Status.IN_PROGRESS)),
+        pending=Count("pk", filter=live & Q(status=StaffTask.Status.PENDING)),
+        in_progress=Count("pk", filter=live & Q(status=StaffTask.Status.IN_PROGRESS)),
         completed=Count("pk", filter=Q(status=StaffTask.Status.COMPLETED)),
-        blocked=Count("pk", filter=Q(status=StaffTask.Status.BLOCKED)),
+        blocked=Count("pk", filter=live & Q(status=StaffTask.Status.BLOCKED)),
         due_soon=Count(
             "pk",
             filter=~Q(status=StaffTask.Status.COMPLETED)
@@ -56,6 +58,10 @@ def decorate_tasks(tasks):
             (status, ACTION_LABELS[(task.status, status)])
             for status in task.allowed_next_statuses()
         ]
+        task.event_closed_label = {
+            Booking.Status.COMPLETED: "Event completed",
+            Booking.Status.CANCELLED: "Event cancelled",
+        }.get(task.assignment.booking.status, "")
         task.is_overdue = (
             task.status != StaffTask.Status.COMPLETED
             and task.assignment.booking.status == Booking.Status.CONFIRMED

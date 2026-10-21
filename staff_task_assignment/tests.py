@@ -465,3 +465,52 @@ class StaffPortalViewTests(StaffTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["page"]), 0)
+
+
+class ClosedEventDisplayTests(StaffTestCase):
+    def setUp(self):
+        super().setUp()
+        self.booking = make_booking(self.customer, event_name="Done event")
+        assignment = StaffAssignment.objects.create(
+            booking=self.booking, staff=self.staff, role="Decorator"
+        )
+        self.task = StaffTask.objects.create(
+            assignment=assignment, title="Still open", due_date=self.booking.event_date
+        )
+        self.task.transition_to(StaffTask.Status.IN_PROGRESS)
+        self.client.force_login(self.staff)
+
+    def test_completed_event_flags_tasks_and_leaves_status_unchanged(self):
+        self.booking.mark_completed()
+
+        response = self.client.get(reverse("staff_task_assignment:tasks"))
+
+        self.assertContains(response, "Event completed")
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.status, StaffTask.Status.IN_PROGRESS)
+
+    def test_cancelled_event_flags_tasks(self):
+        self.booking.mark_cancelled()
+
+        response = self.client.get(
+            reverse(
+                "staff_event_details:detail",
+                kwargs={"assignment_id": self.task.assignment_id},
+            )
+        )
+
+        self.assertContains(response, "Event cancelled")
+
+    def test_open_event_has_no_badge(self):
+        response = self.client.get(reverse("staff_task_assignment:tasks"))
+
+        self.assertNotContains(response, "staff-event-closed-badge")
+
+    def test_counts_ignore_tasks_on_closed_events(self):
+        self.assertEqual(task_counts(self.staff)["in_progress"], 1)
+
+        self.booking.mark_completed()
+
+        counts = task_counts(self.staff)
+        self.assertEqual(counts["in_progress"], 0)
+        self.assertEqual(counts["total"], 1)

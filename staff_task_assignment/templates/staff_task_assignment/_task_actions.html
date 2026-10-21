@@ -1,3 +1,4 @@
+{% if task.event_closed_label %}<span class="staff-event-closed-badge">{{ task.event_closed_label }}</span>{% endif %}
 <div class="staff-task-actions">
   {% for value, label in task.actions %}
     <form method="post" action="{% url 'staff_task_assignment:update_task' task.pk %}" class="staff-task-action-form">
