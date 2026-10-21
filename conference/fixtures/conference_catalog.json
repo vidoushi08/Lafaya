@@ -1,0 +1,152 @@
+[
+{
+  "model": "conference.conferencevenue",
+  "pk": 1,
+  "fields": {
+    "price": "95000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Trianon Convention Centre",
+    "location": "Quatre Bornes, Mauritius",
+    "description": "A majestic, high-ceilinged ballroom built for large-scale summits, international keynotes and gala dinners. Tiered or theatre-style seating, a full-size stage and a grand foyer for registration and networking make it the natural home for our biggest audiences, with room for up to 500 attendees.",
+    "image": "conference/images/conference_venue_trianon.png",
+    "uploaded_image": "",
+    "capacity": 500
+  }
+},
+{
+  "model": "conference.conferencevenue",
+  "pk": 2,
+  "fields": {
+    "price": "55000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Voila Hotel",
+    "location": "Bagatelle, Mauritius",
+    "description": "A polished, acoustically insulated hotel setting made for executive strategy days, confidential board meetings and focused panel discussions. Quiet breakout rooms, reliable connectivity and attentive hotel service keep every session on schedule for up to 150 attendees.",
+    "image": "conference/images/conference_venue_voila.png",
+    "uploaded_image": "",
+    "capacity": 150
+  }
+},
+{
+  "model": "conference.conferencevenue",
+  "pk": 3,
+  "fields": {
+    "price": "75000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 3,
+    "name": "Caudan Arts Centre",
+    "location": "Port Louis, Mauritius",
+    "description": "An agile, design-led space on the Port Louis waterfront with modular partitions and interactive display areas. Ideal for workshops, product launches and creative brainstorming, it reconfigures easily from one open hall to several breakout rooms for up to 200 attendees.",
+    "image": "conference/images/conference_venue_caudan.png",
+    "uploaded_image": "",
+    "capacity": 200
+  }
+},
+{
+  "model": "conference.conferencepackage",
+  "pk": 1,
+  "fields": {
+    "price": "65000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Starter Plan",
+    "tagline": "Focused assemblies",
+    "description": "",
+    "image": "",
+    "features": "Dedicated room for exactly 50 attendees\nTheatre or classroom seating arranged to your agenda\nHigh-definition projector or screen, podium and microphone kit\nTechnician on hand to set up and support the AV during your session\n4-hour exclusive session\nEvent coordinator to run your timeline on the day\nCatering and recording not included (add them as optional services)",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 50,
+    "max_guests": 50
+  }
+},
+{
+  "model": "conference.conferencepackage",
+  "pk": 2,
+  "fields": {
+    "price": "75000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Professional Plan",
+    "tagline": "High-end live events",
+    "description": "",
+    "image": "",
+    "features": "Space for 50 to 200 attendees\nStage, lectern, confidence monitor and wireless microphones\nMulti-camera streaming set-up for remote attendees\nRegistration desk and welcome team for arrivals\nUp to 6-hour session with a working lunch break\nEvent coordinator from setup to close\nRecording and branding not included (add them as optional services)",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 50,
+    "max_guests": 200
+  }
+},
+{
+  "model": "conference.conferencepackage",
+  "pk": 3,
+  "fields": {
+    "price": "110000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 3,
+    "name": "Enterprise Plan",
+    "tagline": "Landmark summits",
+    "description": "",
+    "image": "",
+    "features": "Exclusive use of the venue for 50 to 500 attendees, with no other events\nCustom stage, lighting and large-format screens planned with you\nFull production crew: audio, video and lighting technicians\nFormal welcome reception and networking break\nDedicated hospitality team and VIP guest handling\nEvent coordinator who plans with you beforehand and runs the day\nUp to 6 hours on the day of your event",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 50,
+    "max_guests": 500
+  }
+},
+{
+  "model": "conference.conferenceservice",
+  "pk": 1,
+  "fields": {
+    "price": "45000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Stage Design & Branding",
+    "description": "Backdrops, stage sets, screen content and signage that carry your brand from the registration desk to the keynote stage, designed and installed by our team so the room looks as considered as the agenda.",
+    "highlights": "Custom Backdrops\nPremium Signage\nScreen Content",
+    "image": "conference/images/conference_services_branding.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "conference.conferenceservice",
+  "pk": 2,
+  "fields": {
+    "price": "55000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Live Streaming & Recording",
+    "description": "Take every session beyond the room with crystal-clear 4K video, live streaming for remote attendees and clean audio capture, followed by edited recordings you can share and keep.",
+    "highlights": "4K Broadcast\nRemote Attendees\nPost Production",
+    "image": "conference/images/conference_services_recordings.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "conference.conferenceservice",
+  "pk": 3,
+  "fields": {
+    "price": "1000.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 3,
+    "name": "Corporate Catering",
+    "description": "Fresh, generous menus served with an easy rhythm, from morning pastries and coffee to working lunches and afternoon refreshments, so your attendees stay energised from the first session to the last.",
+    "highlights": "Working Lunch\nCoffee Breaks\nNetworking Bar",
+    "image": "conference/images/conference_services_catering.png",
+    "uploaded_image": ""
+  }
+}
+]

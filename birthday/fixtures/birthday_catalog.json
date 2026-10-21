@@ -1,0 +1,152 @@
+[
+{
+  "model": "birthday.birthdayvenue",
+  "pk": 1,
+  "fields": {
+    "price": "75000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Grand Ballroom",
+    "location": "Central Mauritius",
+    "description": "An elegant ballroom with chandeliers, generous dining space, and room for a polished milestone celebration.",
+    "image": "birthday/images/birthday_venue_ballroom.png",
+    "uploaded_image": "",
+    "capacity": 300
+  }
+},
+{
+  "model": "birthday.birthdayvenue",
+  "pk": 2,
+  "fields": {
+    "price": "90000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Sunset Terrace",
+    "location": "West coast, Mauritius",
+    "description": "An open-air garden terrace for sunset dinners, family gatherings, and relaxed celebrations under the lights.",
+    "image": "birthday/images/birthday_venue_terrace.png",
+    "uploaded_image": "",
+    "capacity": 150
+  }
+},
+{
+  "model": "birthday.birthdayvenue",
+  "pk": 3,
+  "fields": {
+    "price": "27000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Playhouse",
+    "location": "Mauritius",
+    "description": "A playful indoor setting with room for games, activities, and lively birthday parties for all ages.",
+    "image": "birthday/images/birthday_venue_factory.png",
+    "uploaded_image": "",
+    "capacity": 200
+  }
+},
+{
+  "model": "birthday.birthdaypackage",
+  "pk": 1,
+  "fields": {
+    "price": "5000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Little Moments",
+    "tagline": "Intimate celebrations",
+    "description": "",
+    "image": "",
+    "features": "Birthday setup for up to 50 guests\nTables, chairs and a welcoming celebration layout\nBirthday styling for the cake and gift area\nEvent coordinator to manage the timeline on the day\nFood and entertainment can be added to suit your celebration",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": 50
+  }
+},
+{
+  "model": "birthday.birthdaypackage",
+  "pk": 2,
+  "fields": {
+    "price": "22000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Signature Celebration",
+    "tagline": "Thoughtful, joyful gatherings",
+    "description": "",
+    "image": "",
+    "features": "Birthday setup for up to 150 guests\nTables, chairs and lounge-style seating\nBirthday styling for the main celebration space\nSound system and background music\nEvent coordinator from setup to close\nFood and entertainment can be added to suit your celebration",
+    "uploaded_image": "",
+    "is_featured": true,
+    "min_guests": 1,
+    "max_guests": 150
+  }
+},
+{
+  "model": "birthday.birthdaypackage",
+  "pk": 3,
+  "fields": {
+    "price": "30000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Milestone Experience",
+    "tagline": "A celebration to remember",
+    "description": "",
+    "image": "",
+    "features": "Celebration setup for up to 300 guests\nDedicated event coordinator and on-site team\nSignature styling for the venue and birthday moment\nEntertainment and production planned around your vision\nGuest experience coordinated from arrival to the final toast\nFood and entertainment can be tailored to your event",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": 300
+  }
+},
+{
+  "model": "birthday.birthdayservice",
+  "pk": 1,
+  "fields": {
+    "price": "1700.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Birthday styling",
+    "description": "A celebration look shaped around the guest of honour, with considered florals, balloons, tablescapes, and a memorable cake display.",
+    "highlights": "Personalised decor\nCake display",
+    "image": "birthday/images/birthday_services_styling.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "birthday.birthdayservice",
+  "pk": 2,
+  "fields": {
+    "price": "700.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 1,
+    "name": "Gastronomy",
+    "description": "From sharing platters to a seated dinner, menus and drinks are planned to suit your guests and the way you want to celebrate.",
+    "highlights": "Custom menus\nDrinks service",
+    "image": "birthday/images/birthday_services_gastronomy.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "birthday.birthdayservice",
+  "pk": 3,
+  "fields": {
+    "price": "2500.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Entertainment",
+    "description": "Keep the celebration moving with music, DJs, live performers, and age-appropriate activities for your guests.",
+    "highlights": "DJ and live music\nGames and activities",
+    "image": "birthday/images/birthday_services_entertainment.png",
+    "uploaded_image": ""
+  }
+}
+]

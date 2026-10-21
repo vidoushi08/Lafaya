@@ -1,0 +1,110 @@
+.booking-history {
+  min-height: 70vh;
+  padding: 4rem var(--container-padding) 6rem;
+  background: var(--color-review-page);
+  color: var(--color-review-heading);
+  font-family: var(--font-body);
+}
+
+.booking-history-inner {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.booking-history-heading {
+  margin-bottom: 2rem;
+}
+
+.booking-history-heading p {
+  margin: 0 0 0.5rem;
+  color: var(--color-review-copy);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.booking-history-heading h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+}
+
+.booking-history-heading span,
+.booking-history-card p {
+  color: var(--color-review-copy);
+}
+
+.booking-history-card {
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-review-divider);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  box-shadow: 0 8px 24px var(--color-shadow);
+}
+
+.booking-history-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.booking-history-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.booking-history-card p {
+  margin: 0.4rem 0 0;
+}
+
+.booking-history-status {
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-btn);
+  background: var(--color-review-input);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.booking-history-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.booking-history-card dt {
+  color: var(--color-review-copy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.booking-history-card dd {
+  margin: 0.25rem 0 0;
+}
+
+.booking-history-payment-link {
+  color: var(--color-review-heading);
+  font-weight: 700;
+}
+
+.booking-history-empty {
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+@media (max-width: 760px) {
+  .booking-history {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .booking-history-card-heading {
+    flex-direction: column;
+  }
+
+  .booking-history-card dl {
+    grid-template-columns: 1fr;
+  }
+}

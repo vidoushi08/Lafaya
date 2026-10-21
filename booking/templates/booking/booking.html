@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking History | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'booking/css/booking.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="booking-history">
+    <div class="booking-history-inner">
+      <header class="booking-history-heading">
+        <p>Customer portal</p>
+        <h1>Booking History</h1>
+        <span>Track your event requests, approvals, and confirmed bookings.</span>
+      </header>
+
+      {% for booking in bookings %}
+        <article class="booking-history-card">
+          <div class="booking-history-card-heading">
+            <div>
+              <h2>{{ booking.event_type }}{% if booking.event_name %}: {{ booking.event_name }}{% endif %}</h2>
+              <p>{{ booking.reference }} · {{ booking.event_date|date:"j M Y" }}</p>
+            </div>
+            <span class="booking-history-status">{{ booking.get_status_display }}</span>
+          </div>
+          <dl>
+            <div><dt>Venue</dt><dd>{{ booking.venue_name }}</dd></div>
+            <div><dt>Package</dt><dd>{{ booking.package_name }}</dd></div>
+            <div><dt>Guests</dt><dd>{{ booking.guests }}</dd></div>
+            <div><dt>Time</dt><dd>{{ booking.start_time|time:"H:i" }}–{{ booking.end_time|time:"H:i" }}</dd></div>
+          </dl>
+          {% if booking.status == "approved" or booking.status == "confirmed" %}
+            <a class="booking-history-payment-link" href="{% url 'payments:payment_detail' booking.id %}">View payment details</a>
+          {% endif %}
+        </article>
+      {% empty %}
+        <p class="booking-history-empty">You have no booking requests yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
