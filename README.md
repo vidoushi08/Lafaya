@@ -159,3 +159,13 @@ directory; SQLite stores the file paths, not the image contents. Back up the
 `media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
 development server while `DEBUG=True`; production deployment needs an
 appropriate media-file storage and serving configuration.
+
+## Staff workflow
+
+1. A customer books a theme; admin approves; customer pays, so the booking becomes `CONFIRMED`.
+2. In the superadmin (`/admin/`), open a `CONFIRMED` booking and add **Staff assignments** (staff member + role), or use *Staff assignments > Add*. Tasks (title, description, priority, due date) are added under each assignment. Unconfirmed bookings cannot be assigned. Overlapping events for a staff member only show a warning.
+3. Staff sign in and see the dashboard counts, **Booking History** (own bookings only, with search, filters and pagination), **View Tasks** and **Event Details**.
+4. Staff update only their own tasks: `pending > in progress > completed`, or `blocked` (and back to in progress). Updates are locked once the booking is `COMPLETED` or `CANCELLED`.
+5. Admin marks the booking `COMPLETED` or `CANCELLED` after the event. Cancelling frees the venue and date for new requests.
+
+Run `python manage.py migrate` after pulling to create the staff tables.

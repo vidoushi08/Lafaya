@@ -1003,7 +1003,7 @@ class AccountAreaAccessTests(TestCase):
 			"/staff-booking-history/",
 			"/staff-profile/",
 			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
+			"/staff-event-details/1/",
 		)
 
 		for path in protected_paths:
@@ -1020,7 +1020,7 @@ class AccountAreaAccessTests(TestCase):
 			"/staff-booking-history/",
 			"/staff-profile/",
 			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
+			"/staff-event-details/1/",
 		)
 
 		self.client.force_login(customer)
@@ -1033,7 +1033,8 @@ class AccountAreaAccessTests(TestCase):
 		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 403)
 		for path in staff_paths:
 			with self.subTest(account="staff", path=path):
-				self.assertEqual(self.client.get(path).status_code, 200)
+				expected = 404 if path.startswith("/staff-event-details/") else 200
+				self.assertEqual(self.client.get(path).status_code, expected)
 
 	def test_superuser_can_access_customer_and_staff_portals(self):
 		superuser = get_user_model().objects.create_superuser(
@@ -1049,10 +1050,11 @@ class AccountAreaAccessTests(TestCase):
 			"/staff-booking-history/",
 			"/staff-profile/",
 			"/staff-task-assignment/",
-			"/staff-event-details/floral-styling-review/",
 		):
 			with self.subTest(path=path):
 				self.assertEqual(self.client.get(path).status_code, 200)
+
+		self.assertEqual(self.client.get("/staff-event-details/1/").status_code, 404)
 
 
 class AccountPasswordTests(TestCase):

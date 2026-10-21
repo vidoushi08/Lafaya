@@ -1,4 +1,4 @@
-from datetime import date, time, timedelta
+﻿from datetime import date, time, timedelta
 from decimal import Decimal
 from itertools import count
 
@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from booking.models import Booking
 
@@ -14,6 +15,7 @@ from authentication.admin_site import superadmin_site
 
 from .admin import StaffAssignmentInline
 from .models import StaffAssignment, StaffTask
+from .queries import task_counts
 
 _source_ids = count(1)
 
@@ -319,3 +321,147 @@ class StaffAssignmentAdminTests(StaffTestCase):
 
         self.assertContains(list_response, booking.reference)
         self.assertContains(change_response, "Set up")
+
+
+class StaffPortalViewTests(StaffTestCase):
+    def setUp(self):
+        super().setUp()
+        self.booking = make_booking(self.customer, event_name="Garden party")
+        self.assignment = StaffAssignment.objects.create(
+            booking=self.booking, staff=self.staff, role="Decorator"
+        )
+        self.task = StaffTask.objects.create(
+            assignment=self.assignment,
+            title="Hang lanterns",
+            due_date=timezone.localdate() + timedelta(days=1),
+        )
+        other_booking = make_booking(self.customer, event_name="Secret gala")
+        other_assignment = StaffAssignment.objects.create(
+            booking=other_booking, staff=self.other_staff, role="Lead"
+        )
+        self.other_task = StaffTask.objects.create(
+            assignment=other_assignment,
+            title="Other people's job",
+            due_date=other_booking.event_date,
+        )
+        self.update_url = reverse(
+            "staff_task_assignment:update_task", args=[self.task.pk]
+        )
+        self.client.force_login(self.staff)
+
+    def test_task_list_only_shows_own_tasks(self):
+        response = self.client.get(reverse("staff_task_assignment:tasks"))
+
+        self.assertContains(response, "Hang lanterns")
+        self.assertNotContains(response, "Other people")
+
+    def test_task_list_search_and_status_filter(self):
+        url = reverse("staff_task_assignment:tasks")
+
+        self.assertContains(self.client.get(url, {"q": "lanterns"}), "Hang lanterns")
+        self.assertNotContains(self.client.get(url, {"q": "zzz"}), "Hang lanterns")
+        self.assertNotContains(
+            self.client.get(url, {"status": "completed"}), "Hang lanterns"
+        )
+
+    def test_update_moves_task_forward_and_redirects(self):
+        response = self.client.post(self.update_url, {"status": "in_progress"})
+
+        self.assertEqual(response.status_code, 302)
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.status, StaffTask.Status.IN_PROGRESS)
+
+    def test_update_rejects_invalid_transition(self):
+        self.client.post(self.update_url, {"status": "completed"})
+
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.status, StaffTask.Status.PENDING)
+
+    def test_update_rejects_get(self):
+        self.assertEqual(self.client.get(self.update_url).status_code, 405)
+
+    def test_update_of_another_staff_members_task_is_404(self):
+        url = reverse(
+            "staff_task_assignment:update_task", args=[self.other_task.pk]
+        )
+
+        self.assertEqual(
+            self.client.post(url, {"status": "in_progress"}).status_code, 404
+        )
+        self.other_task.refresh_from_db()
+        self.assertEqual(self.other_task.status, StaffTask.Status.PENDING)
+
+    def test_update_blocked_once_booking_is_closed(self):
+        Booking.objects.filter(pk=self.booking.pk).update(
+            status=Booking.Status.COMPLETED
+        )
+
+        self.client.post(self.update_url, {"status": "in_progress"})
+
+        self.task.refresh_from_db()
+        self.assertEqual(self.task.status, StaffTask.Status.PENDING)
+
+    def test_next_redirect_ignores_external_urls(self):
+        response = self.client.post(
+            self.update_url, {"status": "in_progress", "next": "https://evil.example/"}
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response["Location"].startswith("http"))
+
+    def test_customer_and_anonymous_cannot_update(self):
+        self.client.force_login(self.customer)
+        self.assertEqual(
+            self.client.post(self.update_url, {"status": "in_progress"}).status_code,
+            403,
+        )
+        self.client.logout()
+        self.assertEqual(
+            self.client.post(self.update_url, {"status": "in_progress"}).status_code,
+            302,
+        )
+
+    def test_dashboard_shows_real_counts(self):
+        counts = task_counts(self.staff)
+
+        self.assertEqual(counts["total"], 1)
+        self.assertEqual(counts["pending"], 1)
+        self.assertEqual(counts["due_soon"], 1)
+        response = self.client.get(reverse("staff:staff"))
+        self.assertEqual(response.context["counts"]["total"], 1)
+
+    def test_history_lists_only_own_bookings_with_filters(self):
+        url = reverse("staff_booking_history:history")
+
+        response = self.client.get(url)
+        self.assertContains(response, "Garden party")
+        self.assertNotContains(response, "Secret gala")
+        self.assertNotContains(
+            self.client.get(url, {"status": "cancelled"}), "Garden party"
+        )
+        self.assertContains(
+            self.client.get(url, {"q": self.booking.reference}), "Garden party"
+        )
+        self.assertNotContains(self.client.get(url, {"q": "nomatch"}), "Garden party")
+
+    def test_history_paginates(self):
+        for _ in range(11):
+            StaffAssignment.objects.create(
+                booking=make_booking(self.customer), staff=self.staff, role="Extra"
+            )
+
+        response = self.client.get(reverse("staff_booking_history:history"))
+
+        self.assertEqual(response.context["page"].paginator.num_pages, 2)
+        self.assertEqual(len(response.context["page"]), 10)
+
+    def test_history_empty_state(self):
+        self.client.force_login(self.customer.__class__.objects.create_user(
+            username="newstaff", email="n@example.com", password="x-Pass-12345",
+            account_type="staff",
+        ))
+
+        response = self.client.get(reverse("staff_booking_history:history"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["page"]), 0)

@@ -291,6 +291,16 @@
   color: var(--detail-warning-text);
 }
 
+.staff-detail-task-status-completed {
+  background: rgba(46, 160, 90, 0.18);
+  color: #1f7a45;
+}
+
+.staff-detail-task-status-blocked {
+  background: rgba(200, 50, 50, 0.15);
+  color: #b02a2a;
+}
+
 .staff-detail-task-status-pending {
   background: rgba(255, 255, 255, 0.2);
   color: var(--detail-muted);
