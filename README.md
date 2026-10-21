@@ -110,11 +110,11 @@ python manage.py export_catalog_fixtures
    This exports Birthday, Car Events, Conference, and Seaside catalogues. To
    export only selected apps, list them after the command, for example:
    `python manage.py export_catalog_fixtures seaside conference`.
-3. Commit and push the fixtures:
+3. Commit and push the fixtures along with any uploaded catalogue images:
 
 ```bash
-git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures
-git commit -m "Update catalogue fixtures"
+git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures media
+git commit -m "Update catalogue fixtures and images"
 git push
 ```
 
@@ -134,8 +134,11 @@ git merge origin/<owner-branch>
 
 ```bash
 python manage.py migrate
-python manage.py loaddata birthday_catalog car_events_catalog conference_catalog seaside_catalog
+python manage.py load_catalog
 ```
+
+   `load_catalog` loads the Birthday, Car Events, Conference, and Seaside
+   fixtures in one step.
 
 3. Open the site or the admin to check that the prices appear.
 
@@ -144,8 +147,9 @@ python manage.py loaddata birthday_catalog car_events_catalog conference_catalog
 > prices already edited in your local database. Run it on a fresh or development
 > database, not on a database whose prices were changed on purpose afterwards.
 
-Uploaded images are not part of the fixtures. They are stored in `media/`, so
-copy that folder from the owner's laptop as well if images are needed.
+Catalogue images uploaded through the admin are stored under
+`media/<app>/catalog/`, and those files are tracked by git so teammates see the
+same images after pulling. Other media, such as profile pictures, stays local.
 
 ### Seaside catalogue images
 

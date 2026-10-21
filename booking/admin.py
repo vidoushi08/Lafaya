@@ -136,14 +136,25 @@ class BookingAdmin(admin.ModelAdmin):
         "budget",
         "estimated_total",
         "message",
+        "client_name",
+        "client_email",
+        "client_phone",
+        "services_summary",
         "created_at",
         "confirmed_at",
+        "completed_at",
+        "cancelled_at",
         "updated_at",
         "status",
     )
     fields = readonly_fields
     inlines = (PaymentInline,)
-    actions = ("approve_bookings", "reject_bookings")
+    actions = (
+        "approve_bookings",
+        "reject_bookings",
+        "complete_bookings",
+        "cancel_bookings",
+    )
 
     def has_add_permission(self, request):
         return False
@@ -217,4 +228,48 @@ class BookingAdmin(admin.ModelAdmin):
                 f"{failed_emails} rejection email(s) could not be delivered; "
                 "the saved rejections remain in place.",
                 level=messages.ERROR,
+            )
+
+    @admin.action(description="Mark selected bookings as completed")
+    def complete_bookings(self, request, queryset):
+        completed = 0
+        for booking in queryset:
+            try:
+                booking.mark_completed()
+            except ValidationError as error:
+                self.message_user(
+                    request,
+                    f"{booking.reference}: {' '.join(error.messages)}",
+                    level=messages.ERROR,
+                )
+                continue
+            completed += 1
+
+        if completed:
+            self.message_user(
+                request,
+                f"{completed} booking(s) marked as completed.",
+                level=messages.SUCCESS,
+            )
+
+    @admin.action(description="Cancel selected bookings")
+    def cancel_bookings(self, request, queryset):
+        cancelled = 0
+        for booking in queryset:
+            try:
+                booking.mark_cancelled()
+            except ValidationError as error:
+                self.message_user(
+                    request,
+                    f"{booking.reference}: {' '.join(error.messages)}",
+                    level=messages.ERROR,
+                )
+                continue
+            cancelled += 1
+
+        if cancelled:
+            self.message_user(
+                request,
+                f"{cancelled} booking(s) cancelled.",
+                level=messages.SUCCESS,
             )

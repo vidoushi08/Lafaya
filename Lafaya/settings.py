@@ -157,6 +157,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Primary keys
+# Keep every app on the same auto field so the schema stays consistent.
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
