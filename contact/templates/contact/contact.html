@@ -22,36 +22,26 @@
       </div>
     </section>
 
-    <section class="contact-main" aria-label="Contact information and message form">
-      <div class="contact-details">
-        <p class="contact-eyebrow">Get in touch</p>
-        <h2>We’d love to hear from you.</h2>
-        <p class="contact-details-intro">Choose the way that works best for you, or send us a message and we’ll get back to you.</p>
-
-        <a class="contact-detail-card" href="mailto:{{ contact_email }}">
-          <span class="contact-detail-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
-          <span><small>Email us</small><strong>{{ contact_email }}</strong></span>
-          <i class="fa-solid fa-arrow-up-right-from-square contact-detail-arrow" aria-hidden="true"></i>
-        </a>
-        <a class="contact-detail-card" href="tel:{{ contact_phone|cut:' ' }}">
-          <span class="contact-detail-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></span>
-          <span><small>Call our team</small><strong>{{ contact_phone }}</strong></span>
-          <i class="fa-solid fa-arrow-up-right-from-square contact-detail-arrow" aria-hidden="true"></i>
-        </a>
-        <div class="contact-detail-card contact-detail-location">
-          <span class="contact-detail-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
-          <span><small>Visit us</small><strong>{{ contact_address }}</strong></span>
+    <section class="contact-main contact-design-section" aria-label="Get in touch">
+      <div class="contact-design-copy">
+        <h2>Get in Touch</h2>
+        <p class="contact-design-lead">I'd like to hear from you!</p>
+        <p class="contact-design-description">If you have any inquiries or just want to say hi, please use the contact form!</p>
+        <div class="contact-design-socials">
+          <a class="contact-design-email" href="mailto:{{ contact_email }}">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>{{ contact_email }}
+          </a>
+          <div class="contact-design-social-links" aria-label="Lafaya social media">
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+          </div>
         </div>
-
-        <div class="contact-response-note"><i class="fa-regular fa-clock" aria-hidden="true"></i><p><strong>Personal, thoughtful support.</strong><br>Our team usually replies within two business days.</p></div>
       </div>
 
-      <div class="contact-form-card" id="contact-form">
-        <div class="contact-form-heading">
-          <p class="contact-eyebrow">Send a message</p>
-          <h2>How can we help?</h2>
-          <p>Share a few details and we’ll take it from here.</p>
-        </div>
+      <div class="contact-form-card contact-design-form-card" id="contact-form">
 
         {% if messages %}
           {% for message in messages %}<div class="contact-message-success" role="status"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>{{ message }}</div>{% endfor %}
@@ -61,35 +51,27 @@
         <form method="post" action="{% url 'contact:contact' %}#contact-form" class="contact-form">
           {% csrf_token %}
           {{ form.website }}
-          <div class="contact-form-grid">
+          <div class="contact-design-name-row">
             <div class="contact-field">
-              <label for="{{ form.name.id_for_label }}">Your name <span>*</span></label>
-              {{ form.name }}{{ form.name.errors }}
+              <label for="{{ form.first_name.id_for_label }}">First Name</label>
+              {{ form.first_name }}{{ form.first_name.errors }}
             </div>
             <div class="contact-field">
-              <label for="{{ form.email.id_for_label }}">Email address <span>*</span></label>
-              {{ form.email }}{{ form.email.errors }}
-            </div>
-            <div class="contact-field">
-              <label for="{{ form.phone.id_for_label }}">Phone number <small>(optional)</small></label>
-              {{ form.phone }}{{ form.phone.errors }}
-            </div>
-            <div class="contact-field">
-              <label for="{{ form.topic.id_for_label }}">What’s this about? <span>*</span></label>
-              {{ form.topic }}{{ form.topic.errors }}
+              <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+              {{ form.last_name }}{{ form.last_name.errors }}
             </div>
           </div>
           <div class="contact-field">
-            <label for="{{ form.subject.id_for_label }}">Subject <span>*</span></label>
-            {{ form.subject }}{{ form.subject.errors }}
+            <label for="{{ form.email.id_for_label }}">Email <span>*</span></label>
+            {{ form.email }}{{ form.email.errors }}
           </div>
           <div class="contact-field">
-            <label for="{{ form.message.id_for_label }}">Your message <span>*</span></label>
+            <label for="{{ form.message.id_for_label }}">Message</label>
             {{ form.message }}{{ form.message.errors }}
           </div>
           <div class="contact-form-submit-row">
-            <p><i class="fa-solid fa-lock" aria-hidden="true"></i> Your details are only used to respond to this message.</p>
-            <button type="submit">Send message <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <span></span>
+            <button type="submit">Send</button>
           </div>
         </form>
       </div>

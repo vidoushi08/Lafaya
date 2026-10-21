@@ -1,5 +1,4 @@
 .contact-page {
-  overflow: hidden;
   background: #faf8f3;
   color: var(--color-dark);
 }
@@ -58,6 +57,14 @@
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
+}
+
+.contact-hero-link:focus-visible,
+a.contact-detail-card:focus-visible,
+.contact-event-links a:focus-visible,
+.contact-form-submit-row button:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .contact-hero-art {
@@ -288,8 +295,8 @@ a.contact-detail-card:hover {
   display: flex;
   align-items: flex-start;
   gap: 0.45rem;
-  color: #81766c;
-  font-size: 0.7rem;
+  color: #62584f;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
@@ -419,5 +426,167 @@ a.contact-detail-card:hover {
 
   .contact-form-submit-row button {
     width: 100%;
+  }
+}
+
+/* Minimal two-column contact section inspired by the supplied design. */
+.contact-design-section {
+  min-height: 380px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(3rem, 10vw, 9rem);
+  padding-top: clamp(3.5rem, 7vw, 5rem);
+  padding-bottom: clamp(3.5rem, 7vw, 5rem);
+  background: #f8f4f1;
+}
+
+.contact-design-copy h2 {
+  margin: 0 0 0.9rem;
+  color: #98441f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.1rem, 4vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.contact-design-lead {
+  margin-bottom: 1.4rem;
+  color: #623a27;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.95rem;
+}
+
+.contact-design-description {
+  max-width: 275px;
+  color: #746b66;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.contact-design-socials {
+  display: grid;
+  justify-items: start;
+  gap: 0.8rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+.contact-design-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: #554b45;
+  font-size: 0.78rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.contact-design-social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.contact-design-social-links a {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 50%;
+  background: #211f1d;
+  color: #fff;
+  font-size: 0.68rem;
+  text-decoration: none;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.contact-design-social-links a:hover {
+  transform: translateY(-2px);
+  background: #98441f;
+}
+
+.contact-design-form-card {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.contact-design-form-card .contact-form {
+  gap: 0.9rem;
+}
+
+.contact-design-name-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.contact-design-form-card .contact-field {
+  gap: 0.25rem;
+}
+
+.contact-design-form-card .contact-field label {
+  color: #514943;
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.contact-design-form-card .contact-field input,
+.contact-design-form-card .contact-field textarea {
+  min-height: 35px;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #99918c;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0.82rem;
+}
+
+.contact-design-form-card .contact-field textarea {
+  min-height: 78px;
+  resize: vertical;
+}
+
+.contact-design-form-card .contact-form-submit-row {
+  justify-content: flex-end;
+}
+
+.contact-design-form-card .contact-form-submit-row button {
+  min-width: 130px;
+  min-height: 36px;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0;
+  background: #a64d25;
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.contact-design-form-card .contact-form-submit-row button:hover {
+  background: #873d1d;
+}
+
+.contact-design-section :is(a, button):focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .contact-design-section {
+    gap: 2.5rem;
+  }
+
+  .contact-design-socials {
+    margin-top: 2.5rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .contact-design-section {
+    gap: 2.5rem;
+  }
+
+  .contact-design-name-row {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
