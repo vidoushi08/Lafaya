@@ -28,19 +28,19 @@
 
         <section class="customer-history-summary" aria-label="Booking overview">
           <article class="customer-history-summary-item">
-            <span class="customer-history-summary-value">12</span>
+            <span class="customer-history-summary-value">{{ total_bookings }}</span>
             <span class="customer-history-summary-label">Total bookings</span>
           </article>
           <article class="customer-history-summary-item">
-            <span class="customer-history-summary-value">3</span>
+            <span class="customer-history-summary-value">{{ upcoming_count }}</span>
             <span class="customer-history-summary-label">Upcoming</span>
           </article>
           <article class="customer-history-summary-item">
-            <span class="customer-history-summary-value">7</span>
+            <span class="customer-history-summary-value">{{ completed_count }}</span>
             <span class="customer-history-summary-label">Completed</span>
           </article>
           <article class="customer-history-summary-item">
-            <span class="customer-history-summary-value">2</span>
+            <span class="customer-history-summary-value">{{ cancelled_count }}</span>
             <span class="customer-history-summary-label">Cancelled</span>
           </article>
         </section>
@@ -51,30 +51,30 @@
               <p class="customer-history-eyebrow">Your events</p>
               <h2 id="customer-history-title">All bookings</h2>
             </div>
-            <span class="customer-history-record-count">12 bookings</span>
+            <span class="customer-history-record-count">{{ page_obj.paginator.count }} booking{{ page_obj.paginator.count|pluralize }}</span>
           </div>
 
-          <div class="customer-history-toolbar">
+          <form class="customer-history-toolbar" method="get">
             <label class="customer-history-search">
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <input type="search" placeholder="Search bookings" aria-label="Search bookings">
+              <input type="search" name="q" value="{{ search_query }}" placeholder="Search bookings" aria-label="Search bookings">
             </label>
-            <select aria-label="Filter by booking status">
-              <option>All statuses</option>
-              <option>Confirmed</option>
-              <option>Awaiting payment</option>
-              <option>Completed</option>
-              <option>Cancelled</option>
+            <select name="status" aria-label="Filter by booking status" onchange="this.form.submit()">
+              <option value="">All statuses</option>
+              <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>Confirmed</option>
+              <option value="awaiting_payment" {% if status_filter == 'awaiting_payment' %}selected{% endif %}>Awaiting payment</option>
+              <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending approval</option>
+              <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+              <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
             </select>
-            <select aria-label="Filter by event type">
-              <option>All event types</option>
-              <option>Wedding</option>
-              <option>Birthday</option>
-              <option>Conference</option>
-              <option>Concert</option>
-              <option>Seaside</option>
+            <select name="event_type" aria-label="Filter by event type" onchange="this.form.submit()">
+              <option value="">All event types</option>
+              {% for event_type in event_types %}
+                <option value="{{ event_type }}" {% if event_type_filter == event_type %}selected{% endif %}>{{ event_type }}</option>
+              {% endfor %}
             </select>
-          </div>
+            <button type="submit" class="customer-history-filter-submit">Search</button>
+          </form>
 
           <div class="customer-history-table-scroll" role="region" aria-label="Booking history table" tabindex="0">
             <table class="customer-history-table">
@@ -89,58 +89,30 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><strong>Coastal wedding celebration</strong><span>BK-2026-0184</span></td>
-                  <td>05 Dec 2026</td>
-                  <td>Oceanfront Villa</td>
-                  <td>120</td>
-                  <td>MUR 185,000</td>
-                  <td><span class="customer-history-status confirmed">Confirmed</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Emma's birthday dinner</strong><span>BK-2026-0162</span></td>
-                  <td>24 Oct 2026</td>
-                  <td>Sunset Terrace</td>
-                  <td>35</td>
-                  <td>MUR 42,500</td>
-                  <td><span class="customer-history-status pending">Awaiting payment</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Annual leadership conference</strong><span>BK-2026-0117</span></td>
-                  <td>12 Aug 2026</td>
-                  <td>Trianon Convention Centre</td>
-                  <td>240</td>
-                  <td>MUR 310,000</td>
-                  <td><span class="customer-history-status completed">Completed</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Ocean breeze family gathering</strong><span>BK-2026-0098</span></td>
-                  <td>18 Jul 2026</td>
-                  <td>The Glass Pavilion</td>
-                  <td>48</td>
-                  <td>MUR 68,000</td>
-                  <td><span class="customer-history-status completed">Completed</span></td>
-                </tr>
-                <tr>
-                  <td><strong>Live music night</strong><span>BK-2026-0061</span></td>
-                  <td>09 May 2026</td>
-                  <td>Caudan Arts Centre</td>
-                  <td>90</td>
-                  <td>MUR 96,000</td>
-                  <td><span class="customer-history-status cancelled">Cancelled</span></td>
-                </tr>
+                {% for booking in bookings %}
+                  <tr>
+                    <td><strong>{{ booking.event_name|default:booking.event_type }}</strong><span>{{ booking.reference }}</span></td>
+                    <td>{{ booking.event_date|date:"d M Y" }}</td>
+                    <td>{{ booking.venue_name }}</td>
+                    <td>{{ booking.guests }}</td>
+                    <td>{{ booking.payment.currency|default:"MUR" }} {{ booking.estimated_total|floatformat:2 }}</td>
+                    <td><span class="customer-history-status {{ booking.customer_status_class }}">{{ booking.customer_status }}</span></td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="6">No bookings match your search.</td></tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
 
           <div class="customer-history-pagination">
-            <span>Showing 1-5 of 12 bookings</span>
+            <span>Showing {{ page_obj.start_index|default:0 }}-{{ page_obj.end_index|default:0 }} of {{ page_obj.paginator.count }} bookings</span>
             <nav aria-label="Booking history pages">
-              <button type="button" disabled>Previous</button>
-              <button type="button" class="customer-history-page-active" aria-current="page">1</button>
-              <button type="button">2</button>
-              <button type="button">3</button>
-              <button type="button">Next</button>
+              {% if page_obj.has_previous %}<a href="?{{ filter_query }}&amp;page={{ page_obj.previous_page_number }}">Previous</a>{% else %}<button type="button" disabled>Previous</button>{% endif %}
+              {% for page_number in page_obj.paginator.page_range %}
+                {% if page_number == page_obj.number %}<button type="button" class="customer-history-page-active" aria-current="page">{{ page_number }}</button>{% else %}<a href="?{{ filter_query }}&amp;page={{ page_number }}">{{ page_number }}</a>{% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}<a href="?{{ filter_query }}&amp;page={{ page_obj.next_page_number }}">Next</a>{% else %}<button type="button" disabled>Next</button>{% endif %}
             </nav>
           </div>
         </section>

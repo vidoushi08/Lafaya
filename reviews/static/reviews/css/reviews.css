@@ -161,6 +161,36 @@
   background-color: var(--color-review-star);
 }
 
+.reviews-booking-label {
+  color: var(--color-review-copy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.reviews-booking-select {
+  min-height: 42px;
+  padding: 0.5rem;
+  border: 1px solid var(--color-review-divider);
+  border-radius: var(--radius-btn);
+  background: var(--color-review-input);
+  color: var(--color-review-heading);
+  font: inherit;
+}
+
+.reviews-form-errors,
+.reviews-form .errorlist {
+  color: #a32222;
+  font-size: 0.8rem;
+}
+
+.reviews-messages,
+.reviews-own-status,
+.reviews-empty {
+  color: var(--color-review-copy);
+  font-size: 0.85rem;
+}
+
 .reviews-rating-fill-5 {
   width: 78%;
 }
