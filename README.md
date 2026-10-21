@@ -88,6 +88,75 @@ python manage.py runserver
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
 
+## Sharing catalogue data (prices, packages, venues, services)
+
+Git only shares code. The data entered through the admin (prices, price bases,
+packages, venues, services) lives in each person's local `db.sqlite3`, so a
+merge does not bring a teammate's data. Share it with fixtures: JSON files that
+are committed to the repository and loaded into the database.
+
+Never export users, payments, or booking requests. They contain personal data.
+
+### On the laptop that owns the data (example: Seaside and Conference)
+
+1. Enter the prices and catalogue items in the admin at
+   `http://127.0.0.1:8000/admin/`.
+2. Create the fixtures folders (once) and export only the catalogue models:
+
+```bash
+# Windows (PowerShell)
+mkdir seaside\fixtures, conference\fixtures
+
+# macOS / Linux
+mkdir -p seaside/fixtures conference/fixtures
+```
+
+```bash
+python manage.py dumpdata seaside.SeasideVenue seaside.SeasidePackage seaside.SeasideService --indent 2 -o seaside/fixtures/seaside_catalog.json
+python manage.py dumpdata conference.ConferenceVenue conference.ConferencePackage conference.ConferenceService --indent 2 -o conference/fixtures/conference_catalog.json
+```
+
+   For another app, list that app's catalogue models from its `models.py`
+   (for example `car_events.Venue car_events.EventPackage car_events.ExtraService
+   car_events.PackageFeature` or `birthday.BirthdayPackage birthday.BirthdayService
+   birthday.BirthdayVenue`) and save to `<app>/fixtures/<app>_catalog.json`.
+3. Commit and push the fixtures:
+
+```bash
+git add seaside/fixtures conference/fixtures
+git commit -m "Add seaside and conference catalogue fixtures with prices"
+git push
+```
+
+4. Whenever prices or items change and the defaults should be updated for
+   everyone, repeat steps 2 and 3.
+
+### On the laptop receiving the data
+
+1. Merge or pull the owner's branch:
+
+```bash
+git fetch origin
+git merge origin/<owner-branch>
+```
+
+2. Apply the database migrations, then load the fixtures:
+
+```bash
+python manage.py migrate
+python manage.py loaddata seaside_catalog conference_catalog
+```
+
+3. Open the site or the admin to check that the prices appear.
+
+> [WARNING]
+> `loaddata` overwrites rows that have the same primary key, so it replaces any
+> prices already edited in your local database. Run it on a fresh or development
+> database, not on a database whose prices were changed on purpose afterwards.
+
+Uploaded images are not part of the fixtures. They are stored in `media/`, so
+copy that folder from the owner's laptop as well if images are needed.
+
 ### Seaside catalogue images
 
 Superadmins can upload images when managing Seaside venues, packages, and
