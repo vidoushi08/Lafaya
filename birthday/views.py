@@ -1,69 +1,73 @@
-from django.http import HttpResponseBadRequest
+from datetime import timedelta
+
+from django.contrib import messages
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.utils import timezone
 
-from venues.models import EventType, Venue
-
-from .forms import BirthdayEnquiryForm
-from .models import BirthdayPackage
-
-
-def _get_birthday_venues():
-    birthday_type = EventType.objects.filter(slug="birthday").first()
-    if birthday_type is None:
-        return Venue.objects.none()
-    return Venue.objects.filter(event_types=birthday_type).distinct()
+from .forms import MAX_DAYS_AHEAD, BirthdayBookingForm, bookable
+from .models import BirthdayPackage, BirthdayService, BirthdayVenue
+from .notifications import notify_admins_of_booking
 
 
-def _resolve_package(value):
-    if value is None:
-        return None
-
-    cleaned = str(value).strip()
-    if not cleaned:
-        return None
-
-    package_qs = BirthdayPackage.objects.filter(is_active=True)
-    if cleaned.isdigit():
-        return package_qs.filter(pk=int(cleaned)).first()
-    return package_qs.filter(slug=cleaned).first()
+def is_customer(user):
+    return (
+        user.is_authenticated
+        and not user.is_superuser
+        and user.account_type == user.AccountType.CUSTOMER
+    )
 
 
 def index(request):
-    package_param = request.GET.get("package") or request.POST.get("package")
-    package = _resolve_package(package_param) if package_param else None
-    context = {
-        "selected_package": package,
-        "birthday_venues": _get_birthday_venues(),
-    }
-    if package is not None:
-        context["form"] = BirthdayEnquiryForm(package=package)
-    return render(request, "birthday/birthday.html", context)
-
-
-def enquiry(request):
-    package_param = request.GET.get("package") or request.POST.get("package") or request.POST.get("package_slug")
-    package = _resolve_package(package_param) if package_param else None
-
-    if package_param and package is None:
-        return HttpResponseBadRequest("Invalid or inactive package selected.")
+    customer = request.user if is_customer(request.user) else None
+    form = None
 
     if request.method == "POST":
-        if package is None:
-            return HttpResponseBadRequest("A valid package selection is required.")
-
-        form = BirthdayEnquiryForm(request.POST, package=package)
+        if customer is None:
+            return HttpResponseForbidden(
+                "Only signed-in customers can make a birthday booking request."
+            )
+        form = BirthdayBookingForm(request.POST, customer=customer)
         if form.is_valid():
-            enquiry = form.save(commit=False)
-            enquiry.selected_package = package
-            enquiry.quoted_price = package.price if package.package_type == "fixed" else None
-            enquiry.save()
-            return redirect("birthday:birthday")
-    else:
-        form = BirthdayEnquiryForm(package=package)
+            booking = form.save()
+            notify_admins_of_booking(booking, request)
+            messages.success(
+                request,
+                "Your birthday booking request has been submitted and is awaiting approval.",
+            )
+            return redirect(f"{reverse('birthday:birthday')}#birthday-enquiry")
+    elif customer is not None:
+        form = BirthdayBookingForm(
+            initial={
+                "first_name": customer.first_name,
+                "last_name": customer.last_name,
+                "phone": customer.phone,
+            },
+            customer=customer,
+        )
 
-    context = {
-        "selected_package": package,
-        "form": form,
-        "birthday_venues": _get_birthday_venues(),
-    }
-    return render(request, "birthday/birthday.html", context)
+    return render(
+        request,
+        "birthday/birthday.html",
+        {
+            "venues": BirthdayVenue.objects.filter(is_active=True),
+            "packages": BirthdayPackage.objects.filter(is_active=True),
+            "services": BirthdayService.objects.filter(is_active=True),
+            "bookable_venues": bookable(BirthdayVenue),
+            "bookable_packages": bookable(BirthdayPackage),
+            "bookable_services": bookable(BirthdayService),
+            "form": form,
+            "selected_services": (
+                form.data.getlist("optional_services")
+                if form is not None and form.is_bound
+                else []
+            ),
+            "is_customer": customer is not None,
+            "min_event_date": timezone.localdate().isoformat(),
+            "max_event_date": (
+                timezone.localdate() + timedelta(days=MAX_DAYS_AHEAD)
+            ).isoformat(),
+            "login_next": f"{reverse('birthday:birthday')}#birthday-enquiry",
+        },
+    )

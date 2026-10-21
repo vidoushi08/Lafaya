@@ -1,8 +1,17 @@
 from django.contrib import admin
+from django.templatetags.static import static
+from django.utils.html import format_html
 
 from authentication.admin_site import superadmin_site
 
-from .models import CarEventEnquiry, EventPackage, ExtraService, PackageFeature, Venue
+from .models import (
+    CarEventBookingRequest,
+    CarEventEnquiry,
+    EventPackage,
+    ExtraService,
+    PackageFeature,
+    Venue,
+)
 
 
 class PackageFeatureInline(admin.TabularInline):
@@ -10,23 +19,149 @@ class PackageFeatureInline(admin.TabularInline):
     extra = 1
 
 
-class EventPackageAdmin(admin.ModelAdmin):
-    list_display = ("name", "tagline", "is_featured", "is_active")
-    list_filter = ("is_featured", "is_active")
-    search_fields = ("name", "tagline")
+class PricedCatalogItemAdmin(admin.ModelAdmin):
+    list_display = ("name", "price", "price_basis", "is_active", "position")
+    list_editable = ("price", "price_basis", "is_active", "position")
+    list_filter = ("is_active", "price_basis")
+    search_fields = ("name",)
+    readonly_fields = ("image_preview",)
+
+    @admin.display(description="Current image")
+    def image_preview(self, obj):
+        if obj.uploaded_image:
+            return format_html(
+                '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
+                obj.uploaded_image.url,
+            )
+        if obj.image:
+            return format_html(
+                '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
+                static(obj.image),
+            )
+        return "No image uploaded"
+
+
+class VenueAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "location",
+        "capacity",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+        "image_preview",
+    )
+    search_fields = ("name", "location")
+    fields = (
+        "name",
+        "location",
+        "description",
+        "image",
+        "image_preview",
+        "uploaded_image",
+        "capacity",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+    )
+
+
+class EventPackageAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "tagline",
+        "min_attendees",
+        "max_attendees",
+        "price",
+        "price_basis",
+        "is_featured",
+        "is_active",
+        "position",
+        "image_preview",
+    )
+    list_editable = ("price", "price_basis", "is_featured", "is_active", "position")
+    fields = (
+        "name",
+        "tagline",
+        "description",
+        "image",
+        "image_preview",
+        "uploaded_image",
+        "min_attendees",
+        "max_attendees",
+        "price",
+        "price_basis",
+        "is_featured",
+        "is_active",
+        "position",
+    )
     inlines = [PackageFeatureInline]
 
 
-class VenueAdmin(admin.ModelAdmin):
-    list_display = ("name", "location", "is_active")
-    list_filter = ("is_active",)
-    search_fields = ("name", "location")
+class ExtraServiceAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+        "image_preview",
+    )
+    fields = (
+        "name",
+        "description",
+        "highlights",
+        "image",
+        "image_preview",
+        "uploaded_image",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+    )
 
 
-class ExtraServiceAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_active")
-    list_filter = ("is_active",)
-    search_fields = ("name",)
+class CarEventBookingRequestAdmin(admin.ModelAdmin):
+    list_display = (
+        "event_date",
+        "first_name",
+        "last_name",
+        "venue",
+        "package",
+        "expected_attendees",
+        "estimated_total",
+        "status",
+        "created_at",
+    )
+    list_filter = ("status", "event_date")
+    search_fields = ("first_name", "last_name", "email", "event_name")
+    readonly_fields = (
+        "customer",
+        "event_type",
+        "first_name",
+        "last_name",
+        "email",
+        "phone",
+        "event_name",
+        "event_date",
+        "start_time",
+        "end_time",
+        "expected_attendees",
+        "venue",
+        "package",
+        "services",
+        "budget",
+        "estimated_total",
+        "price_breakdown",
+        "message",
+        "created_at",
+    )
+    fields = ("status", *readonly_fields)
+
+    def has_add_permission(self, request):
+        return False
 
 
 class CarEventEnquiryAdmin(admin.ModelAdmin):
@@ -49,6 +184,7 @@ for model, model_admin in (
     (Venue, VenueAdmin),
     (EventPackage, EventPackageAdmin),
     (ExtraService, ExtraServiceAdmin),
+    (CarEventBookingRequest, CarEventBookingRequestAdmin),
     (CarEventEnquiry, CarEventEnquiryAdmin),
 ):
     try:
