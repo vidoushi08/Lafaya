@@ -97,34 +97,24 @@ are committed to the repository and loaded into the database.
 
 Never export users, payments, or booking requests. They contain personal data.
 
-### On the laptop that owns the data (example: Seaside and Conference)
+### On the laptop that owns the data
 
 1. Enter the prices and catalogue items in the admin at
    `http://127.0.0.1:8000/admin/`.
-2. Create the fixtures folders (once) and export only the catalogue models:
+2. Export the approved catalogue models to their app fixture files:
 
 ```bash
-# Windows (PowerShell)
-mkdir seaside\fixtures, conference\fixtures
-
-# macOS / Linux
-mkdir -p seaside/fixtures conference/fixtures
+python manage.py export_catalog_fixtures
 ```
 
-```bash
-python manage.py dumpdata seaside.SeasideVenue seaside.SeasidePackage seaside.SeasideService --indent 2 -o seaside/fixtures/seaside_catalog.json
-python manage.py dumpdata conference.ConferenceVenue conference.ConferencePackage conference.ConferenceService --indent 2 -o conference/fixtures/conference_catalog.json
-```
-
-   For another app, list that app's catalogue models from its `models.py`
-   (for example `car_events.Venue car_events.EventPackage car_events.ExtraService
-   car_events.PackageFeature` or `birthday.BirthdayPackage birthday.BirthdayService
-   birthday.BirthdayVenue`) and save to `<app>/fixtures/<app>_catalog.json`.
+   This exports Birthday, Car Events, Conference, and Seaside catalogues. To
+   export only selected apps, list them after the command, for example:
+   `python manage.py export_catalog_fixtures seaside conference`.
 3. Commit and push the fixtures:
 
 ```bash
-git add seaside/fixtures conference/fixtures
-git commit -m "Add seaside and conference catalogue fixtures with prices"
+git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures
+git commit -m "Update catalogue fixtures"
 git push
 ```
 
@@ -144,7 +134,7 @@ git merge origin/<owner-branch>
 
 ```bash
 python manage.py migrate
-python manage.py loaddata seaside_catalog conference_catalog
+python manage.py loaddata birthday_catalog car_events_catalog conference_catalog seaside_catalog
 ```
 
 3. Open the site or the admin to check that the prices appear.
