@@ -53,6 +53,7 @@
             <p class="car-events-card-location">{{ venue.location }}</p>
             <h3>{{ venue.name }}</h3>
             <p>{{ venue.description }}</p>
+            <p>{% if venue.max_attendees %}{{ venue.min_attendees }}–{{ venue.max_attendees }} attendees{% else %}{{ venue.min_attendees }}+ attendees{% endif %}</p>
           </div>
           <div class="car-events-package-footer">
             <strong>{% if venue.price is not None %}Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per attendee{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
@@ -248,7 +249,7 @@
                 <select class="car-events-form-control" id="venue" name="venue" required>
                   <option value="">Choose a venue</option>
                   {% for venue in bookable_venues %}
-                  <option value="{{ venue.pk }}" data-price="{{ venue.price }}" data-basis="{{ venue.price_basis }}" data-capacity="{{ venue.capacity|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} (Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per attendee{% endif %})</option>
+                  <option value="{{ venue.pk }}" data-price="{{ venue.price }}" data-basis="{{ venue.price_basis }}" data-min-attendees="{{ venue.min_attendees }}" data-max-attendees="{{ venue.max_attendees|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} (Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per attendee{% endif %})</option>
                   {% endfor %}
                 </select>
                 {{ form.venue.errors }}

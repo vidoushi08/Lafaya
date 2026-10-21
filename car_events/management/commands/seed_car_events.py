@@ -12,6 +12,8 @@ VENUES = (
             "A spacious indoor and outdoor setting for large-scale meets, "
             "showcases, and automotive expos."
         ),
+        "min_attendees": 100,
+        "max_attendees": 5000,
         "image": "car_events/images/car_venue_svicc.png",
     },
     {
@@ -21,6 +23,8 @@ VENUES = (
             "A high-capacity sports and entertainment destination for energetic "
             "meets and trackside experiences."
         ),
+        "min_attendees": 100,
+        "max_attendees": 6500,
         "image": "car_events/images/car_venue_cote_dor.png",
     },
     {
@@ -30,6 +34,8 @@ VENUES = (
             "A lively retail destination for community car meets, brand "
             "activations, and public showcases."
         ),
+        "min_attendees": 25,
+        "max_attendees": 1000,
         "image": "car_events/images/car_venue_tribeca.png",
     },
 )
@@ -128,9 +134,14 @@ class Command(BaseCommand):
                     defaults={**defaults, "position": position},
                 )
                 if not created:
+                    updated_fields = []
                     for field, value in defaults.items():
+                        if field in ("min_attendees", "max_attendees"):
+                            continue
                         setattr(item, field, value)
-                    item.save(update_fields=(*defaults.keys(),))
+                        updated_fields.append(field)
+                    if updated_fields:
+                        item.save(update_fields=updated_fields)
 
                 if model is EventPackage:
                     for feature_position, text in enumerate(entry["features"]):
