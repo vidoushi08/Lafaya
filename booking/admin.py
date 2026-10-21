@@ -6,6 +6,8 @@ from django.urls import reverse
 from authentication.admin_site import superadmin_site
 from payments.notifications import send_booking_decision
 from payments.models import Payment
+from staff_task_assignment.admin import StaffAssignmentInline, warn_about_conflicts
+from staff_task_assignment.models import StaffAssignment
 
 from .models import Booking
 
@@ -148,13 +150,25 @@ class BookingAdmin(admin.ModelAdmin):
         "status",
     )
     fields = readonly_fields
-    inlines = (PaymentInline,)
+    inlines = (PaymentInline, StaffAssignmentInline)
     actions = (
         "approve_bookings",
         "reject_bookings",
         "complete_bookings",
         "cancel_bookings",
     )
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for removed in formset.deleted_objects:
+            removed.delete()
+        for instance in instances:
+            if isinstance(instance, StaffAssignment) and instance.created_by_id is None:
+                instance.created_by = request.user
+            instance.save()
+            if isinstance(instance, StaffAssignment):
+                warn_about_conflicts(self, request, instance)
+        formset.save_m2m()
 
     def has_add_permission(self, request):
         return False

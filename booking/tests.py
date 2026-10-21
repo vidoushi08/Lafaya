@@ -172,6 +172,34 @@ class BookingPromotionTests(TestCase):
         )
         self.booking_request.services.add(self.service)
 
+    def test_cancelling_a_booking_frees_its_venue_and_date(self):
+        booking = Booking.objects.get(source_object_id=self.booking_request.pk)
+        Booking.objects.filter(pk=booking.pk).update(status=Booking.Status.CONFIRMED)
+        booking.refresh_from_db()
+
+        booking.mark_cancelled()
+
+        self.booking_request.refresh_from_db()
+        self.assertEqual(
+            self.booking_request.status, SeasideBookingRequest.Status.CANCELLED
+        )
+        replacement = SeasideBookingRequest.objects.create(
+            customer=self.customer,
+            first_name="Ada",
+            last_name="Lovelace",
+            email="ada@example.com",
+            phone="5551234",
+            event_date=self.booking_request.event_date,
+            start_time=time(16, 0),
+            end_time=time(22, 0),
+            expected_guests=60,
+            venue=self.venue,
+            package=self.package,
+            budget=Decimal("12000.00"),
+            estimated_total=Decimal("8500.00"),
+        )
+        self.assertEqual(replacement.venue, self.venue)
+
     def _clear_bookings(self):
         Payment.objects.all().delete()
         Booking.objects.all().delete()

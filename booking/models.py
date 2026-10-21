@@ -161,10 +161,10 @@ class Booking(models.Model):
         if booking.status in (self.Status.REJECTED, self.Status.COMPLETED):
             raise ValidationError("This booking can no longer be cancelled.")
 
-        # The theme request models have no cancelled choice, so the source
-        # request keeps its own status.
         booking.status = self.Status.CANCELLED
         booking.cancelled_at = timezone.now()
         booking.save(update_fields=("status", "cancelled_at", "updated_at"))
+        # A cancelled request no longer holds its venue and date.
+        booking._set_source_status(self.Status.CANCELLED)
         self.refresh_from_db()
         return True
