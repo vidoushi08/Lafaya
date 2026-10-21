@@ -172,6 +172,7 @@
 }
 
 .reviews-booking-select {
+  width: 100%;
   min-height: 42px;
   padding: 0.5rem;
   border: 1px solid var(--color-review-divider);
@@ -181,10 +182,18 @@
   font: inherit;
 }
 
+.reviews-booking-select:focus-visible {
+  outline: 2px solid var(--color-review-star);
+  outline-offset: 2px;
+}
+
 .reviews-form-errors,
 .reviews-form .errorlist {
+  margin: 0;
+  padding-left: 1rem;
   color: #a32222;
   font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 .reviews-messages,
@@ -192,6 +201,33 @@
 .reviews-empty {
   color: var(--color-review-copy);
   font-size: 0.85rem;
+}
+
+.reviews-messages {
+  margin: 0 0 1rem;
+  padding: 0.8rem 1rem 0.8rem 2rem;
+  border: 1px solid var(--color-review-divider);
+  border-radius: var(--radius-btn);
+  background: var(--color-review-tag);
+  line-height: 1.5;
+}
+
+.reviews-own-status {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-review-divider);
+  line-height: 1.5;
+}
+
+.reviews-own-status h3 {
+  margin: 0 0 0.5rem;
+  color: var(--color-review-heading);
+  font-size: 0.9rem;
+}
+
+.reviews-own-status ul {
+  margin: 0;
+  padding-left: 1.1rem;
 }
 
 .reviews-rating-fill-5 {
@@ -454,6 +490,25 @@
   .reviews-list {
     padding: 0;
   }
+}
+
+.reviews-empty {
+  margin: 0;
+  padding: 2rem;
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+  line-height: 1.6;
+}
+
+.reviews-dashboard-link:focus-visible,
+.reviews-submit-button:focus-visible {
+  outline: 2px solid var(--color-review-star);
+  outline-offset: 3px;
+}
+
+.reviews-submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 @media (max-width: 520px) {
