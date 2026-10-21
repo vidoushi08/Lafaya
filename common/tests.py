@@ -1,10 +1,19 @@
+import io
+import json
+import tempfile
+from pathlib import Path
+
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.test import RequestFactory, SimpleTestCase
+from django.core.management import call_command
+from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from common.decorators import account_type_required
 from common.location import get_postal_code, load_cities, load_city_postal_codes
+from common.management.commands.export_catalog_fixtures import CATALOG_MODELS
+from car_events.models import Venue
+from seaside.models import SeasideVenue
 
 
 class LocationDataTests(SimpleTestCase):
@@ -65,3 +74,85 @@ class AccountTypeRequiredTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["Location"], "/authentication/?next=/staff/")
+
+
+class CatalogFixtureExportTests(TestCase):
+    def test_export_contains_only_catalogue_models(self):
+        expected_models = {
+            "birthday": (
+                "BirthdayVenue",
+                "BirthdayPackage",
+                "BirthdayService",
+            ),
+            "car_events": (
+                "Venue",
+                "EventPackage",
+                "PackageFeature",
+                "ExtraService",
+            ),
+            "conference": (
+                "ConferenceVenue",
+                "ConferencePackage",
+                "ConferenceService",
+            ),
+            "seaside": (
+                "SeasideVenue",
+                "SeasidePackage",
+                "SeasideService",
+            ),
+        }
+        self.assertEqual(CATALOG_MODELS, expected_models)
+
+        SeasideVenue.objects.create(
+            name="Fixture venue",
+            location="Mauritius",
+            description="A test catalogue item.",
+            price="100.00",
+        )
+        Venue.objects.create(
+            name="Côte d'Or",
+            location="Mauritius",
+            description="A test car event venue.",
+            price="200.00",
+        )
+        get_user_model().objects.create_user(
+            username="private-user",
+            email="private@example.com",
+            password="test-password",
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            call_command(
+                "export_catalog_fixtures",
+                output_dir=Path(temp_dir),
+                stdout=io.StringIO(),
+            )
+            exported = {}
+            for app_label in CATALOG_MODELS:
+                fixture_path = (
+                    Path(temp_dir)
+                    / app_label
+                    / "fixtures"
+                    / f"{app_label}_catalog.json"
+                )
+                exported[app_label] = json.loads(
+                    fixture_path.read_text(encoding="utf-8")
+                )
+
+        self.assertEqual(set(exported), set(CATALOG_MODELS))
+        self.assertEqual(
+            [item["model"] for item in exported["seaside"]],
+            ["seaside.seasidevenue"],
+        )
+        self.assertEqual(exported["seaside"][0]["fields"]["name"], "Fixture venue")
+        self.assertIn(
+            "Côte d'Or",
+            [item["fields"]["name"] for item in exported["car_events"]],
+        )
+        self.assertTrue(
+            all(
+                item["model"].split(".", 1)[0] == app_label
+                for app_label, items in exported.items()
+                for item in items
+            )
+        )

@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="{% static 'wedding/css/wedding.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+    <script src="{% static 'wedding/js/wedding.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
     <div class="wedding-page">
@@ -178,8 +182,8 @@
                         <p class="package-price-label">Investment</p>
                         <p class="package-price">From Rs 125,000</p>
 
-                        <a href="{% url 'wedding:enquiry' %}?package=elopement-soiree">
-                            Enquire Now
+                        <a href="{% url 'wedding:wedding' %}?package=elopement-soiree#wedding-enquiry">
+                            Book this package
                         </a>
                     </div>
                 </article>
@@ -219,8 +223,8 @@
                         <p class="package-price-label">Investment</p>
                         <p class="package-price">From Rs 180,000</p>
 
-                        <a href="{% url 'wedding:enquiry' %}?package=classic-heritage">
-                            Enquire Now
+                        <a href="{% url 'wedding:wedding' %}?package=classic-heritage#wedding-enquiry">
+                            Book this package
                         </a>
                     </div>
                 </article>
@@ -260,8 +264,8 @@
                         <p class="package-price-label">Investment</p>
                         <p class="package-price">From Rs 210,000</p>
 
-                        <a href="{% url 'wedding:enquiry' %}?package=royal-imperial">
-                            Enquire Now
+                        <a href="{% url 'wedding:wedding' %}?package=royal-imperial#wedding-enquiry">
+                            Book this package
                         </a>
                     </div>
                 </article>
@@ -361,18 +365,67 @@
 
         <!-- Wedding Enquiry Section -->
         <section class="wedding-section wedding-enquiry" id="wedding-enquiry">
-
             <div class="wedding-section-heading">
-                <p class="wedding-eyebrow"> Make It Special</p>
-                <h2>"They didn't just plan a wedding. They built a breathtaking dreamscape that our family will remember forever."</h2>
+                <p class="wedding-eyebrow">Make It Special</p>
+                <h2 id="wedding-enquiry-heading">Book your wedding</h2>
+                <p>Choose your date, venue, and package. We’ll review your request and follow up.</p>
             </div>
 
             <div class="wedding-enquiry-content">
-                <p>From choosing your venue to planning every little detail, our team is here to help.</p>
+                {% if not is_customer %}
+                    <div class="wedding-booking-access" role="status">
+                        <h3>Sign in to book your wedding</h3>
+                        {% if user.is_authenticated %}
+                            <p>Wedding booking requests can only be made from a customer account.</p>
+                        {% else %}
+                            <p>Sign in or create a customer account to submit a wedding booking request.</p>
+                        {% endif %}
+                        <a class="wedding-button wedding-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
+                        {% if not user.is_authenticated %}
+                            <a class="wedding-button wedding-button-outline" href="{% url 'authentication:register' %}">Create an account</a>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    {% for message in messages %}
+                        <p class="wedding-booking-success" role="status">{{ message }}</p>
+                    {% endfor %}
+                    <form class="wedding-booking-form" method="post" action="{% url 'wedding:wedding' %}#wedding-enquiry" data-wedding-booking-form>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}<div class="wedding-booking-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+                        <h3>Contact details</h3>
+                        <div class="wedding-booking-grid">
+                            <label>First name *<input name="first_name" maxlength="150" value="{{ form.first_name.value|default_if_none:'' }}" required>{{ form.first_name.errors }}</label>
+                            <label>Last name *<input name="last_name" maxlength="150" value="{{ form.last_name.value|default_if_none:'' }}" required>{{ form.last_name.errors }}</label>
+                            <label>Email address<input type="email" value="{{ user.email }}" readonly></label>
+                            <label>Phone number *<input name="phone" type="tel" maxlength="32" value="{{ form.phone.value|default_if_none:'' }}" {% if form.phone_locked %}readonly{% endif %} required>{{ form.phone.errors }}</label>
+                        </div>
 
-                <a href="#wedding-enquiry" class="wedding-button wedding-button-primary">
-                    Get in Touch
-                </a>
+                        <h3>Wedding details</h3>
+                        <div class="wedding-booking-grid">
+                            <label>Event name<input name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="e.g. Aisha and Ravi's wedding">{{ form.event_name.errors }}</label>
+                            <label>Event date *<input name="event_date" type="date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>{{ form.event_date.errors }}</label>
+                            <label>Expected guests *<input name="expected_guests" type="number" min="1" max="10000" value="{{ form.expected_guests.value|default_if_none:'' }}" required>{{ form.expected_guests.errors }}</label>
+                            <label>Starting time *<input name="start_time" type="time" value="{{ form.start_time.value|default_if_none:'' }}" required>{{ form.start_time.errors }}</label>
+                            <label>End time *<input name="end_time" type="time" value="{{ form.end_time.value|default_if_none:'' }}" required>{{ form.end_time.errors }}</label>
+                            <label>Preferred venue *<select name="venue" required><option value="">Choose a venue</option>{% for venue in venues %}<option value="{{ venue.pk }}" data-capacity="{{ venue.capacity|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} — {{ venue.location }}</option>{% endfor %}</select>{{ form.venue.errors }}</label>
+                            <label>Your budget (Rs) *<input name="budget" type="number" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" required>{{ form.budget.errors }}</label>
+                            <label>Wedding package *<select name="package" required data-wedding-package><option value="">Choose a package</option>{% for package in packages %}<option value="{{ package.pk }}" data-price="{{ package.price }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' or not form.is_bound and selected_package.pk == package.pk %}selected{% endif %}>{{ package.name }} — Rs {{ package.price|floatformat:0 }} starting price</option>{% endfor %}</select>{{ form.package.errors }}</label>
+                        </div>
+
+                        <fieldset class="wedding-booking-services">
+                            <legend>Optional services</legend>
+                            {% for service in services %}
+                                <label><input type="checkbox" name="optional_services" value="{{ service.pk }}" data-price="{{ service.price }}" data-basis="{{ service.price_basis }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} — Rs {{ service.price|floatformat:0 }}{% if service.price_basis == 'per_guest' %} per guest{% endif %}</label>
+                            {% empty %}
+                                <p>Optional services will appear here when they have a price set.</p>
+                            {% endfor %}
+                            {{ form.optional_services.errors }}
+                        </fieldset>
+                        <div class="wedding-booking-estimate" aria-live="polite">Starting estimate: <strong data-wedding-estimate>Choose a package</strong><p>Final pricing is confirmed by our team after reviewing your request.</p></div>
+                        <label class="wedding-booking-message">Your plans<textarea name="message" rows="4" maxlength="1000" placeholder="Tell us about your wedding plans">{{ form.message.value|default_if_none:'' }}</textarea>{{ form.message.errors }}</label>
+                        <button class="wedding-button wedding-button-primary" type="submit">Submit wedding booking request</button>
+                    </form>
+                {% endif %}
             </div>
 
         </section>

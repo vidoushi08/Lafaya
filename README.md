@@ -52,6 +52,23 @@ pip install -r requirements.txt
   values from `.env`; it uses Django's console email backend until both the Gmail
   address and App Password are set.
 
+  ### Booking approval and demo payments
+
+  Booking requests appear in the superadmin site's **Bookings** queue. Add the
+  approved amount to the booking's payment record, then use the booking action to
+  approve or reject it. Customers can mark an approved booking as paid using the
+  credit/debit card demo from **Payments** in their account area. This demo does
+  not collect card details or charge a real card.
+  After a successful demo payment, the customer receives a receipt email with
+  the booking reference, event date, and amount. Card data is never included in
+  that email or sent to the server. If email delivery fails, the customer can
+  retry sending the receipt from the payment page.
+
+  Individual amounts can be adjusted for each pending booking in the admin.
+  Payment approval and email delivery are separate: if an email cannot be sent,
+  the saved booking decision is retained and the admin reports the delivery
+  failure.
+
 ## Usage
 
 - Apply database migrations:
@@ -76,23 +93,6 @@ python manage.py runserver
 
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
-
-### Existing database created before the custom customer account model
-
-If this project database already has `auth_user` and the built-in admin
-migrations recorded, but does not have `authentication_user`, back up
-`db.sqlite3` before migrating. Then run:
-
-```bash
-python manage.py shell -c 'from django.db import connection; connection.cursor().execute("DELETE FROM django_migrations WHERE app = %s", ["admin"])'
-python manage.py migrate authentication 0001_initial
-python manage.py migrate admin 0003_logentry_add_action_flag_choices --fake
-python manage.py migrate
-```
-
-This preserves existing accounts and admin history while moving the project
-to the custom customer account model. New databases only need the standard
-`python manage.py migrate` command.
 
 ### Seaside catalogue images
 

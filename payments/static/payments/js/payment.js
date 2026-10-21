@@ -1,112 +1,110 @@
-const form = document.getElementById("paymentForm");
+const demoPaymentForm = document.getElementById("demoPaymentForm");
 
-if (form) {
-  const paymentOptions = document.querySelectorAll(".payment-option");
-  const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
-  const cardDetails = document.getElementById("cardDetails");
-  const alternatePayment = document.getElementById("alternatePayment");
-  const alternateMessage = document.getElementById("alternateMessage");
-  const formStatus = document.getElementById("formStatus");
-  const cardNumber = document.getElementById("cardNumber");
-  const expiryDate = document.getElementById("expiryDate");
-  const cvv = document.getElementById("cvv");
+if (demoPaymentForm) {
+  const cardNumber = document.getElementById("demoCardNumber");
+  const cardholderName = document.getElementById("demoCardholderName");
+  const expiryDate = document.getElementById("demoCardExpiry");
+  const cvv = document.getElementById("demoCardCvv");
+  const status = document.getElementById("demoPaymentStatus");
 
-  function setError(input, message) {
+  function setFieldError(input, message) {
+    const error = document.getElementById(`${input.id}Error`);
     const group = input.closest(".payment-form-group");
+    error.textContent = message;
+    input.setAttribute("aria-invalid", String(Boolean(message)));
     group.classList.toggle("payment-form-group-invalid", Boolean(message));
-    group.querySelector(".payment-error-message").textContent = message;
   }
 
-  function validateRequired(input, label) {
-    const valid = input.value.trim() !== "";
-    setError(input, valid ? "" : `${label} is required.`);
-    return valid;
-  }
+  function passesLuhn(number) {
+    const digits = number.replace(/\D/g, "");
+    if (digits.length < 13 || digits.length > 19) {
+      return false;
+    }
 
-  function clearErrors() {
-    form.querySelectorAll(".payment-form-group").forEach((group) => {
-      group.classList.remove("payment-form-group-invalid");
-      group.querySelector(".payment-error-message").textContent = "";
-    });
-  }
-
-  paymentRadios.forEach((radio) => {
-    radio.addEventListener("change", () => {
-      paymentOptions.forEach((option) => {
-        option.classList.toggle("payment-option-selected", option.contains(radio));
-      });
-
-      const isCard = radio.value === "card";
-      cardDetails.hidden = !isCard;
-      cardDetails.querySelectorAll("input").forEach((input) => {
-        input.disabled = !isCard;
-      });
-      alternatePayment.hidden = isCard;
-
-      if (!isCard) {
-        const names = { paypal: "PayPal", applepay: "Apple Pay" };
-        alternateMessage.textContent = `${names[radio.value]} processing is not connected in this demo.`;
+    let sum = 0;
+    for (let index = 0; index < digits.length; index += 1) {
+      let digit = Number(digits[digits.length - 1 - index]);
+      if (index % 2 === 1) {
+        digit *= 2;
+        if (digit > 9) {
+          digit -= 9;
+        }
       }
+      sum += digit;
+    }
+    return sum % 10 === 0;
+  }
 
-      clearErrors();
-      formStatus.textContent = "";
-      formStatus.className = "payment-form-status";
+  function isFutureExpiry(value) {
+    const match = value.match(/^(0[1-9]|1[0-2])\s*\/\s*(\d{2}|\d{4})$/);
+    if (!match) {
+      return false;
+    }
+
+    const month = Number(match[1]);
+    let year = Number(match[2]);
+    if (match[2].length === 2) {
+      year += 2000;
+    }
+    const now = new Date();
+    return year > now.getFullYear()
+      || (year === now.getFullYear() && month >= now.getMonth() + 1);
+  }
+
+  cardNumber.addEventListener("input", () => {
+    const digits = cardNumber.value.replace(/\D/g, "").slice(0, 19);
+    cardNumber.value = digits.replace(/(.{4})/g, "$1 ").trim();
+    setFieldError(cardNumber, "");
+  });
+
+  expiryDate.addEventListener("input", () => {
+    const digits = expiryDate.value.replace(/\D/g, "").slice(0, 6);
+    if (digits.length > 2) {
+      expiryDate.value = `${digits.slice(0, 2)} / ${digits.slice(2)}`;
+    } else {
+      expiryDate.value = digits;
+    }
+    setFieldError(expiryDate, "");
+  });
+
+  cvv.addEventListener("input", () => {
+    cvv.value = cvv.value.replace(/\D/g, "").slice(0, 4);
+    setFieldError(cvv, "");
+  });
+
+  [cardholderName, cardNumber, expiryDate, cvv].forEach((input) => {
+    input.addEventListener("input", () => {
+      status.textContent = "";
+      status.className = "payment-form-status";
     });
   });
 
-  cardNumber.addEventListener("input", (event) => {
-    const digits = event.target.value.replace(/\D/g, "").slice(0, 16);
-    event.target.value = digits.replace(/(.{4})/g, "$1 ").trim();
-  });
-
-  expiryDate.addEventListener("input", (event) => {
-    let digits = event.target.value.replace(/\D/g, "").slice(0, 4);
-    if (digits.length > 2) {
-      digits = `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-    }
-    event.target.value = digits;
-  });
-
-  cvv.addEventListener("input", (event) => {
-    event.target.value = event.target.value.replace(/\D/g, "").slice(0, 4);
-  });
-
-  form.addEventListener("submit", (event) => {
+  demoPaymentForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    formStatus.textContent = "";
-    formStatus.className = "payment-form-status";
+    const validNumber = passesLuhn(cardNumber.value);
+    const validName = cardholderName.value.trim().length >= 2;
+    const validExpiry = isFutureExpiry(expiryDate.value.trim());
+    const validCvv = /^\d{3,4}$/.test(cvv.value);
 
-    const selectedMethod = form.querySelector('input[name="paymentMethod"]:checked').value;
-    let valid = true;
+    setFieldError(cardNumber, validNumber ? "" : "Enter a valid card number.");
+    setFieldError(cardholderName, validName ? "" : "Enter the name shown on the card.");
+    setFieldError(expiryDate, validExpiry ? "" : "Enter a valid future expiry date (MM / YY).");
+    setFieldError(cvv, validCvv ? "" : "Enter a 3 or 4-digit security code.");
 
-    if (selectedMethod === "card") {
-      const cardDigits = cardNumber.value.replace(/\D/g, "");
-      const name = document.getElementById("cardholderName");
-      const expiryMatch = expiryDate.value.match(/^(0[1-9]|1[0-2])\s\/\s\d{2}$/);
-      const cvvValid = /^\d{3,4}$/.test(cvv.value);
-      const cardValid = cardDigits.length === 16;
-      const expiryValid = Boolean(expiryMatch);
-
-      setError(cardNumber, cardValid ? "" : "Enter a valid 16-digit card number.");
-      setError(expiryDate, expiryValid ? "" : "Use a valid MM / YY date.");
-      setError(cvv, cvvValid ? "" : "Enter a valid 3 or 4-digit CVV.");
-
-      valid = validateRequired(name, "Cardholder name") && cardValid && expiryValid && cvvValid;
-    }
-
-    valid = validateRequired(document.getElementById("streetAddress"), "Street address") && valid;
-    valid = validateRequired(document.getElementById("city"), "City") && valid;
-    valid = validateRequired(document.getElementById("postalCode"), "Postal code") && valid;
-    valid = validateRequired(document.getElementById("country"), "Country") && valid;
-
-    if (!valid) {
-      formStatus.textContent = "Please correct the highlighted fields.";
-      formStatus.classList.add("payment-form-status-error");
-      form.querySelector(".payment-form-group-invalid input:not(:disabled), .payment-form-group-invalid select:not(:disabled)")?.focus();
+    if (!validNumber || !validName || !validExpiry || !validCvv) {
+      status.textContent = "Please correct the highlighted card fields.";
+      status.classList.add("payment-form-status-error");
+      demoPaymentForm.querySelector('[aria-invalid="true"]')?.focus();
       return;
     }
 
-    formStatus.textContent = "Your details pass the demo checks. No payment was submitted or charged.";
-    formStatus.classList.add("payment-form-status-success");
+    status.textContent = "Completing demo payment. No real charge will be made.";
+    status.classList.add("payment-form-status-success");
+
+    cardNumber.value = "";
+    cardholderName.value = "";
+    expiryDate.value = "";
+    cvv.value = "";
+    demoPaymentForm.submit();
   });
 }

@@ -1,0 +1,260 @@
+[
+{
+  "model": "car_events.venue",
+  "pk": 1,
+  "fields": {
+    "price": "70000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "SVICC",
+    "location": "Paille, Mauritius",
+    "description": "A spacious indoor and outdoor setting for large-scale meets, showcases, and automotive expos.",
+    "image": "car_events/images/car_venue_svicc.png",
+    "uploaded_image": "",
+    "min_attendees": 100,
+    "max_attendees": 5000
+  }
+},
+{
+  "model": "car_events.venue",
+  "pk": 2,
+  "fields": {
+    "price": "35000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Côte d'Or",
+    "location": "St Pierre, Mauritius",
+    "description": "A high-capacity sports and entertainment destination for energetic meets and trackside experiences.",
+    "image": "car_events/images/car_venue_cote_dor.png",
+    "uploaded_image": "",
+    "min_attendees": 100,
+    "max_attendees": 6500
+  }
+},
+{
+  "model": "car_events.venue",
+  "pk": 3,
+  "fields": {
+    "price": "50000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Tribeca Mall",
+    "location": "Trianon, Mauritius",
+    "description": "A lively retail destination for community car meets, brand activations, and public showcases.",
+    "image": "car_events/images/car_venue_tribeca.png",
+    "uploaded_image": "",
+    "min_attendees": 25,
+    "max_attendees": 1000
+  }
+},
+{
+  "model": "car_events.eventpackage",
+  "pk": 1,
+  "fields": {
+    "price": "28900.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Starter Meet",
+    "tagline": "Focused assemblies",
+    "description": "",
+    "is_featured": false,
+    "image": "",
+    "uploaded_image": "",
+    "min_attendees": 1,
+    "max_attendees": null
+  }
+},
+{
+  "model": "car_events.eventpackage",
+  "pk": 2,
+  "fields": {
+    "price": "62500.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Premium Meet",
+    "tagline": "High-energy live events",
+    "description": "",
+    "is_featured": true,
+    "image": "",
+    "uploaded_image": "",
+    "min_attendees": 1,
+    "max_attendees": null
+  }
+},
+{
+  "model": "car_events.eventpackage",
+  "pk": 3,
+  "fields": {
+    "price": "89000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Festival Experience",
+    "tagline": "Built around your vision",
+    "description": "",
+    "is_featured": false,
+    "image": "",
+    "uploaded_image": "",
+    "min_attendees": 1,
+    "max_attendees": null
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 1,
+  "fields": {
+    "event_package": 1,
+    "text": "Venue sourcing and booking",
+    "position": 0
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 2,
+  "fields": {
+    "event_package": 1,
+    "text": "Event-day coordination",
+    "position": 1
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 3,
+  "fields": {
+    "event_package": 1,
+    "text": "Registration planning",
+    "position": 2
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 4,
+  "fields": {
+    "event_package": 1,
+    "text": "Promotional support",
+    "position": 3
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 5,
+  "fields": {
+    "event_package": 2,
+    "text": "Everything in Starter Meet",
+    "position": 0
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 6,
+  "fields": {
+    "event_package": 2,
+    "text": "Sponsor coordination",
+    "position": 1
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 7,
+  "fields": {
+    "event_package": 2,
+    "text": "Professional photo and video",
+    "position": 2
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 8,
+  "fields": {
+    "event_package": 2,
+    "text": "Show-and-shine programming",
+    "position": 3
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 9,
+  "fields": {
+    "event_package": 3,
+    "text": "Multi-zone event planning",
+    "position": 0
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 10,
+  "fields": {
+    "event_package": 3,
+    "text": "Brand and sponsor activations",
+    "position": 1
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 11,
+  "fields": {
+    "event_package": 3,
+    "text": "Live entertainment coordination",
+    "position": 2
+  }
+},
+{
+  "model": "car_events.packagefeature",
+  "pk": 12,
+  "fields": {
+    "event_package": 3,
+    "text": "Full event production support",
+    "position": 3
+  }
+},
+{
+  "model": "car_events.extraservice",
+  "pk": 1,
+  "fields": {
+    "price": "11900.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "VIP Experience",
+    "description": "Set aside premium parking, lounge access, catering, and branded passes for your special guests.",
+    "image": "car_events/images/car_services_vip.png",
+    "highlights": "",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "car_events.extraservice",
+  "pk": 2,
+  "fields": {
+    "price": "9800.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Show & Shine",
+    "description": "Give standout builds their moment with registrations, judging, trophies, and an awards ceremony.",
+    "image": "car_events/images/car_services_show.png",
+    "highlights": "",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "car_events.extraservice",
+  "pk": 3,
+  "fields": {
+    "price": "7900.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "JDM Experience",
+    "description": "Bring Japanese street-car culture to life with themed branding, categories, and dedicated awards.",
+    "image": "car_events/images/car_services_jdm.png",
+    "highlights": "",
+    "uploaded_image": ""
+  }
+}
+]

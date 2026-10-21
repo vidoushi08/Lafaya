@@ -12,6 +12,8 @@ VENUES = (
             "A spacious indoor and outdoor setting for large-scale meets, "
             "showcases, and automotive expos."
         ),
+        "min_attendees": 100,
+        "max_attendees": 5000,
         "image": "car_events/images/car_venue_svicc.png",
     },
     {
@@ -21,6 +23,8 @@ VENUES = (
             "A high-capacity sports and entertainment destination for energetic "
             "meets and trackside experiences."
         ),
+        "min_attendees": 100,
+        "max_attendees": 6500,
         "image": "car_events/images/car_venue_cote_dor.png",
     },
     {
@@ -30,6 +34,8 @@ VENUES = (
             "A lively retail destination for community car meets, brand "
             "activations, and public showcases."
         ),
+        "min_attendees": 25,
+        "max_attendees": 1000,
         "image": "car_events/images/car_venue_tribeca.png",
     },
 )
@@ -80,6 +86,7 @@ EXTRAS = (
             "Set aside premium parking, lounge access, catering, and branded "
             "passes for your special guests."
         ),
+        "highlights": "Premium parking\nLounge access",
         "image": "car_events/images/car_services_vip.png",
     },
     {
@@ -88,6 +95,7 @@ EXTRAS = (
             "Give standout builds their moment with registrations, judging, "
             "trophies, and an awards ceremony."
         ),
+        "highlights": "Judging\nAwards ceremony",
         "image": "car_events/images/car_services_show.png",
     },
     {
@@ -96,40 +104,56 @@ EXTRAS = (
             "Bring Japanese street-car culture to life with themed branding, "
             "categories, and dedicated awards."
         ),
+        "highlights": "Themed categories\nDedicated awards",
         "image": "car_events/images/car_services_jdm.png",
     },
 )
 
 
 class Command(BaseCommand):
-    help = "Create or update the default car event venues, packages, features, and services."
+    help = (
+        "Create or refresh the default car event catalogue without overwriting "
+        "prices or superadmin availability settings."
+    )
 
     @transaction.atomic
     def handle(self, *args, **options):
-        for venue_data in VENUES:
-            Venue.objects.update_or_create(
-                name=venue_data["name"], defaults=venue_data
-            )
-
-        for package_data in PACKAGES:
-            package, _ = EventPackage.objects.update_or_create(
-                name=package_data["name"],
-                defaults={
+        for model, entries in (
+            (Venue, VENUES),
+            (EventPackage, PACKAGES),
+            (ExtraService, EXTRAS),
+        ):
+            for position, entry in enumerate(entries):
+                defaults = {
                     key: value
-                    for key, value in package_data.items()
+                    for key, value in entry.items()
                     if key != "features"
-                },
-            )
-            for position, text in enumerate(package_data["features"]):
-                PackageFeature.objects.update_or_create(
-                    event_package=package,
-                    text=text,
-                    defaults={"position": position},
+                }
+                item, created = model.objects.get_or_create(
+                    name=entry["name"],
+                    defaults={**defaults, "position": position},
                 )
+                if not created:
+                    updated_fields = []
+                    for field, value in defaults.items():
+                        if field in ("min_attendees", "max_attendees"):
+                            continue
+                        setattr(item, field, value)
+                        updated_fields.append(field)
+                    if updated_fields:
+                        item.save(update_fields=updated_fields)
 
-        for extra_data in EXTRAS:
-            ExtraService.objects.update_or_create(
-                name=extra_data["name"], defaults=extra_data
+                if model is EventPackage:
+                    for feature_position, text in enumerate(entry["features"]):
+                        PackageFeature.objects.update_or_create(
+                            event_package=item,
+                            text=text,
+                            defaults={"position": feature_position},
+                        )
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                "Car event catalogue seeded. Set prices and price bases in superadmin "
+                "before offering items for booking."
             )
-
-        self.stdout.write(self.style.SUCCESS("Car event content seeded successfully."))
+        )

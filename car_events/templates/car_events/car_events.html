@@ -13,141 +13,300 @@
       <img class="car-events-hero-image" src="{% static 'images/events/cars_main.png' %}" alt="A crowd gathered around cars at an automotive meet">
       <div class="car-events-hero-overlay"></div>
       <div class="car-events-hero-content">
-        <p class="car-events-eyebrow">Automotive event production</p>
-        <h1 id="car-events-hero-heading">Turn your car meet into a landmark event</h1>
-        <p class="car-events-hero-copy">From venue booking and sponsorship planning to event management and marketing, we deliver unforgettable automotive experiences across Mauritius.</p>
+        <p class="car-events-eyebrow">Lafaya automotive gatherings</p>
+        <h1 id="car-events-hero-heading">Where the road meets the moment.</h1>
+        <p class="car-events-hero-copy">From intimate club meets to full-scale showcases, we bring together the right venue, production, and automotive culture for an event worth remembering.</p>
         <div class="car-events-hero-actions">
           <a class="car-events-button car-events-button-primary" href="#car-events-venues">Explore venues</a>
-          <a class="car-events-button car-events-button-outline" href="#car-events-services">Explore services</a>
+          <a class="car-events-button car-events-button-outline" href="#car-events-enquiry">Plan your event</a>
         </div>
       </div>
     </section>
 
-    {% if messages %}
-      <div class="car-events-messages" role="status" aria-live="polite">
-        {% for message in messages %}
-          <p class="car-events-message car-events-message-{{ message.tags }}">{{ message }}</p>
-        {% endfor %}
+    <section class="car-events-introduction">
+      <div>
+        <p class="car-events-eyebrow">Made for the moment</p>
+        <h2>Bring your community together.</h2>
       </div>
-    {% endif %}
+      <p class="car-events-introduction-copy">From the first car rolling in to the final awards, Lafaya takes care of the details behind a great automotive event. Choose your setting, shape your experience, and leave the event-day logistics to us.</p>
+    </section>
 
-    <section class="car-events-band car-events-venues" id="car-events-venues" aria-labelledby="car-events-venues-heading">
-      <div class="car-events-section-heading car-events-section-heading-row">
+    <section class="car-events-section car-events-venues" id="car-events-venues" aria-labelledby="car-events-venues-heading">
+      <div class="car-events-section-heading">
         <div>
-          <p class="car-events-eyebrow">Made for every kind of meet</p>
-          <h2 id="car-events-venues-heading">Find your perfect venue</h2>
+          <p class="car-events-eyebrow">The right setting</p>
+          <h2 id="car-events-venues-heading">Find your perfect venue.</h2>
         </div>
-        <a class="car-events-section-link" href="#car-events-packages">Explore packages <i class="fa-solid fa-arrow-right"></i></a>
+        <button class="car-events-explore-button" type="button" data-explore-toggle="car-events-venue-list" data-label-more="Explore venues" data-label-less="Show fewer venues" aria-expanded="false" aria-controls="car-events-venue-list" hidden>
+          <span>Explore venues</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="car-events-card-grid">
+      <div class="car-events-card-grid" id="car-events-venue-list" data-explore-list>
         {% for venue in venues %}
-          <article class="car-events-venue-card">
-            {% if venue.image %}
-              <img src="{% static venue.image %}" alt="{{ venue.name }} event venue in {{ venue.location }}">
-            {% endif %}
-            <div class="car-events-card-content">
-              <p class="car-events-card-location">{{ venue.location }}</p>
-              <h3>{{ venue.name }}</h3>
-              <p>{{ venue.description }}</p>
-            </div>
-            <a class="car-events-card-link" href="#car-events-enquiry">Explore venue <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
+        <article class="car-events-card">
+          {% if venue.uploaded_image %}
+          <img src="{{ venue.uploaded_image.url }}" alt="{{ venue.name }}">
+          {% elif venue.image %}
+          <img src="{% static venue.image %}" alt="{{ venue.name }}">
+          {% endif %}
+          <div class="car-events-card-content">
+            <p class="car-events-card-location">{{ venue.location }}</p>
+            <h3>{{ venue.name }}</h3>
+            <p>{{ venue.description }}</p>
+            <p>{% if venue.max_attendees %}{{ venue.min_attendees }}–{{ venue.max_attendees }} attendees{% else %}{{ venue.min_attendees }}+ attendees{% endif %}</p>
+          </div>
+          <div class="car-events-package-footer">
+            <strong>{% if venue.price is not None %}Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per attendee{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
+          </div>
+        </article>
         {% empty %}
-          <p>Venue options are being updated. Please contact us to discuss your event.</p>
+        <p class="car-events-empty-state">Car event venues will be available again shortly.</p>
         {% endfor %}
       </div>
     </section>
 
-    <section class="car-events-packages" id="car-events-packages" aria-labelledby="car-events-packages-heading">
-      <div class="car-events-section-heading car-events-section-heading-row">
+    <section class="car-events-section car-events-packages" aria-labelledby="car-events-packages-heading">
+      <div class="car-events-section-heading">
         <div>
-          <p class="car-events-eyebrow">Flexible event planning</p>
-          <h2 id="car-events-packages-heading">Choose your event package</h2>
+          <p class="car-events-eyebrow">Simple, considered packages</p>
+          <h2 id="car-events-packages-heading">Choose your kind of meet.</h2>
         </div>
-        <a class="car-events-section-link" href="#car-events-enquiry">Compare packages <i class="fa-solid fa-arrow-right"></i></a>
+        <button class="car-events-explore-button" type="button" data-explore-toggle="car-events-package-list" data-label-more="Explore packages" data-label-less="Show fewer packages" aria-expanded="false" aria-controls="car-events-package-list" hidden>
+          <span>Explore packages</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="car-events-package-grid">
+      <div class="car-events-package-grid" id="car-events-package-list" data-explore-list>
         {% for package in packages %}
-          <article class="car-events-package{% if package.is_featured %} car-events-package-featured{% endif %}">
-            <div class="car-events-package-heading">
-              <p>{{ package.tagline }}</p>
-              <h3>{{ package.name }}</h3>
-            </div>
-            {% if package.description %}
-              <p class="car-events-package-description">{{ package.description }}</p>
-            {% endif %}
-            <ul>
-              {% for feature in package.features.all %}
-                <li>{{ feature.text }}</li>
-              {% empty %}
-                <li>Tailored planning for your event</li>
-              {% endfor %}
-            </ul>
-            <a href="#car-events-enquiry">Plan your meet <i class="fa-solid fa-arrow-right"></i></a>
-          </article>
+        <article class="car-events-package{% if package.is_featured %} car-events-package-featured{% endif %}">
+          {% if package.uploaded_image %}
+          <img class="car-events-package-image" src="{{ package.uploaded_image.url }}" alt="{{ package.name }}">
+          {% elif package.image %}
+          <img class="car-events-package-image" src="{% static package.image %}" alt="{{ package.name }}">
+          {% endif %}
+          <div class="car-events-package-heading">
+            <p>{{ package.tagline }}</p>
+            <h3>{{ package.name }}</h3>
+          </div>
+          {% if package.description %}
+          <p class="car-events-package-description">{{ package.description }}</p>
+          {% endif %}
+          <ul>
+            {% for feature in package.feature_list %}
+            <li>{{ feature }}</li>
+            {% empty %}
+            <li>Event details can be tailored to your meet.</li>
+            {% endfor %}
+          </ul>
+          <div class="car-events-package-footer">
+            <strong>{% if package.price is not None %}Rs {{ package.price|floatformat:0 }}{% if package.price_basis == "per_guest" %} per attendee{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
+          </div>
+        </article>
         {% empty %}
-          <p class="car-events-empty">Our event packages are being updated. Contact us to plan a custom event.</p>
+        <p class="car-events-empty-state">Car event packages will be available again shortly.</p>
         {% endfor %}
       </div>
     </section>
 
-    <section class="car-events-band car-events-services" id="car-events-services" aria-labelledby="car-events-services-heading">
-      <div class="car-events-section-heading car-events-section-heading-centered">
-        <p class="car-events-eyebrow">Make it yours</p>
-        <h2 id="car-events-services-heading">Add something extra</h2>
-        <p>Build a meet that gives drivers and fans a reason to stay longer.</p>
+    <section class="car-events-section car-events-services" aria-labelledby="car-events-services-heading">
+      <div class="car-events-section-heading">
+        <div>
+          <p class="car-events-eyebrow">Every detail, beautifully handled</p>
+          <h2 id="car-events-services-heading">Car event enhancements.</h2>
+        </div>
+        <button class="car-events-explore-button" type="button" data-explore-toggle="car-events-service-list" data-label-more="Explore services" data-label-less="Show fewer services" aria-expanded="false" aria-controls="car-events-service-list" hidden>
+          <span>Explore services</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
       </div>
-
-      <div class="car-events-service-grid">
-        {% for extra in extras %}
-          <article class="car-events-service">
-            {% if extra.image %}
-              <img src="{% static extra.image %}" alt="{{ extra.name }}">
-            {% endif %}
-            <div class="car-events-service-content">
-              <h3>{{ extra.name }}</h3>
-              <p>{{ extra.description }}</p>
+      <div class="car-events-service-grid" id="car-events-service-list" data-explore-list>
+        {% for service in extras %}
+        <article class="car-events-service">
+          {% if service.uploaded_image %}
+          <img src="{{ service.uploaded_image.url }}" alt="{{ service.name }}">
+          {% elif service.image %}
+          <img src="{% static service.image %}" alt="{{ service.name }}">
+          {% endif %}
+          <div class="car-events-service-content">
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            {% if service.highlight_list %}
+            <div class="car-events-service-tags">
+              {% for highlight in service.highlight_list %}
+              <span>{{ highlight }}</span>
+              {% endfor %}
             </div>
-          </article>
+            {% endif %}
+          </div>
+          <div class="car-events-package-footer">
+            <strong>{% if service.price is not None %}Rs {{ service.price|floatformat:0 }}{% if service.price_basis == "per_guest" %} per attendee{% else %} per booking{% endif %}{% else %}Price on request{% endif %}</strong>
+          </div>
+        </article>
         {% empty %}
-          <p>No additional services are currently listed. Ask us about custom options.</p>
+        <p class="car-events-empty-state">Car event services will be available again shortly.</p>
         {% endfor %}
+      </div>
+      <div class="car-events-book-cta">
+        <a class="car-events-button car-events-button-primary" href="#car-events-enquiry">Want to book with Lafaya? <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </section>
 
     <section class="car-events-testimonial">
-      <blockquote>“Lafaya handled the venue, permits, sponsors, and schedules. Our crew simply showed up and enjoyed the meet.”</blockquote>
+      <blockquote>“From the venue to the final award, every detail was handled. Our club got to enjoy the meet right alongside everyone else.”</blockquote>
       <cite>Car club organizer</cite>
     </section>
 
     <section class="car-events-enquiry" id="car-events-enquiry" aria-labelledby="car-events-enquiry-heading">
-      <div class="car-events-enquiry-heading">
-        <p class="car-events-eyebrow">Ready when you are</p>
-        <h2 id="car-events-enquiry-heading">Let’s make your next meet one to remember.</h2>
-        <p>Share a few details and our team will get in touch to plan your event.</p>
-      </div>
-      <form class="car-events-enquiry-form" id="car-events-enquiry-form" method="post">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-          <div class="car-events-form-errors" role="alert">{{ form.non_field_errors }}</div>
-        {% endif %}
-        {% for field in form %}
-          <div class="car-events-form-field{% if field.name == 'extras' %} car-events-form-field-extras{% endif %}">
-            {% if field.name != 'extras' %}
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {% else %}
-              <span class="car-events-form-label">{{ field.label }}</span>
+      <img class="car-events-enquiry-background" src="{% static 'images/events/cars_main.png' %}" alt="" aria-hidden="true">
+      <div class="car-events-enquiry-shade"></div>
+      <div class="car-events-enquiry-panel">
+        <header class="car-events-enquiry-heading">
+          <p class="car-events-eyebrow">Automotive gatherings</p>
+          <h2 id="car-events-enquiry-heading">Book your car event</h2>
+          <p>Tell us what you are planning, and we’ll help bring your meet to life.</p>
+        </header>
+        {% if not is_customer %}
+        <div class="car-events-access-notice" role="status">
+          <h3>Sign in to book your event</h3>
+          {% if user.is_authenticated %}
+          <p>Car event booking requests can only be made from a customer account. Please sign in with your customer account to continue.</p>
+          {% else %}
+          <p>You need a customer account to make a booking request. Sign in or create an account, then you’ll come straight back here.</p>
+          {% endif %}
+          <div class="car-events-access-actions">
+            <a class="car-events-button car-events-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
+            {% if not user.is_authenticated %}
+            <a class="car-events-button car-events-button-outline" href="{% url 'authentication:register' %}">Create an account</a>
             {% endif %}
-            {{ field }}
-            {% for error in field.errors %}
-              <p class="car-events-form-error" role="alert">{{ error }}</p>
-            {% endfor %}
           </div>
+        </div>
+        {% else %}
+        {% for message in messages %}
+        <p class="car-events-form-success" role="status">{{ message }}</p>
         {% endfor %}
-        <button class="car-events-button car-events-button-light" type="submit">Send enquiry <i class="fa-solid fa-arrow-right"></i></button>
-      </form>
+        {% if form.non_field_errors %}
+        <div class="car-events-form-errors" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <form class="car-events-enquiry-form" method="post" action="{% url 'car_events:car_events' %}#car-events-enquiry" data-booking-form>
+          {% csrf_token %}
+          <section class="car-events-form-section" aria-labelledby="car-events-contact-heading">
+            <h3 id="car-events-contact-heading">Contact details</h3>
+            <div class="car-events-form-grid">
+              <div class="car-events-form-field">
+                <label for="first-name">First name <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="text" id="first-name" name="first_name" autocomplete="given-name" value="{{ form.first_name.value|default_if_none:'' }}" maxlength="150" required>
+                {{ form.first_name.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="last-name">Last name <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="text" id="last-name" name="last_name" autocomplete="family-name" value="{{ form.last_name.value|default_if_none:'' }}" maxlength="150" required>
+                {{ form.last_name.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="email-address">Email address <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="email" id="email-address" autocomplete="email" value="{{ user.email }}" readonly>
+              </div>
+              <div class="car-events-form-field">
+                <label for="phone-number">Phone number <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="tel" id="phone-number" name="phone" autocomplete="tel" value="{{ form.phone.value|default_if_none:'' }}" maxlength="32" {% if form.phone_locked %}readonly{% endif %} required>
+                {{ form.phone.errors }}
+              </div>
+            </div>
+          </section>
+
+          <section class="car-events-form-section" aria-labelledby="car-events-event-heading">
+            <h3 id="car-events-event-heading">Event specifics</h3>
+            <div class="car-events-form-grid">
+              <div class="car-events-form-field">
+                <label for="event-type">Event type</label>
+                <input class="car-events-form-control" type="text" id="event-type" value="Car Event" readonly>
+              </div>
+              <div class="car-events-form-field">
+                <label for="event-name">Event name</label>
+                <input class="car-events-form-control" type="text" id="event-name" name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="e.g. Mauritius Motor Meet">
+                {{ form.event_name.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="event-date">Event date <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="date" id="event-date" name="event_date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>
+                {{ form.event_date.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="attendee-count">Expected attendees <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="number" id="attendee-count" name="expected_attendees" min="1" max="10000" step="1" value="{{ form.expected_attendees.value|default_if_none:'' }}" placeholder="e.g. 150" required>
+                {{ form.expected_attendees.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="start-time">Starting time <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="time" id="start-time" name="start_time" value="{{ form.start_time.value|default_if_none:'' }}" required>
+                {{ form.start_time.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="end-time">End time <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="time" id="end-time" name="end_time" value="{{ form.end_time.value|default_if_none:'' }}" required>
+                {{ form.end_time.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="venue">Preferred venue <span aria-hidden="true">*</span></label>
+                <select class="car-events-form-control" id="venue" name="venue" required>
+                  <option value="">Choose a venue</option>
+                  {% for venue in bookable_venues %}
+                  <option value="{{ venue.pk }}" data-price="{{ venue.price }}" data-basis="{{ venue.price_basis }}" data-min-attendees="{{ venue.min_attendees }}" data-max-attendees="{{ venue.max_attendees|default_if_none:'' }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} (Rs {{ venue.price|floatformat:0 }}{% if venue.price_basis == "per_guest" %} per attendee{% endif %})</option>
+                  {% endfor %}
+                </select>
+                {{ form.venue.errors }}
+              </div>
+              <div class="car-events-form-field">
+                <label for="budget">Your budget (Rs) <span aria-hidden="true">*</span></label>
+                <input class="car-events-form-control" type="number" id="budget" name="budget" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" placeholder="e.g. 150000" required>
+                {{ form.budget.errors }}
+              </div>
+            </div>
+          </section>
+
+          <section class="car-events-form-section" aria-labelledby="car-events-options-heading">
+            <h3 id="car-events-options-heading">Packages &amp; options</h3>
+            <div class="car-events-form-field car-events-form-package">
+              <label for="package">Select your package <span aria-hidden="true">*</span></label>
+              <select class="car-events-form-control" id="package" name="package" required>
+                <option value="">Choose a package</option>
+                {% for package in bookable_packages %}
+                <option value="{{ package.pk }}" data-price="{{ package.price }}" data-basis="{{ package.price_basis }}" data-min-attendees="{{ package.min_attendees }}" data-max-attendees="{{ package.max_attendees|default_if_none:'' }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' %}selected{% endif %}>{{ package.name }} (Rs {{ package.price|floatformat:0 }}{% if package.price_basis == "per_guest" %} per attendee{% endif %})</option>
+                {% endfor %}
+              </select>
+              {{ form.package.errors }}
+            </div>
+            <fieldset class="car-events-form-field car-events-form-field-services">
+              <legend>Optional services</legend>
+              <div class="car-events-form-options">
+                {% for service in bookable_services %}
+                <label><input type="checkbox" name="optional_services" value="{{ service.pk }}" data-price="{{ service.price }}" data-basis="{{ service.price_basis }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} (Rs {{ service.price|floatformat:0 }}{% if service.price_basis == "per_guest" %} per attendee{% endif %})</label>
+                {% endfor %}
+              </div>
+              {{ form.optional_services.errors }}
+            </fieldset>
+            <div class="car-events-estimate" data-estimate aria-live="polite">
+              <p class="car-events-estimate-total">Estimated total: <strong data-estimate-total>Rs 0</strong></p>
+              <p class="car-events-estimate-note" data-estimate-note>Choose a venue and package to see your estimate.</p>
+            </div>
+          </section>
+
+          <section class="car-events-form-section car-events-form-section-vision" aria-labelledby="car-events-vision-heading">
+            <h3 id="car-events-vision-heading">Your vision</h3>
+            <div class="car-events-form-field car-events-form-field-message">
+              <label for="expectations">Short message <span class="car-events-form-label-note">(your expectations)</span></label>
+              <textarea class="car-events-form-control" id="expectations" name="message" rows="3" maxlength="1000" placeholder="Tell us what you have in mind for your car event.">{{ form.message.value|default_if_none:'' }}</textarea>
+              {{ form.message.errors }}
+            </div>
+          </section>
+
+          <button class="car-events-button car-events-button-submit" type="submit">Submit booking request <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <p class="car-events-form-required-note"><span aria-hidden="true">*</span> Required fields</p>
+        </form>
+        {% endif %}
+      </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'car_events/js/car_events.js' %}"></script>
 {% endblock %}
