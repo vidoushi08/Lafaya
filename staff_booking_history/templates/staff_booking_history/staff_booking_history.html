@@ -5,6 +5,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'staff_booking_history/css/staff_booking_history.css' %}">
+  <link rel="stylesheet" href="{% static 'css/staff_shared.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -35,120 +36,95 @@
 
       <div class="booking-history-summary-row">
         <div class="booking-history-summary-card">
-          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-soft"></span> 248</span>
-          <p>Total historical bookings</p>
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-soft"></span> {{ totals.total }}</span>
+          <p>Assigned bookings</p>
         </div>
         <div class="booking-history-summary-card">
-          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-success"></span> 231</span>
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-warning"></span> {{ totals.upcoming }}</span>
+          <p>Confirmed (upcoming)</p>
+        </div>
+        <div class="booking-history-summary-card">
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-success"></span> {{ totals.completed }}</span>
           <p>Completed</p>
         </div>
         <div class="booking-history-summary-card">
-          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-warning"></span> 11</span>
-          <p>Awaiting review</p>
-        </div>
-        <div class="booking-history-summary-card">
-          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-danger"></span> 6</span>
+          <span class="booking-history-summary-inline"><span class="booking-history-dot booking-history-dot-danger"></span> {{ totals.cancelled }}</span>
           <p>Cancelled</p>
         </div>
       </div>
 
       <section class="booking-history-table-panel">
         <div class="booking-history-toolbar">
-          <div class="booking-history-search-wrap">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search staff, event ID or staff ID..." aria-label="Search bookings" />
-          </div>
-
-          <div class="booking-history-filter-group">
-            <button type="button" class="booking-history-filter-btn">All statuses <i class="fa-solid fa-chevron-down"></i></button>
-            <button type="button" class="booking-history-filter-btn">All events <i class="fa-solid fa-chevron-down"></i></button>
-            <button type="button" class="booking-history-filter-btn">01 Jun — 22 Sep 2026 <i class="fa-solid fa-chevron-down"></i></button>
-          </div>
+          <form method="get" class="staff-filter-form">
+            <div class="staff-filter-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="search" name="q" value="{{ query }}" placeholder="Search reference, event name or venue" aria-label="Search bookings">
+            </div>
+            <select name="status" aria-label="Filter by status">
+              <option value="">All statuses</option>
+              {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if value == status %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <select name="theme" aria-label="Filter by theme">
+              <option value="">All themes</option>
+              {% for item in themes %}
+                <option value="{{ item }}" {% if item == theme %}selected{% endif %}>{{ item }}</option>
+              {% endfor %}
+            </select>
+            <input type="date" name="date_from" value="{{ date_from }}" aria-label="Events from">
+            <input type="date" name="date_to" value="{{ date_to }}" aria-label="Events until">
+            <button type="submit" class="staff-filter-submit">Filter</button>
+            {% if has_filters %}
+              <a href="{% url 'staff_booking_history:history' %}" class="staff-filter-reset">Clear</a>
+            {% endif %}
+          </form>
         </div>
 
         <div class="booking-history-table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Staff name</th>
-                <th>Date assigned</th>
-                <th>Date completed</th>
-                <th>Event type</th>
-                <th>Event ID</th>
-                <th>Staff ID</th>
+                <th>Reference</th>
+                <th>Event</th>
+                <th>Theme</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Client</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><span class="booking-history-avatar avatar-brown">LI</span> Liam</td>
-                <td>12 July 2026</td>
-                <td>10 September 2026</td>
-                <td>Birthday</td>
-                <td>EV-260712-84</td>
-                <td>STF-0184</td>
-                <td><span class="booking-history-status success">Completed</span></td>
-              </tr>
-              <tr>
-                <td><span class="booking-history-avatar avatar-gold">AO</span> Amara Okafor</td>
-                <td>28 June 2026</td>
-                <td>02 September 2026</td>
-                <td>Wedding</td>
-                <td>EV-260628-71</td>
-                <td>STF-0062</td>
-                <td><span class="booking-history-status success">Completed</span></td>
-              </tr>
-              <tr>
-                <td><span class="booking-history-avatar avatar-olive">NW</span> Noah Williams</td>
-                <td>05 August 2026</td>
-                <td>29 August 2026</td>
-                <td>Conference</td>
-                <td>EV-260805-19</td>
-                <td>STF-0117</td>
-                <td><span class="booking-history-status warning">In review</span></td>
-              </tr>
-              <tr>
-                <td><span class="booking-history-avatar avatar-sand">SM</span> Sofia Martinez</td>
-                <td>16 July 2026</td>
-                <td>22 August 2026</td>
-                <td>Concert</td>
-                <td>EV-267016-52</td>
-                <td>STF-0095</td>
-                <td><span class="booking-history-status success">Completed</span></td>
-              </tr>
-              <tr>
-                <td><span class="booking-history-avatar avatar-rose">EC</span> Ethan Clarke</td>
-                <td>03 June 2026</td>
-                <td>18 August 2026</td>
-                <td>Seaside</td>
-                <td>EV-260603-38</td>
-                <td>STF-0143</td>
-                <td><span class="booking-history-status danger">Cancelled</span></td>
-              </tr>
-              <tr>
-                <td><span class="booking-history-avatar avatar-peach">MP</span> Maya Patel</td>
-                <td>20 May 2026</td>
-                <td>09 August 2026</td>
-                <td>Birthday</td>
-                <td>EV-260520-63</td>
-                <td>STF-0028</td>
-                <td><span class="booking-history-status success">Completed</span></td>
-              </tr>
+              {% for assignment in page %}
+                {% with booking=assignment.booking %}
+                  <tr>
+                    <td><a href="{% url 'staff_event_details:detail' assignment.pk %}">{{ booking.reference }}</a></td>
+                    <td>{{ booking.event_name|default:"—" }}</td>
+                    <td>{{ booking.event_type }}</td>
+                    <td>{{ booking.event_date|date:"j M Y" }}</td>
+                    <td>{{ booking.venue_name }}</td>
+                    <td>{{ booking.client_name|default:"—" }}</td>
+                    <td>
+                      <span class="booking-history-status {% if booking.status == 'completed' %}success{% elif booking.status == 'cancelled' %}danger{% else %}warning{% endif %}">{{ booking.get_status_display }}</span>
+                    </td>
+                  </tr>
+                {% endwith %}
+              {% empty %}
+                <tr>
+                  <td colspan="7" class="staff-empty-state">
+                    {% if has_filters %}
+                      No bookings match your filters.
+                    {% else %}
+                      You have not been assigned to any bookings yet.
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>
 
-        <div class="booking-history-pagination">
-          <span>Showing 1-6 of 248 bookings</span>
-          <div class="booking-history-page-links">
-            <button type="button" class="booking-history-page-btn disabled">Previous</button>
-            <button type="button" class="booking-history-page-btn active">1</button>
-            <button type="button" class="booking-history-page-btn">2</button>
-            <button type="button" class="booking-history-page-btn">3</button>
-            <button type="button" class="booking-history-page-btn">4</button>
-            <button type="button" class="booking-history-page-btn">Next</button>
-          </div>
-        </div>
+        {% include 'includes/staff_pagination.html' with noun='bookings' %}
       </section>
     </main>
   </div>

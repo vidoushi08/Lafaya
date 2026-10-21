@@ -6,6 +6,8 @@ from django.urls import reverse
 from authentication.admin_site import superadmin_site
 from payments.notifications import send_booking_decision
 from payments.models import Payment
+from staff_task_assignment.admin import StaffAssignmentInline, warn_about_conflicts
+from staff_task_assignment.models import StaffAssignment
 
 from .models import Booking
 
@@ -136,14 +138,37 @@ class BookingAdmin(admin.ModelAdmin):
         "budget",
         "estimated_total",
         "message",
+        "client_name",
+        "client_email",
+        "client_phone",
+        "services_summary",
         "created_at",
         "confirmed_at",
+        "completed_at",
+        "cancelled_at",
         "updated_at",
         "status",
     )
     fields = readonly_fields
-    inlines = (PaymentInline,)
-    actions = ("approve_bookings", "reject_bookings")
+    inlines = (PaymentInline, StaffAssignmentInline)
+    actions = (
+        "approve_bookings",
+        "reject_bookings",
+        "complete_bookings",
+        "cancel_bookings",
+    )
+
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for removed in formset.deleted_objects:
+            removed.delete()
+        for instance in instances:
+            if isinstance(instance, StaffAssignment) and instance.created_by_id is None:
+                instance.created_by = request.user
+            instance.save()
+            if isinstance(instance, StaffAssignment):
+                warn_about_conflicts(self, request, instance)
+        formset.save_m2m()
 
     def has_add_permission(self, request):
         return False
@@ -217,4 +242,48 @@ class BookingAdmin(admin.ModelAdmin):
                 f"{failed_emails} rejection email(s) could not be delivered; "
                 "the saved rejections remain in place.",
                 level=messages.ERROR,
+            )
+
+    @admin.action(description="Mark selected bookings as completed")
+    def complete_bookings(self, request, queryset):
+        completed = 0
+        for booking in queryset:
+            try:
+                booking.mark_completed()
+            except ValidationError as error:
+                self.message_user(
+                    request,
+                    f"{booking.reference}: {' '.join(error.messages)}",
+                    level=messages.ERROR,
+                )
+                continue
+            completed += 1
+
+        if completed:
+            self.message_user(
+                request,
+                f"{completed} booking(s) marked as completed.",
+                level=messages.SUCCESS,
+            )
+
+    @admin.action(description="Cancel selected bookings")
+    def cancel_bookings(self, request, queryset):
+        cancelled = 0
+        for booking in queryset:
+            try:
+                booking.mark_cancelled()
+            except ValidationError as error:
+                self.message_user(
+                    request,
+                    f"{booking.reference}: {' '.join(error.messages)}",
+                    level=messages.ERROR,
+                )
+                continue
+            cancelled += 1
+
+        if cancelled:
+            self.message_user(
+                request,
+                f"{cancelled} booking(s) cancelled.",
+                level=messages.SUCCESS,
             )

@@ -5,6 +5,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'staff_task_assignment/css/task_assignment.css' %}">
+  <link rel="stylesheet" href="{% static 'css/staff_shared.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -35,144 +36,97 @@
         </div>
       </header>
 
+      {% include 'includes/staff_messages.html' %}
+
       <section class="task-assignment-summary-row">
         <div class="task-assignment-summary-card">
-          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-soft"></span> 18</span>
-          <p>Open tasks</p>
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-soft"></span> {{ counts.pending }}</span>
+          <p>Pending</p>
         </div>
         <div class="task-assignment-summary-card">
-          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-warning"></span> 07</span>
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-warning"></span> {{ counts.in_progress }}</span>
           <p>In progress</p>
         </div>
         <div class="task-assignment-summary-card">
-          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-success"></span> 26</span>
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-success"></span> {{ counts.completed }}</span>
           <p>Completed</p>
         </div>
         <div class="task-assignment-summary-card">
-          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-danger"></span> 03</span>
+          <span class="task-assignment-summary-inline"><span class="task-assignment-dot task-assignment-dot-danger"></span> {{ counts.blocked }}</span>
           <p>Blocked</p>
         </div>
       </section>
 
       <section class="task-assignment-board">
         <div class="task-assignment-topbar">
-          <div class="task-assignment-search-wrap">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search tasks, client or date" aria-label="Search tasks" />
-          </div>
-
-          <div class="task-assignment-filter-group">
-            <button type="button" class="task-assignment-filter-btn">All tasks <i class="fa-solid fa-chevron-down"></i></button>
-            <button type="button" class="task-assignment-filter-btn">Priority <i class="fa-solid fa-chevron-down"></i></button>
-          </div>
+          <form method="get" class="staff-filter-form">
+            <div class="staff-filter-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="search" name="q" value="{{ query }}" placeholder="Search task, event, reference or venue" aria-label="Search tasks">
+            </div>
+            <select name="status" aria-label="Filter by status">
+              <option value="">All statuses</option>
+              {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if value == status %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <select name="priority" aria-label="Filter by priority">
+              <option value="">All priorities</option>
+              {% for value, label in priority_choices %}
+                <option value="{{ value }}" {% if value == priority %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="staff-filter-submit">Filter</button>
+            {% if has_filters %}
+              <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-filter-reset">Clear</a>
+            {% endif %}
+          </form>
         </div>
 
         <div class="task-assignment-list">
-          <article class="task-card task-card-priority-high">
-            <div class="task-card-head">
-              <div>
-                <p class="task-card-tag">Wedding</p>
-                <h2>Floral styling review</h2>
-              </div>
-              <span class="task-status task-status-danger">high priority</span>
-            </div>
+          {% for task in page %}
+            {% with booking=task.assignment.booking %}
+              <article class="task-card task-card-priority-{{ task.priority }}">
+                <div class="task-card-head">
+                  <div>
+                    <p class="task-card-tag">{{ booking.event_type }}</p>
+                    <h2>{{ task.title }}</h2>
+                  </div>
+                  <span class="task-status {% if task.status == 'completed' %}task-status-success{% elif task.status == 'in_progress' %}task-status-warning{% elif task.status == 'blocked' %}task-status-danger{% endif %}">{{ task.get_status_display }}</span>
+                </div>
 
-            <div class="task-card-meta">
-              <div><span class="task-label">client</span><strong>Amara &amp; Ethan</strong></div>
-              <div><span class="task-label">due</span><strong>Today • 4:00 PM</strong></div>
-              <div>
-                <span class="task-label">staff</span>
-                <strong>
-                  {% if request.user.get_full_name %}
-                    {{ request.user.get_full_name }}
-                  {% else %}
-                    {{ request.user.username }}
-                  {% endif %}
-                </strong>
-              </div>
-            </div>
+                <div class="task-card-meta">
+                  <div><span class="task-label">event</span><strong>{{ booking.event_name|default:booking.event_type }} · {{ booking.reference }}</strong></div>
+                  <div>
+                    <span class="task-label">due</span>
+                    <strong class="{% if task.is_overdue %}staff-overdue{% endif %}">{{ task.due_date|date:"j M Y" }}{% if task.is_overdue %} (overdue){% endif %}</strong>
+                  </div>
+                  <div><span class="task-label">priority</span><strong>{{ task.get_priority_display }}</strong></div>
+                  <div><span class="task-label">my role</span><strong>{{ task.assignment.role }}</strong></div>
+                </div>
 
-            <p class="task-card-copy">
-              Finalise floral arrangement samples, coordinate venue setup, and confirm the ceremony backdrop plan with the wedding coordinator.
+                {% if task.description %}
+                  <p class="task-card-copy">{{ task.description }}</p>
+                {% endif %}
+
+                <div class="task-card-actions">
+                  <a href="{% url 'staff_event_details:detail' task.assignment_id %}" class="task-action-btn task-action-btn-primary">View event</a>
+                  {% include 'staff_task_assignment/_task_actions.html' with next_url=request.get_full_path %}
+                </div>
+              </article>
+            {% endwith %}
+          {% empty %}
+            <p class="staff-empty-state">
+              {% if has_filters %}
+                No tasks match your filters.
+              {% else %}
+                You have no tasks yet. Tasks appear here once an admin assigns them to you.
+              {% endif %}
             </p>
-
-            <div class="task-card-actions">
-              <a href="{% url 'staff_event_details:detail' 'floral-styling-review' %}" class="task-action-btn task-action-btn-primary">View details</a>
-            </div>
-          </article>
-
-          <article class="task-card task-card-priority-medium">
-            <div class="task-card-head">
-              <div>
-                <p class="task-card-tag">Birthday</p>
-                <h2>Guest list check-in</h2>
-              </div>
-              <span class="task-status task-status-warning">in progress</span>
-            </div>
-
-            <div class="task-card-meta">
-              <div><span class="task-label">client</span><strong>Leah Morgan</strong></div>
-              <div><span class="task-label">due</span><strong>Tomorrow • 9:30 AM</strong></div>
-              <div><span class="task-label">staff</span><strong>Junior Patel</strong></div>
-            </div>
-
-            <p class="task-card-copy">
-              Confirm RSVP completion, prepare name tags, and coordinate welcome desk staffing for the arrival window.
-            </p>
-
-            <div class="task-card-actions">
-              <a href="{% url 'staff_event_details:detail' 'guest-list-check-in' %}" class="task-action-btn task-action-btn-primary">View details</a>
-            </div>
-          </article>
-
-          <article class="task-card task-card-priority-low">
-            <div class="task-card-head">
-              <div>
-                <p class="task-card-tag">Conference</p>
-                <h2>Stage sound check</h2>
-              </div>
-              <span class="task-status task-status-success">scheduled</span>
-            </div>
-
-            <div class="task-card-meta">
-              <div><span class="task-label">client</span><strong>Harbor Summit</strong></div>
-              <div><span class="task-label">due</span><strong>Wed • 1:15 PM</strong></div>
-              <div><span class="task-label">staff</span><strong>Nora James</strong></div>
-            </div>
-
-            <p class="task-card-copy">
-              Review audio setup, test live streaming feed, and ensure all event presenters have final briefing notes.
-            </p>
-
-            <div class="task-card-actions">
-              <a href="{% url 'staff_event_details:detail' 'stage-sound-check' %}" class="task-action-btn task-action-btn-primary">View details</a>
-            </div>
-          </article>
-
-          <article class="task-card task-card-priority-medium">
-            <div class="task-card-head">
-              <div>
-                <p class="task-card-tag">Seaside</p>
-                <h2>Catering schedule</h2>
-              </div>
-              <span class="task-status task-status-warning">needs review</span>
-            </div>
-
-            <div class="task-card-meta">
-              <div><span class="task-label">client</span><strong>Oceanview Villa</strong></div>
-              <div><span class="task-label">due</span><strong>Thu • 11:00 AM</strong></div>
-              <div><span class="task-label">staff</span><strong>Sarah Moore</strong></div>
-            </div>
-
-            <p class="task-card-copy">
-              Confirm appetizer sequence, beverage station timing, and supplier arrival order for guest service flow.
-            </p>
-
-            <div class="task-card-actions">
-              <a href="{% url 'staff_event_details:detail' 'catering-schedule' %}" class="task-action-btn task-action-btn-primary">View details</a>
-            </div>
-          </article>
+          {% endfor %}
         </div>
+
+        {% include 'includes/staff_pagination.html' with noun='tasks' %}
       </section>
     </main>
   </div>

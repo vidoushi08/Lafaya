@@ -143,6 +143,7 @@ class ConferenceBookingRequest(models.Model):
         PENDING = "pending", "Pending approval"
         APPROVED = "approved", "Approved"
         REJECTED = "rejected", "Rejected"
+        CANCELLED = "cancelled", "Cancelled"
 
     EVENT_TYPE = "Conference"
 

@@ -18,6 +18,8 @@ class Booking(models.Model):
         APPROVED = "approved", "Approved"
         REJECTED = "rejected", "Rejected"
         CONFIRMED = "confirmed", "Confirmed"
+        COMPLETED = "completed", "Completed"
+        CANCELLED = "cancelled", "Cancelled"
 
     customer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -53,8 +55,14 @@ class Booking(models.Model):
     budget = models.DecimalField(max_digits=12, decimal_places=2)
     estimated_total = models.DecimalField(max_digits=12, decimal_places=2)
     message = models.TextField(blank=True)
+    client_name = models.CharField(max_length=301, blank=True)
+    client_email = models.EmailField(blank=True)
+    client_phone = models.CharField(max_length=32, blank=True)
+    services_summary = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     confirmed_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -128,5 +136,35 @@ class Booking(models.Model):
         booking.status = self.Status.CONFIRMED
         booking.confirmed_at = timezone.now()
         booking.save(update_fields=("status", "confirmed_at", "updated_at"))
+        self.refresh_from_db()
+        return True
+
+    @transaction.atomic
+    def mark_completed(self):
+        booking = type(self).objects.select_for_update().get(pk=self.pk)
+        if booking.status == self.Status.COMPLETED:
+            return False
+        if booking.status != self.Status.CONFIRMED:
+            raise ValidationError("Only confirmed bookings can be completed.")
+
+        booking.status = self.Status.COMPLETED
+        booking.completed_at = timezone.now()
+        booking.save(update_fields=("status", "completed_at", "updated_at"))
+        self.refresh_from_db()
+        return True
+
+    @transaction.atomic
+    def mark_cancelled(self):
+        booking = type(self).objects.select_for_update().get(pk=self.pk)
+        if booking.status == self.Status.CANCELLED:
+            return False
+        if booking.status in (self.Status.REJECTED, self.Status.COMPLETED):
+            raise ValidationError("This booking can no longer be cancelled.")
+
+        booking.status = self.Status.CANCELLED
+        booking.cancelled_at = timezone.now()
+        booking.save(update_fields=("status", "cancelled_at", "updated_at"))
+        # A cancelled request no longer holds its venue and date.
+        booking._set_source_status(self.Status.CANCELLED)
         self.refresh_from_db()
         return True

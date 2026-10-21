@@ -94,6 +94,69 @@ python manage.py runserver
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
 
+## Sharing catalogue data (prices, packages, venues, services)
+
+Git only shares code. The data entered through the admin (prices, price bases,
+packages, venues, services) lives in each person's local `db.sqlite3`, so a
+merge does not bring a teammate's data. Share it with fixtures: JSON files that
+are committed to the repository and loaded into the database.
+
+Never export users, payments, or booking requests. They contain personal data.
+
+### On the laptop that owns the data
+
+1. Enter the prices and catalogue items in the admin at
+   `http://127.0.0.1:8000/admin/`.
+2. Export the approved catalogue models to their app fixture files:
+
+```bash
+python manage.py export_catalog_fixtures
+```
+
+   This exports Birthday, Car Events, Conference, and Seaside catalogues. To
+   export only selected apps, list them after the command, for example:
+   `python manage.py export_catalog_fixtures seaside conference`.
+3. Commit and push the fixtures along with any uploaded catalogue images:
+
+```bash
+git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures media
+git commit -m "Update catalogue fixtures and images"
+git push
+```
+
+4. Whenever prices or items change and the defaults should be updated for
+   everyone, repeat steps 2 and 3.
+
+### On the laptop receiving the data
+
+1. Merge or pull the owner's branch:
+
+```bash
+git fetch origin
+git merge origin/<owner-branch>
+```
+
+2. Apply the database migrations, then load the fixtures:
+
+```bash
+python manage.py migrate
+python manage.py load_catalog
+```
+
+   `load_catalog` loads the Birthday, Car Events, Conference, and Seaside
+   fixtures in one step.
+
+3. Open the site or the admin to check that the prices appear.
+
+> [WARNING]
+> `loaddata` overwrites rows that have the same primary key, so it replaces any
+> prices already edited in your local database. Run it on a fresh or development
+> database, not on a database whose prices were changed on purpose afterwards.
+
+Catalogue images uploaded through the admin are stored under
+`media/<app>/catalog/`, and those files are tracked by git so teammates see the
+same images after pulling. Other media, such as profile pictures, stays local.
+
 ### Seaside catalogue images
 
 Superadmins can upload images when managing Seaside venues, packages, and
@@ -102,3 +165,13 @@ directory; SQLite stores the file paths, not the image contents. Back up the
 `media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
 development server while `DEBUG=True`; production deployment needs an
 appropriate media-file storage and serving configuration.
+
+## Staff workflow
+
+1. A customer books a theme; admin approves; customer pays, so the booking becomes `CONFIRMED`.
+2. In the superadmin (`/admin/`), open a `CONFIRMED` booking and add **Staff assignments** (staff member + role), or use *Staff assignments > Add*. Tasks (title, description, priority, due date) are added under each assignment. Unconfirmed bookings cannot be assigned. Overlapping events for a staff member only show a warning.
+3. Staff sign in and see the dashboard counts, **Booking History** (own bookings only, with search, filters and pagination), **View Tasks** and **Event Details**.
+4. Staff update only their own tasks: `pending > in progress > completed`, or `blocked` (and back to in progress). Updates are locked once the booking is `COMPLETED` or `CANCELLED`.
+5. Admin marks the booking `COMPLETED` or `CANCELLED` after the event. Cancelling frees the venue and date for new requests.
+
+Run `python manage.py migrate` after pulling to create the staff tables.

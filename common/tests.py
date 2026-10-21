@@ -156,3 +156,13 @@ class CatalogFixtureExportTests(TestCase):
                 for item in items
             )
         )
+
+
+class CatalogFixtureLoadTests(TestCase):
+    def test_load_catalog_imports_catalogue_rows(self):
+        call_command("load_catalog", stdout=io.StringIO())
+
+        self.assertTrue(
+            SeasideVenue.objects.filter(name="The Glass Pavilion").exists()
+        )
+        self.assertTrue(Venue.objects.filter(name="Côte d'Or").exists())
