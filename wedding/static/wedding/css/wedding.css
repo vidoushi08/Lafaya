@@ -324,29 +324,6 @@
     color: #D4AF37;
 }
 
-/* Decorative Plus and Minus Controls */
-
-.wedding-venues .venue-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-venues .venue-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-}
-
 /* Responsive venue layout */
 @media (max-width: 768px) {
 
@@ -562,30 +539,6 @@
 }
 
 
-/* Decorative Plus and Minus Controls */
-
-.wedding-packages .packages-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-packages .packages-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-}
-
-
 /*Responsive LAyout*/
 @media (max-width: 900px) {
 
@@ -728,29 +681,6 @@
     font-weight: 600;
     line-height: 1.4;
     white-space: normal;
-}
-
-/* Decorative Plus and Minus Controls */
-
-.wedding-services .services-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-services .services-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
 }
 
 /*responsive design*/
