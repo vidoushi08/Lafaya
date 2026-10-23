@@ -1,6 +1,4 @@
 from django import forms
-from django.utils import timezone
-
 from booking.models import Booking
 
 from .models import Review
@@ -28,8 +26,7 @@ class ReviewForm(forms.ModelForm):
         reviewed_bookings = Review.objects.values_list("booking_id", flat=True)
         self.fields["booking"].queryset = Booking.objects.filter(
             customer=customer,
-            status=Booking.Status.CONFIRMED,
-            event_date__lt=timezone.localdate(),
+            status=Booking.Status.COMPLETED,
         ).exclude(pk__in=reviewed_bookings).order_by("-event_date")
         self.fields["booking"].label = "Event to review"
 
@@ -37,8 +34,8 @@ class ReviewForm(forms.ModelForm):
         booking = self.cleaned_data["booking"]
         if booking.customer_id != self.customer.pk:
             raise forms.ValidationError("Choose one of your own bookings.")
-        if booking.status != Booking.Status.CONFIRMED or booking.event_date >= timezone.localdate():
-            raise forms.ValidationError("You can review an event after it has taken place.")
+        if booking.status != Booking.Status.COMPLETED:
+            raise forms.ValidationError("You can review a booking after it has been completed.")
         if Review.objects.filter(booking=booking).exists():
             raise forms.ValidationError("You have already reviewed this event.")
         return booking
