@@ -38,7 +38,7 @@
     max-width: 1000px;
     margin: 0 auto;
     color: white;
-    text-align: center;
+    text-align: left;
 }
 
 .wedding-eyebrow {
@@ -67,14 +67,14 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 1.7;
-    margin: 40px !important;
+    margin: 40px 0 !important;
     max-width: 900px;
 }
 
 /* Buttons */
 .wedding-hero-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 14px;
 }
