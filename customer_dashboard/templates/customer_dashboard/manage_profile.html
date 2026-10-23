@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Customer Profile | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/manage_profile.css' %}">
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="customer-profile-shell customer-dashboard">
+    {% include "customer_dashboard/includes/sidebar.html" %}
+
+    <main class="customer-profile-main">
+      <div class="customer-profile-circle customer-profile-circle-top" aria-hidden="true"></div>
+      <div class="customer-profile-circle customer-profile-circle-bottom" aria-hidden="true"></div>
+      <img class="customer-profile-vase" src="{% static 'images/ceramic_pot.png' %}" alt="" aria-hidden="true">
+
+      <div class="customer-profile-content">
+        {% if messages %}
+          <ul class="customer-profile-messages" role="status">
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+          </ul>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          <header class="customer-profile-header">
+            <h1 class="customer-profile-breadcrumb">
+              <span>Customer</span>
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+              <strong>Manage Profile</strong>
+            </h1>
+            <button class="customer-profile-save" type="submit">Save</button>
+          </header>
+
+          {% if form.non_field_errors %}
+            <div class="customer-profile-errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <section class="customer-profile-editor" aria-label="Customer profile details">
+            <div class="customer-profile-photo-column">
+              <div class="customer-profile-avatar" aria-label="Customer profile avatar">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <div class="customer-profile-fields">
+              <label class="customer-profile-field" for="{{ form.first_name.id_for_label }}">
+                <span>{{ form.first_name.label }}</span>
+                {{ form.first_name }}
+                {{ form.first_name.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.last_name.id_for_label }}">
+                <span>{{ form.last_name.label }}</span>
+                {{ form.last_name }}
+                {{ form.last_name.errors }}
+              </label>
+
+              <label class="customer-profile-field customer-profile-field-wide" for="{{ form.email.id_for_label }}">
+                <span>{{ form.email.label }}</span>
+                {{ form.email }}
+                {{ form.email.errors }}
+              </label>
+
+              <label class="customer-profile-field" for="{{ form.phone.id_for_label }}">
+                <span>{{ form.phone.label }}</span>
+                {{ form.phone }}
+                {{ form.phone.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.date_of_birth.id_for_label }}">
+                <span>Date of Birth</span>
+                <span class="customer-profile-date-wrap">{{ form.date_of_birth }}</span>
+                {{ form.date_of_birth.errors }}
+              </label>
+
+              <label class="customer-profile-field" for="{{ form.gender.id_for_label }}">
+                <span>{{ form.gender.label }}</span>
+                {{ form.gender }}
+                {{ form.gender.errors }}
+              </label>
+
+              <label class="customer-profile-field customer-profile-field-wide" for="{{ form.address.id_for_label }}">
+                <span>{{ form.address.label }}</span>
+                {{ form.address }}
+                {{ form.address.errors }}
+              </label>
+
+              <label class="customer-profile-field" for="{{ form.city.id_for_label }}">
+                <span>{{ form.city.label }}</span>
+                {{ form.city }}
+                {{ form.city.errors }}
+              </label>
+              <label class="customer-profile-field" for="{{ form.postal_code.id_for_label }}">
+                <span>Postal Code</span>
+                {{ form.postal_code }}
+                {{ form.postal_code.errors }}
+              </label>
+
+              <div class="customer-profile-form-actions">
+                <a class="customer-password-link" href="{% url 'authentication:password_change' %}">
+                  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                  <span>Change password</span>
+                </a>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

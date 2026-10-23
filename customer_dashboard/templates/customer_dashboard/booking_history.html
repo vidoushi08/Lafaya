@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Customer Booking History | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/booking_history.css' %}">
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/manage_profile.css' %}">
+  <link rel="stylesheet" href="{% static 'customer_dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="customer-profile-shell customer-history-shell customer-dashboard">
+    {% include "customer_dashboard/includes/sidebar.html" %}
+
+    <main class="customer-profile-main customer-history-main">
+      <div class="customer-profile-circle customer-profile-circle-top" aria-hidden="true"></div>
+      <div class="customer-profile-circle customer-profile-circle-bottom" aria-hidden="true"></div>
+
+      <div class="customer-profile-content customer-history-content">
+        <header class="customer-profile-header customer-history-header">
+          <h1 class="customer-profile-breadcrumb">
+            <span>Customer</span>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            <strong>Booking History</strong>
+          </h1>
+        </header>
+
+        <section class="customer-history-summary" aria-label="Booking overview">
+          <article class="customer-history-summary-item">
+            <span class="customer-history-summary-value">{{ total_bookings }}</span>
+            <span class="customer-history-summary-label">Total bookings</span>
+          </article>
+          <article class="customer-history-summary-item">
+            <span class="customer-history-summary-value">{{ upcoming_count }}</span>
+            <span class="customer-history-summary-label">Upcoming</span>
+          </article>
+          <article class="customer-history-summary-item">
+            <span class="customer-history-summary-value">{{ completed_count }}</span>
+            <span class="customer-history-summary-label">Completed</span>
+          </article>
+          <article class="customer-history-summary-item">
+            <span class="customer-history-summary-value">{{ cancelled_count }}</span>
+            <span class="customer-history-summary-label">Cancelled</span>
+          </article>
+        </section>
+
+        <section class="customer-history-panel" aria-labelledby="customer-history-title">
+          <div class="customer-history-panel-heading">
+            <div>
+              <p class="customer-history-eyebrow">Your events</p>
+              <h2 id="customer-history-title">All bookings</h2>
+            </div>
+            <span class="customer-history-record-count">{{ page_obj.paginator.count }} booking{{ page_obj.paginator.count|pluralize }}</span>
+          </div>
+
+          <form class="customer-history-toolbar" method="get">
+            <label class="customer-history-search">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input type="search" name="q" value="{{ search_query }}" placeholder="Search bookings" aria-label="Search bookings">
+            </label>
+            <select name="status" aria-label="Filter by booking status" onchange="this.form.submit()">
+              <option value="">All statuses</option>
+              <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>Confirmed</option>
+              <option value="awaiting_payment" {% if status_filter == 'awaiting_payment' %}selected{% endif %}>Awaiting payment</option>
+              <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending approval</option>
+              <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+              <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+            <select name="event_type" aria-label="Filter by event type" onchange="this.form.submit()">
+              <option value="">All event types</option>
+              {% for event_type in event_types %}
+                <option value="{{ event_type }}" {% if event_type_filter == event_type %}selected{% endif %}>{{ event_type }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="customer-history-filter-submit">Search</button>
+          </form>
+
+          <div class="customer-history-table-scroll" role="region" aria-label="Booking history table" tabindex="0">
+            <table class="customer-history-table">
+              <thead>
+                <tr>
+                  <th scope="col">Event</th>
+                  <th scope="col">Event date</th>
+                  <th scope="col">Venue</th>
+                  <th scope="col">Guests</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in bookings %}
+                  <tr>
+                    <td><strong>{{ booking.event_name|default:booking.event_type }}</strong><span>{{ booking.reference }}</span></td>
+                    <td>{{ booking.event_date|date:"d M Y" }}</td>
+                    <td>{{ booking.venue_name }}</td>
+                    <td>{{ booking.guests }}</td>
+                    <td>{{ booking.payment.currency|default:"MUR" }} {{ booking.estimated_total|floatformat:2 }}</td>
+                    <td><span class="customer-history-status {{ booking.customer_status_class }}">{{ booking.customer_status }}</span></td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="6">No bookings match your search.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="customer-history-pagination">
+            <span>Showing {{ page_obj.start_index|default:0 }}-{{ page_obj.end_index|default:0 }} of {{ page_obj.paginator.count }} bookings</span>
+            <nav aria-label="Booking history pages">
+              {% if page_obj.has_previous %}<a href="?{{ filter_query }}&amp;page={{ page_obj.previous_page_number }}">Previous</a>{% else %}<button type="button" disabled>Previous</button>{% endif %}
+              {% for page_number in page_obj.paginator.page_range %}
+                {% if page_number == page_obj.number %}<button type="button" class="customer-history-page-active" aria-current="page">{{ page_number }}</button>{% else %}<a href="?{{ filter_query }}&amp;page={{ page_number }}">{{ page_number }}</a>{% endif %}
+              {% endfor %}
+              {% if page_obj.has_next %}<a href="?{{ filter_query }}&amp;page={{ page_obj.next_page_number }}">Next</a>{% else %}<button type="button" disabled>Next</button>{% endif %}
+            </nav>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

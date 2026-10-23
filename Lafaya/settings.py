@@ -47,13 +47,10 @@ INSTALLED_APPS = [
     "customer_dashboard.apps.CustomerDashboardConfig",
     # staff application
     "staff.apps.StaffConfig",
-    # staff booking history application
+    # staff portal applications
     "staff_booking_history.apps.StaffBookingHistoryConfig",
-    # staff profile application
     "staff_profile.apps.StaffProfileConfig",
-    # staff task assignment application
     "staff_task_assignment.apps.StaffTaskAssignmentConfig",
-    # staff event details application
     "staff_event_details.apps.StaffEventDetailsConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
@@ -75,6 +72,10 @@ INSTALLED_APPS = [
     "booking.apps.BookingConfig",
     # contact application
     "contact.apps.ContactConfig",
+
+    # venues application
+    "venues.apps.VenuesConfig",
+
     # django default applications
     "django.contrib.admin",
     "django.contrib.auth",
@@ -199,6 +200,7 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@lafaya.mu")
+CONTACT_RECIPIENT_EMAIL = os.getenv("CONTACT_RECIPIENT_EMAIL", "hello@lafaya.mu")
 EMAIL_BACKEND = (
     "django.core.mail.backends.smtp.EmailBackend"
     if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD

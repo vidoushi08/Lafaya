@@ -10,6 +10,7 @@ REQUEST_MODELS = (
     ("seaside", "SeasideBookingRequest"),
     ("conference", "ConferenceBookingRequest"),
     ("car_events", "CarEventBookingRequest"),
+    ("wedding", "WeddingBookingRequest"),
 )
 
 

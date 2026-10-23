@@ -83,12 +83,8 @@
   }
 
   function fitsAttendees(option, attendees) {
-    var capacity = parseInt(option.dataset.capacity, 10);
     var minAttendees = parseInt(option.dataset.minAttendees, 10);
     var maxAttendees = parseInt(option.dataset.maxAttendees, 10);
-    if (capacity && attendees > capacity) {
-      return false;
-    }
     if (minAttendees && attendees < minAttendees) {
       return false;
     }
