@@ -75,6 +75,8 @@
 .wedding-hero-actions {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
 }
 
 .wedding-button {
@@ -897,8 +899,8 @@
 }
 
 .wedding-hero-actions .wedding-button-outline {
-    background-color: #d4af37;
-    border: 1px solid #d4af37;
+    background-color: transparent;
+    border: 1px solid white;
     color: white;
 }
 
