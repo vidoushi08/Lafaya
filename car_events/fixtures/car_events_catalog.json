@@ -256,5 +256,20 @@
     "highlights": "",
     "uploaded_image": ""
   }
+},
+{
+  "model": "car_events.extraservice",
+  "pk": 4,
+  "fields": {
+    "price": "490.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 0,
+    "name": "Big Buffet",
+    "description": "This optional service is the perfect solution for keeping your guests happy, energized, and well-fed throughout the event.",
+    "image": "car_events/images/car_services_Big_Buffet.jpg",
+    "highlights": "",
+    "uploaded_image": ""
+  }
 }
 ]
