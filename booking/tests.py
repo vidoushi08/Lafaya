@@ -9,6 +9,7 @@ from django.db.models.signals import post_save
 from django.test import TestCase
 from django.urls import reverse
 
+from .admin import BookingAdmin
 from payments.models import Payment
 from seaside.models import (
     SeasideBookingRequest,
@@ -16,6 +17,7 @@ from seaside.models import (
     SeasideService,
     SeasideVenue,
 )
+from wedding.models import WeddingBookingRequest, WeddingPackage, WeddingVenue
 
 from .models import Booking
 
@@ -112,20 +114,9 @@ class BookingStatusTransitionTests(TestCase):
         with self.assertRaises(ValidationError):
             self.booking.mark_completed()
 
-    def test_confirmed_booking_can_be_cancelled(self):
-        self._set_status(Booking.Status.CONFIRMED)
-
-        self.assertTrue(self.booking.mark_cancelled())
-
-        self.booking.refresh_from_db()
-        self.assertEqual(self.booking.status, Booking.Status.CANCELLED)
-        self.assertIsNotNone(self.booking.cancelled_at)
-
-    def test_rejected_booking_cannot_be_cancelled(self):
-        self._set_status(Booking.Status.REJECTED)
-
-        with self.assertRaises(ValidationError):
-            self.booking.mark_cancelled()
+    def test_admin_booking_actions_do_not_include_cancellation(self):
+        self.assertNotIn("cancel_bookings", BookingAdmin.actions)
+        self.assertFalse(hasattr(Booking, "mark_cancelled"))
 
 
 class BookingPromotionTests(TestCase):
@@ -172,16 +163,13 @@ class BookingPromotionTests(TestCase):
         )
         self.booking_request.services.add(self.service)
 
-    def test_cancelling_a_booking_frees_its_venue_and_date(self):
+    def test_rejecting_a_booking_frees_its_venue_and_date(self):
         booking = Booking.objects.get(source_object_id=self.booking_request.pk)
-        Booking.objects.filter(pk=booking.pk).update(status=Booking.Status.CONFIRMED)
-        booking.refresh_from_db()
-
-        booking.mark_cancelled()
+        booking.reject()
 
         self.booking_request.refresh_from_db()
         self.assertEqual(
-            self.booking_request.status, SeasideBookingRequest.Status.CANCELLED
+            self.booking_request.status, SeasideBookingRequest.Status.REJECTED
         )
         replacement = SeasideBookingRequest.objects.create(
             customer=self.customer,

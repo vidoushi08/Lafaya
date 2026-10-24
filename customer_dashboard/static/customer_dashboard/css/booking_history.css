@@ -240,7 +240,8 @@
   color: var(--color-accent-hover);
 }
 
-.customer-history-status.cancelled {
+.customer-history-status.cancelled,
+.customer-history-status.rejected {
   background: var(--color-muted);
   color: var(--color-brand);
 }

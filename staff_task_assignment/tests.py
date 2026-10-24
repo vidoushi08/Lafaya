@@ -225,7 +225,10 @@ class StaffTaskModelTests(StaffTestCase):
         self.assertEqual(task.allowed_next_statuses(), ())
 
     def test_new_tasks_cannot_be_added_to_a_closed_booking(self):
-        self.booking.mark_cancelled()
+        Booking.objects.filter(pk=self.booking.pk).update(
+            status=Booking.Status.CANCELLED
+        )
+        self.assignment.refresh_from_db()
         task = StaffTask(
             assignment=self.assignment,
             title="Late task",
@@ -490,7 +493,9 @@ class ClosedEventDisplayTests(StaffTestCase):
         self.assertEqual(self.task.status, StaffTask.Status.IN_PROGRESS)
 
     def test_cancelled_event_flags_tasks(self):
-        self.booking.mark_cancelled()
+        Booking.objects.filter(pk=self.booking.pk).update(
+            status=Booking.Status.CANCELLED
+        )
 
         response = self.client.get(
             reverse(

@@ -40,8 +40,8 @@
             <span class="customer-history-summary-label">Completed</span>
           </article>
           <article class="customer-history-summary-item">
-            <span class="customer-history-summary-value">{{ cancelled_count }}</span>
-            <span class="customer-history-summary-label">Cancelled</span>
+            <span class="customer-history-summary-value">{{ rejected_count }}</span>
+            <span class="customer-history-summary-label">Rejected</span>
           </article>
         </section>
 
@@ -65,12 +65,12 @@
               <option value="awaiting_payment" {% if status_filter == 'awaiting_payment' %}selected{% endif %}>Awaiting payment</option>
               <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending approval</option>
               <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
-              <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+              <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
             </select>
             <select name="event_type" aria-label="Filter by event type" onchange="this.form.submit()">
               <option value="">All event types</option>
-              {% for event_type in event_types %}
-                <option value="{{ event_type }}" {% if event_type_filter == event_type %}selected{% endif %}>{{ event_type }}</option>
+              {% for event_type, event_label in event_types %}
+                <option value="{{ event_type }}" {% if event_type_filter == event_type %}selected{% endif %}>{{ event_label }}</option>
               {% endfor %}
             </select>
             <button type="submit" class="customer-history-filter-submit">Search</button>
@@ -108,11 +108,11 @@
           <div class="customer-history-pagination">
             <span>Showing {{ page_obj.start_index|default:0 }}-{{ page_obj.end_index|default:0 }} of {{ page_obj.paginator.count }} bookings</span>
             <nav aria-label="Booking history pages">
-              {% if page_obj.has_previous %}<a href="?{{ filter_query }}&amp;page={{ page_obj.previous_page_number }}">Previous</a>{% else %}<button type="button" disabled>Previous</button>{% endif %}
+              {% if page_obj.has_previous %}<a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>{% else %}<button type="button" disabled>Previous</button>{% endif %}
               {% for page_number in page_obj.paginator.page_range %}
-                {% if page_number == page_obj.number %}<button type="button" class="customer-history-page-active" aria-current="page">{{ page_number }}</button>{% else %}<a href="?{{ filter_query }}&amp;page={{ page_number }}">{{ page_number }}</a>{% endif %}
+                {% if page_number == page_obj.number %}<button type="button" class="customer-history-page-active" aria-current="page">{{ page_number }}</button>{% else %}<a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_number }}">{{ page_number }}</a>{% endif %}
               {% endfor %}
-              {% if page_obj.has_next %}<a href="?{{ filter_query }}&amp;page={{ page_obj.next_page_number }}">Next</a>{% else %}<button type="button" disabled>Next</button>{% endif %}
+              {% if page_obj.has_next %}<a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_obj.next_page_number }}">Next</a>{% else %}<button type="button" disabled>Next</button>{% endif %}
             </nav>
           </div>
         </section>

@@ -34,14 +34,19 @@
           <p class="payment-notice">Your booking request is waiting for Lafaya's review. No payment is due yet.</p>
         {% elif booking.status == "rejected" %}
           <p class="payment-notice">This booking request was not approved. Contact Lafaya if you need more information.</p>
-        {% elif booking.status == "confirmed" or payment.status == "verified" or payment.status == "demo_paid" %}
+        {% elif booking.status == "cancelled" %}
+          <p class="payment-notice">This booking was cancelled. If you already made a payment, please contact Lafaya for assistance.</p>
+        {% elif booking.status == "confirmed" or booking.status == "completed" or payment.status == "verified" or payment.status == "demo_paid" %}
           <p class="payment-notice payment-notice-success">
-            {% if payment.status == "demo_paid" %}
+            {% if booking.status == "completed" %}
+              This event is completed.
+              {% if payment.status == "demo_paid" %}Demo payment completed. No real card was charged.{% elif payment.status == "verified" %}Payment verified.{% endif %}
+            {% elif payment.status == "demo_paid" %}
               Demo payment completed. No real card was charged.
             {% else %}
               Payment verified. Your booking is confirmed.
             {% endif %}
-            Your booking is confirmed.
+            {% if booking.status == "confirmed" %}Your booking is confirmed.{% endif %}
           </p>
           {% if payment.paid_at %}
             <p>Payment date: {{ payment.paid_at|date:"j M Y, H:i" }}</p>

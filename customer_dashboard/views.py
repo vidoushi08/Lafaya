@@ -9,6 +9,16 @@ from common.decorators import account_type_required
 from .forms import CustomerProfileForm
 
 
+BOOKING_EVENT_TYPES = (
+    ("Seaside", "Seaside"),
+    ("Conference", "Conference"),
+    ("Wedding", "Wedding"),
+    ("Birthday", "Birthday"),
+    ("Car Event", "Car Meet"),
+    ("Concert", "Concert"),
+)
+
+
 @account_type_required("customer")
 def index(request):
     return render(request, "customer_dashboard/dashboard.html")
@@ -43,9 +53,12 @@ def booking_history(request):
             status__in=(Booking.Status.PENDING, Booking.Status.APPROVED, Booking.Status.CONFIRMED),
         ).count(),
         "completed_count": customer_bookings.filter(
-            status=Booking.Status.CONFIRMED, event_date__lt=today
+            Q(status=Booking.Status.COMPLETED)
+            | Q(status=Booking.Status.CONFIRMED, event_date__lt=today)
         ).count(),
-        "cancelled_count": customer_bookings.filter(status=Booking.Status.REJECTED).count(),
+        "rejected_count": customer_bookings.filter(
+            status=Booking.Status.REJECTED
+        ).count(),
     }
 
     search_query = request.GET.get("q", "").strip()
@@ -65,8 +78,11 @@ def booking_history(request):
     if status_filter == "confirmed":
         bookings = bookings.filter(status=Booking.Status.CONFIRMED, event_date__gte=today)
     elif status_filter == "completed":
-        bookings = bookings.filter(status=Booking.Status.CONFIRMED, event_date__lt=today)
-    elif status_filter == "cancelled":
+        bookings = bookings.filter(
+            Q(status=Booking.Status.COMPLETED)
+            | Q(status=Booking.Status.CONFIRMED, event_date__lt=today)
+        )
+    elif status_filter == "rejected":
         bookings = bookings.filter(status=Booking.Status.REJECTED)
     elif status_filter == "awaiting_payment":
         bookings = bookings.filter(status=Booking.Status.APPROVED)
@@ -77,9 +93,14 @@ def booking_history(request):
     page_obj = paginator.get_page(request.GET.get("page"))
     for booking in page_obj.object_list:
         if booking.status == Booking.Status.REJECTED:
+            booking.customer_status = "Rejected"
+            booking.customer_status_class = "rejected"
+        elif booking.status == Booking.Status.CANCELLED:
             booking.customer_status = "Cancelled"
             booking.customer_status_class = "cancelled"
-        elif booking.status == Booking.Status.CONFIRMED and booking.event_date < today:
+        elif booking.status == Booking.Status.COMPLETED or (
+            booking.status == Booking.Status.CONFIRMED and booking.event_date < today
+        ):
             booking.customer_status = "Completed"
             booking.customer_status_class = "completed"
         elif booking.status == Booking.Status.CONFIRMED:
@@ -94,11 +115,6 @@ def booking_history(request):
 
     filter_params = request.GET.copy()
     filter_params.pop("page", None)
-    event_types = (
-        customer_bookings.order_by("event_type")
-        .values_list("event_type", flat=True)
-        .distinct()
-    )
     return render(
         request,
         "customer_dashboard/booking_history.html",
@@ -109,7 +125,7 @@ def booking_history(request):
             "search_query": search_query,
             "status_filter": status_filter,
             "event_type_filter": event_type_filter,
-            "event_types": event_types,
+            "event_types": BOOKING_EVENT_TYPES,
             "filter_query": filter_params.urlencode(),
         },
     )

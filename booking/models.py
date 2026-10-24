@@ -152,19 +152,3 @@ class Booking(models.Model):
         booking.save(update_fields=("status", "completed_at", "updated_at"))
         self.refresh_from_db()
         return True
-
-    @transaction.atomic
-    def mark_cancelled(self):
-        booking = type(self).objects.select_for_update().get(pk=self.pk)
-        if booking.status == self.Status.CANCELLED:
-            return False
-        if booking.status in (self.Status.REJECTED, self.Status.COMPLETED):
-            raise ValidationError("This booking can no longer be cancelled.")
-
-        booking.status = self.Status.CANCELLED
-        booking.cancelled_at = timezone.now()
-        booking.save(update_fields=("status", "cancelled_at", "updated_at"))
-        # A cancelled request no longer holds its venue and date.
-        booking._set_source_status(self.Status.CANCELLED)
-        self.refresh_from_db()
-        return True
