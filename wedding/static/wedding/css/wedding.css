@@ -38,7 +38,7 @@
     max-width: 1000px;
     margin: 0 auto;
     color: white;
-    text-align: center;
+    text-align: left;
 }
 
 .wedding-eyebrow {
@@ -67,14 +67,16 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 1.7;
-    margin: 40px !important;
+    margin: 40px 0 !important;
     max-width: 900px;
 }
 
 /* Buttons */
 .wedding-hero-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 14px;
 }
 
 .wedding-button {
@@ -322,29 +324,6 @@
     color: #D4AF37;
 }
 
-/* Decorative Plus and Minus Controls */
-
-.wedding-venues .venue-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-venues .venue-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-}
-
 /* Responsive venue layout */
 @media (max-width: 768px) {
 
@@ -560,30 +539,6 @@
 }
 
 
-/* Decorative Plus and Minus Controls */
-
-.wedding-packages .packages-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-packages .packages-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-}
-
-
 /*Responsive LAyout*/
 @media (max-width: 900px) {
 
@@ -726,29 +681,6 @@
     font-weight: 600;
     line-height: 1.4;
     white-space: normal;
-}
-
-/* Decorative Plus and Minus Controls */
-
-.wedding-services .services-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 25px;
-}
-
-.wedding-services .services-controls span {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #D4AF37;
-    border-radius: 50%;
-    color: #D4AF37;
-    font-family: 'Manrope', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
 }
 
 /*responsive design*/
@@ -897,8 +829,8 @@
 }
 
 .wedding-hero-actions .wedding-button-outline {
-    background-color: #d4af37;
-    border: 1px solid #d4af37;
+    background-color: transparent;
+    border: 1px solid white;
     color: white;
 }
 

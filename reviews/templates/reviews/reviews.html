@@ -66,7 +66,7 @@
               <p class="reviews-form-status" role="status" aria-live="polite">Select a rating and submit your review.</p>
             </form>
           {% else %}
-            <p class="reviews-form-status">You can review an event once it is completed and confirmed.</p>
+            <p class="reviews-form-status">You can review a booking after it has been marked completed.</p>
           {% endif %}
           {% if own_reviews %}
             <div class="reviews-own-status"><h3>Your submissions</h3><ul>{% for review in own_reviews %}<li>{{ review.booking.event_name|default:review.booking.event_type }} — {{ review.get_status_display }}</li>{% endfor %}</ul></div>
