@@ -131,6 +131,7 @@ class CustomerDashboardTests(TestCase):
             reverse("customer_dashboard:manage_profile"),
         )
         self.assertContains(response, "customer-action-create-menu")
+        self.assertContains(response, "<strong>Manage Profile</strong>")
         for route_name in (
             "car_events:car_events",
             "wedding:wedding",

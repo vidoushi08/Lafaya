@@ -5,7 +5,7 @@ from django import forms
 from django.db import transaction
 from django.utils import timezone
 
-from .models import WeddingBookingRequest, WeddingEnquiry, WeddingPackage, WeddingService, WeddingVenue
+from .models import WeddingBookingRequest, WeddingPackage, WeddingService, WeddingVenue
 
 MAX_BUDGET = Decimal("10000000")
 MAX_GUESTS = 10000
@@ -185,18 +185,3 @@ class WeddingBookingForm(forms.Form):
         request.services.set(services)
         return request
 
-
-class WeddingEnquiryForm(forms.ModelForm):
-    class Meta:
-        model = WeddingEnquiry
-        fields = ["event_date", "venue", "custom_requirements", "notes"]
-        widgets = {
-            "event_date": forms.DateInput(attrs={"type": "date"}),
-            "venue": forms.TextInput(attrs={"placeholder": "Preferred venue"}),
-            "custom_requirements": forms.Textarea(
-                attrs={"placeholder": "Tell us about your wedding plans...", "rows": 4}
-            ),
-            "notes": forms.Textarea(
-                attrs={"placeholder": "Any other information...", "rows": 3}
-            ),
-        }

@@ -5,7 +5,6 @@ from booking.admin import BookingRequestAdminActions
 
 from .models import (
     WeddingBookingRequest,
-    WeddingEnquiry,
     WeddingPackage,
     WeddingService,
     WeddingVenue,
@@ -56,11 +55,3 @@ class WeddingBookingRequestAdmin(BookingRequestAdminActions, admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-
-@admin.register(WeddingEnquiry, site=superadmin_site)
-class WeddingEnquiryAdmin(admin.ModelAdmin):
-    list_display = ("customer", "package", "event_date", "status", "quoted_price", "created_at")
-    list_filter = ("status", "event_date", "created_at")
-    search_fields = ("customer__username", "package__name")
-    readonly_fields = ("created_at", "updated_at")
-    ordering = ("-created_at",)

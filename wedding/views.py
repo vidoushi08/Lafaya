@@ -1,13 +1,12 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
-from .forms import MAX_DAYS_AHEAD, WeddingBookingForm, WeddingEnquiryForm
+from .forms import MAX_DAYS_AHEAD, WeddingBookingForm
 from .models import WeddingPackage, WeddingService, WeddingVenue
 from .notifications import notify_admins_of_booking
 
@@ -80,27 +79,3 @@ def index(request):
         },
     )
 
-
-@login_required
-def enquiry(request):
-    package_slug = request.GET.get("package") or request.POST.get("package")
-    package = get_object_or_404(WeddingPackage, slug=package_slug, is_active=True)
-
-    if request.method == "POST":
-        form = WeddingEnquiryForm(request.POST)
-
-        if form.is_valid():
-            wedding_enquiry = form.save(commit=False)
-            wedding_enquiry.customer = request.user
-            wedding_enquiry.package = package
-            wedding_enquiry.save()
-            messages.success(request, "Your wedding enquiry has been submitted successfully!")
-            return redirect("wedding:wedding")
-    else:
-        form = WeddingEnquiryForm()
-
-    return render(
-        request,
-        "wedding/wedding_enquiry.html",
-        {"form": form, "package": package},
-    )

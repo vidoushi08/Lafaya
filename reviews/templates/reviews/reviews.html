@@ -91,37 +91,7 @@
             <ul class="review-tags" aria-label="Review event details"><li>{{ review.booking.event_type }}</li><li>{{ review.booking.event_date|date:"j M Y" }}</li></ul>
           </article>
         {% empty %}
-          <section aria-labelledby="example-reviews-heading">
-            <h2 id="example-reviews-heading">Example reviews</h2>
-            <p class="reviews-empty">These sample reviews show how customer feedback will appear once real reviews are published.</p>
-            <article class="review-card">
-              <div class="review-card-header">
-                <div><h2>Sample customer</h2><span>Example review</span></div>
-                <span class="reviews-stars" aria-label="5 out of 5 stars">{% for star in "12345" %}<i class="fa-solid fa-star" aria-hidden="true"></i>{% endfor %}</span>
-              </div>
-              <h3>Wedding celebration</h3>
-              <p class="review-card-copy">The team made our wedding feel personal from the first planning conversation to the final moments of the evening. Everything came together beautifully.</p>
-              <ul class="review-tags" aria-label="Example event details"><li>Wedding</li><li>Sample</li></ul>
-            </article>
-            <article class="review-card">
-              <div class="review-card-header">
-                <div><h2>Sample customer</h2><span>Example review</span></div>
-                <span class="reviews-stars" aria-label="5 out of 5 stars">{% for star in "12345" %}<i class="fa-solid fa-star" aria-hidden="true"></i>{% endfor %}</span>
-              </div>
-              <h3>Seaside celebration</h3>
-              <p class="review-card-copy">Our celebration by the sea was relaxed, welcoming, and thoughtfully organised. We could enjoy the day while the Lafaya team handled the details.</p>
-              <ul class="review-tags" aria-label="Example event details"><li>Seaside</li><li>Sample</li></ul>
-            </article>
-            <article class="review-card">
-              <div class="review-card-header">
-                <div><h2>Sample customer</h2><span>Example review</span></div>
-                <span class="reviews-stars" aria-label="5 out of 5 stars">{% for star in "12345" %}<i class="fa-solid fa-star" aria-hidden="true"></i>{% endfor %}</span>
-              </div>
-              <h3>Birthday party</h3>
-              <p class="review-card-copy">From the decorations to the entertainment, every part of the party felt just right. Our family had a wonderful time celebrating together.</p>
-              <ul class="review-tags" aria-label="Example event details"><li>Birthday</li><li>Sample</li></ul>
-            </article>
-          </section>
+          <p class="reviews-empty">No customer reviews have been published yet.</p>
         {% endfor %}
       </div>
     </section>
