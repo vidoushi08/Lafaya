@@ -1,6 +1,7 @@
 from datetime import date, time
 from decimal import Decimal
 import io
+import json
 from pathlib import Path
 import tempfile
 
@@ -11,9 +12,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from booking.models import Booking
-from payments.models import Payment
-
-from .models import Review
+from .models import Review, ReviewShowcase
 
 
 class ReviewsPageTests(TestCase):
@@ -170,7 +169,7 @@ class ReviewFixtureTests(TestCase):
             status=Review.Status.PUBLISHED,
         )
 
-    def test_export_contains_published_review_without_private_customer_data(self):
+    def test_export_contains_anonymized_review_without_customer_or_booking_records(self):
         with tempfile.TemporaryDirectory() as output_dir:
             call_command(
                 "export_reviews_fixture",
@@ -184,12 +183,37 @@ class ReviewFixtureTests(TestCase):
             ) as fixture_file:
                 content = fixture_file.read()
 
-        self.assertIn("reviews.review", content)
-        self.assertIn("booking.booking", content)
+        fixture_objects = json.loads(content)
+        self.assertEqual(
+            {item["model"] for item in fixture_objects},
+            {"reviews.reviewshowcase"},
+        )
         self.assertIn("Beautiful day by the sea.", content)
         self.assertNotIn("private@example.com", content)
+        self.assertNotIn("Amina", content)
+        self.assertNotIn("Seaside wedding", content)
 
-    def test_exported_review_loads_and_displays_on_reviews_page(self):
+    def test_exported_review_loads_without_importing_or_changing_bookings(self):
+        collision_content_type = ContentType.objects.get(
+            app_label="car_events",
+            model="careventbookingrequest",
+        )
+        Booking.objects.create(
+            customer=self.customer,
+            source_content_type=collision_content_type,
+            source_object_id=1,
+            status=Booking.Status.COMPLETED,
+            event_type="Car Event",
+            event_date=date(2025, 6, 1),
+            start_time=time(18, 0),
+            end_time=time(23, 0),
+            guests=40,
+            venue_name="Venue",
+            package_name="Package",
+            budget=Decimal("10000.00"),
+            estimated_total=Decimal("8000.00"),
+        )
+
         with tempfile.TemporaryDirectory() as output_dir:
             call_command(
                 "export_reviews_fixture",
@@ -198,17 +222,42 @@ class ReviewFixtureTests(TestCase):
                 stdout=io.StringIO(),
             )
             fixture_path = Path(output_dir) / "reviews" / "fixtures" / "reviews_catalogue.json"
-            Review.objects.all().delete()
-            Payment.objects.all().delete()
-            Booking.objects.all().delete()
-            get_user_model().objects.filter(pk=self.customer.pk).delete()
-            self.assertFalse(Review.objects.exists())
+            booking_count = Booking.objects.count()
+            review_count = Review.objects.count()
+            customer_count = get_user_model().objects.count()
 
-            call_command("loaddata", str(fixture_path), stdout=io.StringIO())
+            call_command(
+                "load_reviews_fixture",
+                str(fixture_path),
+                stdout=io.StringIO(),
+            )
 
-        self.assertTrue(Review.objects.filter(comment="Beautiful day by the sea.").exists())
-        self.client.force_login(get_user_model().objects.get(pk=self.customer.pk))
+        self.assertEqual(Booking.objects.count(), booking_count)
+        self.assertEqual(Review.objects.count(), review_count)
+        self.assertEqual(get_user_model().objects.count(), customer_count)
+        self.assertTrue(
+            ReviewShowcase.objects.filter(comment="Beautiful day by the sea.").exists()
+        )
+
+        self.client.force_login(self.customer)
         response = self.client.get(reverse("reviews:reviews"))
         self.assertContains(response, "Beautiful day by the sea.")
-        self.assertContains(response, "Amina")
-        self.assertContains(response, "Seaside wedding")
+        self.assertContains(response, "Lafaya customer")
+
+    def test_loading_same_review_fixture_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as output_dir:
+            call_command(
+                "export_reviews_fixture",
+                "--output-dir",
+                output_dir,
+                stdout=io.StringIO(),
+            )
+            fixture_path = Path(output_dir) / "reviews" / "fixtures" / "reviews_catalogue.json"
+            for _ in range(2):
+                call_command(
+                    "load_reviews_fixture",
+                    str(fixture_path),
+                    stdout=io.StringIO(),
+                )
+
+        self.assertEqual(ReviewShowcase.objects.count(), 1)

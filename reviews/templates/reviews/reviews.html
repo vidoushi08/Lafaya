@@ -79,16 +79,16 @@
           <article class="review-card">
             <div class="review-card-header">
               <div>
-                <h2>{{ review.customer.get_full_name|default:review.customer.username }}</h2>
+                <h2>{{ review.author_name }}</h2>
                 <time datetime="{{ review.created_at|date:'Y-m-d' }}">{{ review.created_at|date:"F j, Y" }}</time>
               </div>
               <span class="reviews-stars" aria-label="{{ review.rating }} out of 5 stars">
                 {% for star in "12345" %}<i class="fa-solid fa-star{% if review.rating < forloop.counter %} reviews-star-muted{% endif %}" aria-hidden="true"></i>{% endfor %}
               </span>
             </div>
-            <h3>{{ review.booking.event_name|default:review.booking.event_type }}</h3>
+            <h3>{{ review.event_name|default:review.event_type }}</h3>
             <p class="review-card-copy">{{ review.comment|linebreaksbr }}</p>
-            <ul class="review-tags" aria-label="Review event details"><li>{{ review.booking.event_type }}</li><li>{{ review.booking.event_date|date:"j M Y" }}</li></ul>
+            <ul class="review-tags" aria-label="Review event details"><li>{{ review.event_type }}</li><li>{{ review.event_date|date:"j M Y" }}</li></ul>
           </article>
         {% empty %}
           <p class="reviews-empty">No customer reviews have been published yet.</p>

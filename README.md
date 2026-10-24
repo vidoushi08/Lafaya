@@ -117,12 +117,13 @@ python manage.py export_catalog_fixtures
    catalogues. To export only selected apps, list them after the command, for
    example: `python manage.py export_catalog_fixtures seaside wedding`.
    Published customer reviews are exported separately with
-   `python manage.py export_reviews_fixture`, which includes only the customers
-   and bookings those reviews reference and removes their emails and passwords.
+   `python manage.py export_reviews_fixture`. The review fixture contains
+   anonymized public-review snapshots only; it does not export customer accounts
+   or booking records.
 3. Commit and push the fixtures along with any uploaded catalogue images:
 
 ```bash
-git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures wedding/fixtures media
+git add birthday/fixtures car_events/fixtures conference/fixtures reviews/fixtures seaside/fixtures wedding/fixtures media
 git commit -m "Update catalogue fixtures and images"
 git push
 ```
@@ -147,8 +148,10 @@ python manage.py load_catalog
 ```
 
    `load_catalog` loads the Birthday, Car Events, Conference, Seaside, and
-   Wedding fixtures in one step. Reviews are separate, so load them with:
-   `python manage.py loaddata reviews_catalogue`.
+   Wedding fixtures in one step. Reviews are separate, so load them safely with:
+   `python manage.py load_reviews_fixture`.
+   This command updates anonymized review snapshots without changing local
+   customer, booking, or payment records.
 
 3. Open the site or the admin to check that the prices appear.
 

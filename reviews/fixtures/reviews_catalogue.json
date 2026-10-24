@@ -1,79 +1,15 @@
 [
   {
-    "model": "authentication.user",
-    "pk": 3,
+    "model": "reviews.reviewshowcase",
+    "pk": null,
     "fields": {
-      "password": "!",
-      "last_login": null,
-      "is_superuser": false,
-      "username": "vidoushisoobug@gmail.com",
-      "first_name": "Vidoushi",
-      "last_name": "Soobug",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2026-10-16T18:33:35.756Z",
-      "email": "",
-      "account_type": "customer",
-      "phone": "+23058151371",
-      "date_of_birth": "2005-08-27",
-      "gender": "female",
-      "address": "Camp Carol",
-      "city": "Plaine Magnien",
-      "postal_code": "51603",
-      "password_reset_at": "2026-10-23T05:22:52.266Z",
-      "onboarding_token_hash": "",
-      "onboarding_token_created_at": null,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "booking.booking",
-    "pk": 11,
-    "fields": {
-      "customer": [
-        "vidoushisoobug@gmail.com"
-      ],
-      "source_content_type": [
-        "car_events",
-        "careventbookingrequest"
-      ],
-      "source_object_id": 1,
-      "reference": "LAF-EBE1ABF7C490",
-      "status": "completed",
+      "source_key": "published-review-1",
+      "display_name": "Lafaya customer",
       "event_type": "Car Event",
-      "event_name": "CAR MEETUP",
       "event_date": "2027-03-25",
-      "start_time": "10:30:00",
-      "end_time": "14:00:00",
-      "guests": 150,
-      "venue_name": "C\u00f4te d'Or",
-      "package_name": "Festival Experience",
-      "budget": "550000.00",
-      "estimated_total": "153600.00",
-      "message": "",
-      "client_name": "Vidoushi Soobug",
-      "client_email": "vidoushisoobug@gmail.com",
-      "client_phone": "+23058151371",
-      "services_summary": "JDM Experience, Show & Shine, VIP Experience",
-      "created_at": "2026-10-21T12:04:43.943Z",
-      "confirmed_at": "2026-10-21T12:18:19.293Z",
-      "completed_at": "2026-10-21T13:12:57.949Z",
-      "cancelled_at": null,
-      "updated_at": "2026-10-21T13:12:57.950Z"
-    }
-  },
-  {
-    "model": "reviews.review",
-    "pk": 1,
-    "fields": {
-      "customer": 3,
-      "booking": 11,
       "rating": 4,
       "comment": "The car meet was very well organized. Highly recommended!!!",
-      "status": "published",
-      "created_at": "2026-10-24T17:32:54.973Z",
-      "updated_at": "2026-10-24T17:32:54.973Z"
+      "created_at": "2026-10-24T17:32:54.973Z"
     }
   }
 ]
