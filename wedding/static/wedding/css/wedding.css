@@ -694,3 +694,89 @@
     background-color: #d4af37;
     border-color: #d4af37;
 }
+
+/* Wedding booking form: use the Wedding gold accent with Seaside's layout. */
+.wedding-page .seaside-enquiry {
+    background-color: #f5eed6;
+}
+
+.wedding-page .seaside-enquiry-shade {
+    background: linear-gradient(180deg, rgba(72, 55, 12, 0.12), rgba(111, 79, 10, 0.28));
+}
+
+.wedding-page .seaside-enquiry-panel {
+    background: linear-gradient(135deg, rgba(255, 253, 246, 0.94), rgba(249, 241, 213, 0.9));
+    box-shadow: 0 24px 70px rgba(98, 76, 19, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.wedding-page .seaside-enquiry-heading .seaside-eyebrow,
+.wedding-page .seaside-form-section h3,
+.wedding-page .seaside-form-field label span,
+.wedding-page .seaside-form-required-note span,
+.wedding-page .seaside-estimate-total strong {
+    color: #D4AF37;
+}
+
+.wedding-page .seaside-enquiry-heading h2,
+.wedding-page .seaside-form-field label,
+.wedding-page .seaside-form-field legend,
+.wedding-page .seaside-form-options label,
+.wedding-page .seaside-form-control,
+.wedding-page .seaside-estimate,
+.wedding-page .seaside-access-notice {
+    color: #333333;
+}
+
+.wedding-page .seaside-enquiry-heading > p:last-child,
+.wedding-page .seaside-form-label-note,
+.wedding-page .seaside-form-required-note {
+    color: #665d46;
+}
+
+.wedding-page .seaside-form-section {
+    border-bottom-color: rgba(212, 175, 55, 0.3);
+}
+
+.wedding-page .seaside-form-control {
+    background: rgba(255, 252, 240, 0.8);
+    box-shadow: inset 0 1px 3px rgba(98, 76, 19, 0.08);
+}
+
+.wedding-page .seaside-form-control::placeholder {
+    color: rgba(51, 51, 51, 0.58);
+}
+
+.wedding-page .seaside-form-control:focus {
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.22);
+}
+
+.wedding-page .seaside-form-control[readonly] {
+    background: rgba(239, 228, 189, 0.62);
+}
+
+.wedding-page .seaside-form-options input {
+    accent-color: #D4AF37;
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit {
+    background: #D4AF37;
+    box-shadow: 0 8px 20px rgba(98, 76, 19, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit:hover {
+    background: #b8962e;
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit:focus-visible {
+    outline-color: #D4AF37;
+}
+
+.wedding-page .seaside-form-success {
+    border-left-color: #D4AF37;
+}
+
+.wedding-page .seaside-estimate {
+    background: rgba(255, 252, 240, 0.82);
+}
+
