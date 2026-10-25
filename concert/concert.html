@@ -1,0 +1,365 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concert | LaFaya</title>
+    <link rel="stylesheet" href="{% static 'concert/css/concert.css' %}">
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header class="navbar">
+    <a href="#" class="logo"><span>●</span> LAFAYA</a>
+
+    <nav>
+        <a href="/">HOMEPAGE</a>
+        <a href="#">WEDDING</a>
+        <a href="{% url 'concert_home' %}" class="active">CONCERT</a>
+        <a href="#">CONFERENCE</a>
+        <a href="#">SEASIDE</a>
+        <a href="#">BIRTHDAY</a>
+        <a href="#">CAR EVENT</a>
+    </nav>
+
+    <button class="menu-toggle" id="menuToggle"
+            aria-label="Toggle navigation">☰</button>
+</header>
+
+<main>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">ENGINEERED FOR PURE ACOUSTIC ENERGY</p>
+
+            <h1>Experience <span>Live Music</span><br>Reborn</h1>
+
+            <p class="hero-description">
+                Immerse yourself in legendary soundscapes, monumental
+                lighting design, and unmatched physical stadium performance.
+                We craft unforgettable sonic journeys across the globe.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#ticket-packages" class="btn btn-primary">
+                    FIND SHOWS
+                </a>
+                <button class="btn btn-outline" id="teaserButton">
+                    WATCH TEASER
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- VENUES -->
+    <section class="section venues-section" id="venues">
+        <div class="section-heading">
+            <div>
+                <p class="section-label">— WORLD-CLASS ARENAS —</p>
+                <h2>Iconic Stages of Electric Energy</h2>
+            </div>
+            <a href="#venues" class="scroll-link">Scroll to explore <span>›</span></a>
+        </div>
+
+        <div class="card-grid venue-grid" id="venueGrid">
+            {% for venue in venues %}
+            <article class="venue-card">
+                <img src="{{ venue.image.url }}" alt="{{ venue.name }}">
+
+                <div class="card-content">
+                    <p class="location">{{ venue.location }}</p>
+                    <h3>{{ venue.name }}</h3>
+                    <p>{{ venue.description }}</p>
+                    <a href="#ticket-packages" class="card-link">
+                        EXPLORE VENUE <span>›</span>
+                    </a>
+                </div>
+            </article>
+            {% empty %}
+            <article class="venue-card">
+                <img src="{% static 'concert/images/neon-dome.jpg' %}"
+                     alt="Concert stage at The Neon Dome Arena">
+                <div class="card-content">
+                    <p class="location">TOKYO, JAPAN</p>
+                    <h3>The Neon Dome Arena</h3>
+                    <p>A multi-sensory cyber dome loaded with spatial audio
+                       and immersive LED walls.</p>
+                    <a href="#ticket-packages" class="card-link">
+                        EXPLORE VENUE <span>›</span>
+                    </a>
+                </div>
+            </article>
+
+            <article class="venue-card">
+                <img src="{% static 'concert/images/viper-canyon.jpg' %}"
+                     alt="Outdoor Viper Canyon concert stage">
+                <div class="card-content">
+                    <p class="location">COLORADO, USA</p>
+                    <h3>Viper Canyon Amphitheater</h3>
+                    <p>Monolithic red rocks meet premium acoustic projection,
+                       creating a natural sonic experience.</p>
+                    <a href="#ticket-packages" class="card-link">
+                        EXPLORE VENUE <span>›</span>
+                    </a>
+                </div>
+            </article>
+
+            <article class="venue-card">
+                <img src="{% static 'concert/images/foundry.jpg' %}"
+                     alt="The Foundry Cathedral concert venue">
+                <div class="card-content">
+                    <p class="location">BERLIN, GERMANY</p>
+                    <h3>The Foundry Cathedral</h3>
+                    <p>A dark industrial powerhouse delivering a powerful
+                       audiovisual experience.</p>
+                    <a href="#ticket-packages" class="card-link">
+                        EXPLORE VENUE <span>›</span>
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-controls">
+            <button class="square-btn" data-scroll="venueGrid"
+                    data-direction="-1" aria-label="Previous venues">+</button>
+            <button class="square-btn" data-scroll="venueGrid"
+                    data-direction="1" aria-label="Next venues">−</button>
+        </div>
+    </section>
+
+    <!-- PRODUCTION ELEMENTS -->
+    <section class="section production-section" id="production">
+        <div class="center-heading">
+            <p class="section-label">— TOUR ATELIER —</p>
+            <h2>Monumental Production Elements</h2>
+        </div>
+
+        <div class="card-grid production-grid" id="productionGrid">
+            {% for element in production_elements %}
+            <article class="production-card">
+                <img src="{{ element.image.url }}" alt="{{ element.name }}">
+                <div class="card-content">
+                    <h3>{{ element.name }}</h3>
+                    <p>{{ element.description }}</p>
+                    {% if element.features %}
+                    <div class="tags">
+                        {% for feature in element.features.splitlines %}
+                        <span>{{ feature }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <article class="production-card">
+                <img src="{% static 'concert/images/sonic-engineering.jpg' %}"
+                     alt="Concert sound engineering equipment">
+                <div class="card-content">
+                    <h3>Sonic Engineering</h3>
+                    <p>High-fidelity spatial audio systems providing
+                       exceptional soundscapes.</p>
+                    <div class="tags">
+                        <span>120dB Clarity</span>
+                        <span>Spatial Arrays</span>
+                        <span>Bass Control</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="production-card">
+                <img src="{% static 'concert/images/laser.jpg' %}"
+                     alt="Concert stage with laser lighting">
+                <div class="card-content">
+                    <h3>Laser Sonography</h3>
+                    <p>Immersive visual transformations using powerful
+                       lighting systems and real-time effects.</p>
+                    <div class="tags">
+                        <span>3D Vector Lasers</span>
+                        <span>Live Visual Mapping</span>
+                        <span>Reactive Shows</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="production-card">
+                <img src="{% static 'concert/images/catering.jpg' %}"
+                     alt="Backstage catering area">
+                <div class="card-content">
+                    <h3>Backstage Catering</h3>
+                    <p>Premium culinary services, curated cocktails and
+                       dedicated green-room support.</p>
+                    <div class="tags">
+                        <span>VIP Lounge Access</span>
+                        <span>Artisanal Cocktails</span>
+                        <span>Green Room Dining</span>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-controls">
+            <button class="square-btn" data-scroll="productionGrid"
+                    data-direction="-1" aria-label="Previous elements">+</button>
+            <button class="square-btn" data-scroll="productionGrid"
+                    data-direction="1" aria-label="Next elements">−</button>
+        </div>
+    </section>
+
+    <!-- TICKET PACKAGES -->
+    <section class="section ticket-section" id="ticket-packages">
+        <div class="section-heading">
+            <div>
+                <p class="section-label">— TICKET PACKAGES —</p>
+                <h2>Access Your Sonic Adventure</h2>
+            </div>
+            <button class="compare-button" id="compareButton">
+                Compare Tiers <span>●</span>
+            </button>
+        </div>
+
+        <div class="card-grid ticket-grid">
+            {% for package in ticket_packages %}
+            <article class="ticket-card">
+                <div class="ticket-header">
+                    <p>{{ package.tier }}</p>
+                    <h3>{{ package.name }}</h3>
+                </div>
+
+                <div class="ticket-body">
+                    {% if package.features %}
+                    <ul>
+                        {% for feature in package.features.splitlines %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>{{ package.description }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="ticket-footer">
+                    <div>
+                        <p class="admission-label">ADMISSION</p>
+                        <p class="price">From RS {{ package.price|floatformat:0 }}</p>
+                    </div>
+                    <button class="select-button"
+                            data-package="{{ package.name }}"
+                            data-price="{{ package.price }}">
+                        Select
+                    </button>
+                </div>
+            </article>
+            {% empty %}
+            <article class="ticket-card">
+                <div class="ticket-header">
+                    <p>STANDARD ADMISSION</p>
+                    <h3>Arena Pit Pass</h3>
+                </div>
+                <div class="ticket-body">
+                    <ul>
+                        <li>Access to general arena standing pit</li>
+                        <li>Standard digital entry pass</li>
+                        <li>High-fidelity acoustic coverage zone</li>
+                        <li>Merchandise kiosk access</li>
+                    </ul>
+                </div>
+                <div class="ticket-footer">
+                    <div><p class="admission-label">ADMISSION</p>
+                    <p class="price">From RS 2500</p></div>
+                    <button class="select-button"
+                            data-package="Arena Pit Pass" data-price="2500">
+                        Select
+                    </button>
+                </div>
+            </article>
+
+            <article class="ticket-card">
+                <div class="ticket-header">
+                    <p>ELEVATED PREMIUM</p>
+                    <h3>VIP Backstage Pass</h3>
+                </div>
+                <div class="ticket-body">
+                    <ul>
+                        <li>Front-row VIP venue entrance</li>
+                        <li>Access to backstage lounge</li>
+                        <li>Exclusive limited edition show poster</li>
+                        <li>Premium elevated soundstage viewing</li>
+                    </ul>
+                </div>
+                <div class="ticket-footer">
+                    <div><p class="admission-label">ADMISSION</p>
+                    <p class="price">From RS 5000</p></div>
+                    <button class="select-button"
+                            data-package="VIP Backstage Pass" data-price="5000">
+                        Select
+                    </button>
+                </div>
+            </article>
+
+            <article class="ticket-card">
+                <div class="ticket-header">
+                    <p>ULTIMATE EXPERIENCE</p>
+                    <h3>All-Access AAA</h3>
+                </div>
+                <div class="ticket-body">
+                    <ul>
+                        <li>Full artist soundcheck experience</li>
+                        <li>On-stage side platform viewing area</li>
+                        <li>Bespoke catering and premium open bar</li>
+                        <li>Exclusive artist meet and greet photo</li>
+                    </ul>
+                </div>
+                <div class="ticket-footer">
+                    <div><p class="admission-label">ADMISSION</p>
+                    <p class="price">From RS 10000</p></div>
+                    <button class="select-button"
+                            data-package="All-Access AAA" data-price="10000">
+                        Select
+                    </button>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-controls">
+            <button class="square-btn" data-scroll="ticket-packages"
+                    data-direction="-1" aria-label="Scroll up">+</button>
+            <button class="square-btn" data-scroll="ticket-packages"
+                    data-direction="1" aria-label="Scroll down">−</button>
+        </div>
+    </section>
+
+    <!-- CLOSING QUOTE -->
+    <section class="quote-section">
+        <blockquote>
+            "The absolute scale of the sound, the violent clarity of the
+            lights, the total energy of the crowd... it wasn't just a
+            concert, it was a futuristic awakening."
+        </blockquote>
+        <p>— LIAM G., BERLIN WAREHOUSE TOUR 2024</p>
+    </section>
+
+</main>
+
+<!-- SIMPLE INTERACTION DIALOG -->
+<dialog id="actionDialog" class="action-dialog">
+    <button class="dialog-close" id="dialogClose"
+            aria-label="Close dialog">×</button>
+    <h2 id="dialogTitle">Concert</h2>
+    <p id="dialogMessage"></p>
+    <button class="btn btn-primary" id="dialogOkay">OK</button>
+</dialog>
+
+<footer class="footer">
+    <a href="#" class="logo"><span>●</span> LAFAYA</a>
+    <p>Crafting unforgettable experiences.</p>
+</footer>
+
+<script src="{% static 'concert/js/concert.js' %}"></script>
+</body>
+</html>
