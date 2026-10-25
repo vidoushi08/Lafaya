@@ -5,12 +5,14 @@
     "fields": {
       "name": "Elopement Soirée",
       "slug": "elopement-soiree",
+      "tagline": "The Intimate Gathering",
+      "features": "Bespoke elopement planner\nLuxury floral design & backdrop\nPre-ceremony champagne toast\nDedicated photographer (4 Hours)",
       "description": "Intimate wedding planning, floral design, a champagne toast, and photography.",
       "price": "125000.00",
       "min_guests": 1,
       "max_guests": null,
       "is_active": true,
-      "display_order": 1
+      "position": 1
     }
   },
   {
@@ -19,12 +21,14 @@
     "fields": {
       "name": "Classic Heritage",
       "slug": "classic-heritage",
+      "tagline": "Signature Grandeur",
+      "features": "Full-service weekend curation\nElite venue sourcing & buyout\nCocktail & premium dining design\nCinematography & photography team",
       "description": "Full-service wedding planning, venue sourcing, dining design, and photography.",
       "price": "180000.00",
       "min_guests": 1,
       "max_guests": null,
       "is_active": true,
-      "display_order": 2
+      "position": 2
     }
   },
   {
@@ -33,12 +37,14 @@
     "fields": {
       "name": "Royal Imperial",
       "slug": "royal-imperial",
+      "tagline": "The Masterpiece Studio",
+      "features": "Multi-day celebration planning\nCelebrity guest concierge\n3D custom floorplan & renders\nSymphony orchestra procurement",
       "description": "Multi-day celebration planning with guest concierge and full production support.",
       "price": "210000.00",
       "min_guests": 1,
       "max_guests": null,
       "is_active": true,
-      "display_order": 3
+      "position": 3
     }
   },
   {
@@ -85,6 +91,8 @@
     "pk": 1,
     "fields": {
       "name": "Symphonic Entertainment",
+      "highlights": "Premium Soundscapes\nElite Curators\nLive Orchestral Integration",
+      "image": "wedding/images/wedding_services_entertainment.png",
       "description": "Live music, DJs, and curated sound.",
       "price": null,
       "price_basis": "per_booking",
@@ -97,6 +105,8 @@
     "pk": 2,
     "fields": {
       "name": "Immersive Scenography",
+      "highlights": "Custom Floral Art\nLighting Mastery\nTable Curation",
+      "image": "wedding/images/wedding_services_scenes.png",
       "description": "Floral installations, drapery, and event lighting.",
       "price": null,
       "price_basis": "per_booking",
@@ -109,6 +119,8 @@
     "pk": 3,
     "fields": {
       "name": "Gourmet Gastronomy",
+      "highlights": "Bespoke Banquets\nSommelier Selection\nCrafted Patisserie",
+      "image": "wedding/images/wedding_services_gastronomy.png",
       "description": "Custom dining, wine pairings, and wedding cakes.",
       "price": null,
       "price_basis": "per_booking",

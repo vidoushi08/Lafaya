@@ -6,8 +6,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
-from .forms import WeddingBookingForm
+from .forms import MAX_DAYS_AHEAD, WeddingBookingForm, bookable
 from .models import WeddingPackage, WeddingService, WeddingVenue
+from .notifications import notify_admins_of_booking
 
 
 def is_customer(user):
@@ -29,7 +30,8 @@ def index(request):
             )
         form = WeddingBookingForm(request.POST, customer=customer)
         if form.is_valid():
-            form.save()
+            booking = form.save()
+            notify_admins_of_booking(booking, request)
             messages.success(
                 request,
                 "Your wedding booking request has been submitted and is awaiting approval.",
@@ -53,9 +55,9 @@ def index(request):
             "packages": WeddingPackage.objects.filter(is_active=True),
             "venues": WeddingVenue.objects.filter(is_active=True),
             "services": WeddingService.objects.filter(is_active=True),
-            "bookable_packages": WeddingPackage.objects.filter(is_active=True),
-            "bookable_venues": WeddingVenue.objects.filter(is_active=True),
-            "bookable_services": WeddingService.objects.filter(is_active=True),
+            "bookable_packages": bookable(WeddingPackage),
+            "bookable_venues": bookable(WeddingVenue),
+            "bookable_services": bookable(WeddingService),
             "form": form,
             "selected_services": (
                 form.data.getlist("optional_services")
@@ -64,7 +66,7 @@ def index(request):
             ),
             "is_customer": customer is not None,
             "min_event_date": today.isoformat(),
-            "max_event_date": (today + timedelta(days=730)).isoformat(),
+            "max_event_date": (today + timedelta(days=MAX_DAYS_AHEAD)).isoformat(),
             "login_next": f"{reverse('wedding:wedding')}#wedding-enquiry",
         },
     )

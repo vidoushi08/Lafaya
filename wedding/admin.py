@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.templatetags.static import static
+from django.utils.html import format_html
 
 from authentication.admin_site import superadmin_site
 from booking.admin import BookingRequestAdminActions
@@ -11,29 +13,115 @@ from .models import (
 )
 
 
-@admin.register(WeddingPackage, site=superadmin_site)
-class WeddingPackageAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "min_guests", "max_guests", "is_active", "display_order")
-    list_filter = ("is_active",)
-    search_fields = ("name", "slug")
-    prepopulated_fields = {"slug": ("name",)}
-    ordering = ("display_order", "name")
+class PricedCatalogItemAdmin(admin.ModelAdmin):
+    list_display = ("name", "price", "price_basis", "is_active", "position")
+    list_editable = ("price", "price_basis", "is_active", "position")
+    list_filter = ("is_active", "price_basis")
+    search_fields = ("name",)
+    readonly_fields = ("image_preview",)
+
+    @admin.display(description="Current image")
+    def image_preview(self, obj):
+        if obj.uploaded_image:
+            return format_html(
+                '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
+                obj.uploaded_image.url,
+            )
+        static_image = getattr(obj, "image", "")
+        if static_image:
+            return format_html(
+                '<img src="{}" alt="" style="max-width: 240px; max-height: 160px;">',
+                static(static_image),
+            )
+        return "No image uploaded"
 
 
 @admin.register(WeddingVenue, site=superadmin_site)
-class WeddingVenueAdmin(admin.ModelAdmin):
-    list_display = ("name", "location", "capacity", "is_active", "position")
-    list_filter = ("is_active",)
+class WeddingVenueAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "location",
+        "capacity",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+        "image_preview",
+    )
     search_fields = ("name", "location")
-    list_editable = ("capacity", "is_active", "position")
+    fields = (
+        "name",
+        "location",
+        "description",
+        "image",
+        "image_preview",
+        "uploaded_image",
+        "capacity",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+    )
+
+
+@admin.register(WeddingPackage, site=superadmin_site)
+class WeddingPackageAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "tagline",
+        "min_guests",
+        "max_guests",
+        "price",
+        "price_basis",
+        "is_featured",
+        "is_active",
+        "position",
+        "image_preview",
+    )
+    list_editable = ("price", "price_basis", "is_featured", "is_active", "position")
+    search_fields = ("name", "slug")
+    prepopulated_fields = {"slug": ("name",)}
+    fields = (
+        "name",
+        "slug",
+        "tagline",
+        "description",
+        "image",
+        "features",
+        "image_preview",
+        "uploaded_image",
+        "min_guests",
+        "max_guests",
+        "price",
+        "price_basis",
+        "is_featured",
+        "is_active",
+        "position",
+    )
 
 
 @admin.register(WeddingService, site=superadmin_site)
-class WeddingServiceAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "price_basis", "is_active", "position")
-    list_filter = ("is_active", "price_basis")
-    search_fields = ("name",)
-    list_editable = ("price", "price_basis", "is_active", "position")
+class WeddingServiceAdmin(PricedCatalogItemAdmin):
+    list_display = (
+        "name",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+        "image_preview",
+    )
+    fields = (
+        "name",
+        "description",
+        "highlights",
+        "image",
+        "image_preview",
+        "uploaded_image",
+        "price",
+        "price_basis",
+        "is_active",
+        "position",
+    )
 
 
 @admin.register(WeddingBookingRequest, site=superadmin_site)

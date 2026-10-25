@@ -11,10 +11,22 @@ from .models import (
     WeddingService,
     WeddingVenue,
 )
+from .pricing import calculate_estimate
 
 MAX_BUDGET = Decimal("10000000")
 MAX_GUESTS = 10000
 MAX_DAYS_AHEAD = 730
+
+
+def bookable(model):
+    """Active catalogue items that have a configured price.
+
+    Venues and services may stay unpriced ("Price on request"), so only
+    packages are filtered by price.
+    """
+    if model is WeddingPackage:
+        return model.objects.filter(is_active=True, price__isnull=False)
+    return model.objects.filter(is_active=True)
 
 
 class WeddingBookingForm(forms.Form):
@@ -40,18 +52,19 @@ class WeddingBookingForm(forms.Form):
     def __init__(self, *args, customer, **kwargs):
         super().__init__(*args, **kwargs)
         self.customer = customer
-        self.fields["venue"].queryset = WeddingVenue.objects.filter(is_active=True)
-        self.fields["package"].queryset = WeddingPackage.objects.filter(is_active=True)
-        self.fields["optional_services"].queryset = WeddingService.objects.filter(
-            is_active=True
-        )
+        self.fields["venue"].queryset = bookable(WeddingVenue)
+        self.fields["package"].queryset = bookable(WeddingPackage)
+        self.fields["optional_services"].queryset = bookable(WeddingService)
 
     @property
     def phone_locked(self):
         return bool(self.customer.phone)
 
     def clean_phone(self):
-        return self.customer.phone if self.phone_locked else self.cleaned_data["phone"].strip()
+        # The account phone number is authoritative when one exists.
+        if self.phone_locked:
+            return self.customer.phone
+        return self.cleaned_data["phone"].strip()
 
     def clean_event_date(self):
         event_date = self.cleaned_data["event_date"]
@@ -91,31 +104,22 @@ class WeddingBookingForm(forms.Form):
                 self.add_error("package", f"{package.name} accommodates up to {package.max_guests} guests.")
 
         budget = cleaned.get("budget")
-        if package and budget is not None:
+        if guests and venue and package and budget is not None:
             services = list(cleaned.get("optional_services") or [])
-            total = package.price + sum(
-                (service.price or Decimal("0.00") for service in services),
-                Decimal("0.00"),
-            )
+            total, lines = calculate_estimate(venue, package, services, guests)
             if total > budget:
-                self.add_error("budget", f"Your selection costs Rs {total:,.2f}, above your budget of Rs {budget:,.2f}.")
-            self.estimate = (total, services)
+                self.add_error(
+                    "budget",
+                    f"Your selection costs Rs {total:,.2f}, which is above your "
+                    f"budget of Rs {budget:,.2f}.",
+                )
+            self.estimate = (total, lines, services)
         return cleaned
 
     @transaction.atomic
     def save(self):
         data = self.cleaned_data
-        total, services = self.estimate
-        breakdown = [{"name": data["package"].name, "unit_price": str(data["package"].price), "subtotal": str(data["package"].price)}]
-        breakdown.extend(
-            {
-                "name": service.name,
-                "unit_price": str(service.price) if service.price is not None else None,
-                "subtotal": str(service.price) if service.price is not None else None,
-                "note": "Price on request" if service.price is None else "",
-            }
-            for service in services
-        )
+        total, lines, services = self.estimate
         booking = WeddingBookingRequest.objects.create(
             customer=self.customer,
             first_name=data["first_name"].strip(),
@@ -131,7 +135,7 @@ class WeddingBookingForm(forms.Form):
             package=data["package"],
             budget=data["budget"],
             estimated_total=total,
-            price_breakdown=breakdown,
+            price_breakdown=lines,
             message=data["message"].strip(),
         )
         booking.services.set(services)
