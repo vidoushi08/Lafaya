@@ -221,3 +221,18 @@ __marimo__/
 .streamlit/secrets.toml
 
 env
+# Local AI files
+/AGENTS*.md
+
+# Secrets and virtual environments
+/.env
+/env/
+/venv/
+/.venv/
+
+# Local databases and backups
+/db.sqlite3
+/db-before-birthday-repair.sqlite3
+
+# Design reference only
+/concert-landing-page.png

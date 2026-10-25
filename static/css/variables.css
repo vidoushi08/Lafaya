@@ -18,6 +18,15 @@
   --color-dashboard-icon: #817a73;
   --color-dashboard-line: #eee9e1;
   --color-dashboard-sidebar: #f2ece9;
+  --color-concert-background: #090611;
+  --color-concert-background-deep: #07050c;
+  --color-concert-border: #342542;
+  --color-concert-muted: #b9a9cc;
+  --color-concert-surface: #191326;
+  --color-concert-surface-raised: #21172f;
+  --color-concert-testimonial: #120d1c;
+  --color-concert-text: #f8f4ff;
+  --color-concert-violet: #9d43d6;
   --color-dark: #333333;
   --color-review-button: #654331;
   --color-review-button-hover: #4f3427;
