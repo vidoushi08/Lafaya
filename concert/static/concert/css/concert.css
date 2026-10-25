@@ -1024,3 +1024,31 @@
   content: "\2192";
   font-family: var(--font-body);
 }
+
+/* Header accents apply only while the Concert page is displayed. */
+body:has(.concert-page) .navbar .lafaya-logo-circle,
+body:has(.concert-page) .navbar .navbar-auth {
+  background-color: var(--color-concert-violet);
+}
+
+body:has(.concert-page) .navbar .navbar-auth:hover,
+body:has(.concert-page) .navbar .navbar-auth:focus-visible {
+  background-color: #7830a7;
+}
+
+/* Navigation text and underline highlights inherit Concert's violet accent. */
+body:has(.concert-page) .navbar {
+  --color-accent: var(--color-concert-violet);
+  --color-accent-hover: #7830a7;
+}
+
+body:has(.concert-page) .navbar :is(.navbar-links a, .navbar-dropdown-toggle, .navbar-toggle):is(:focus-visible, :active),
+body:has(.concert-page) .navbar-dropdown.active > .navbar-dropdown-toggle {
+  color: var(--color-concert-violet);
+}
+
+body:has(.concert-page) .navbar-links > li > a:is(:focus-visible, :active)::after,
+body:has(.concert-page) .navbar-dropdown-toggle:is(:focus-visible, :active)::after,
+body:has(.concert-page) .navbar-dropdown.active > .navbar-dropdown-toggle::after {
+  transform: scaleX(1);
+}
