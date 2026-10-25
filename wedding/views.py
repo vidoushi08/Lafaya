@@ -55,9 +55,7 @@ def index(request):
             "services": WeddingService.objects.filter(is_active=True),
             "bookable_packages": WeddingPackage.objects.filter(is_active=True),
             "bookable_venues": WeddingVenue.objects.filter(is_active=True),
-            "bookable_services": WeddingService.objects.filter(
-                is_active=True, price__isnull=False
-            ),
+            "bookable_services": WeddingService.objects.filter(is_active=True),
             "form": form,
             "selected_services": (
                 form.data.getlist("optional_services")

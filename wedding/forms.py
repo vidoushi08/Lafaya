@@ -43,7 +43,7 @@ class WeddingBookingForm(forms.Form):
         self.fields["venue"].queryset = WeddingVenue.objects.filter(is_active=True)
         self.fields["package"].queryset = WeddingPackage.objects.filter(is_active=True)
         self.fields["optional_services"].queryset = WeddingService.objects.filter(
-            is_active=True, price__isnull=False
+            is_active=True
         )
 
     @property
@@ -94,7 +94,8 @@ class WeddingBookingForm(forms.Form):
         if package and budget is not None:
             services = list(cleaned.get("optional_services") or [])
             total = package.price + sum(
-                (service.price for service in services), Decimal("0.00")
+                (service.price or Decimal("0.00") for service in services),
+                Decimal("0.00"),
             )
             if total > budget:
                 self.add_error("budget", f"Your selection costs Rs {total:,.2f}, above your budget of Rs {budget:,.2f}.")
@@ -107,7 +108,12 @@ class WeddingBookingForm(forms.Form):
         total, services = self.estimate
         breakdown = [{"name": data["package"].name, "unit_price": str(data["package"].price), "subtotal": str(data["package"].price)}]
         breakdown.extend(
-            {"name": service.name, "unit_price": str(service.price), "subtotal": str(service.price)}
+            {
+                "name": service.name,
+                "unit_price": str(service.price) if service.price is not None else None,
+                "subtotal": str(service.price) if service.price is not None else None,
+                "note": "Price on request" if service.price is None else "",
+            }
             for service in services
         )
         booking = WeddingBookingRequest.objects.create(
