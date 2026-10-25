@@ -935,6 +935,92 @@ class SuperAdminAccessTests(TestCase):
 		list_response = self.client.get("/admin/authentication/user/")
 		self.assertContains(list_response, "Superadmin")
 
+	def test_staff_admin_flag_does_not_grant_superadmin_area_access(self):
+		staff = get_user_model().objects.create_user(
+			username="staff-user",
+			email="staff@example.com",
+			password="C0mpl3x+event-planning-2026!",
+			account_type="staff",
+			is_staff=True,
+		)
+		self.client.force_login(staff)
+
+		response = self.client.get("/admin/")
+
+		self.assertEqual(response.status_code, 302)
+		self.assertIn("/admin/login/", response["Location"])
+
+
+class AccountAreaAccessTests(TestCase):
+	def create_account(self, account_type):
+		return get_user_model().objects.create_user(
+			username=f"{account_type}-access",
+			email=f"{account_type}-access@example.com",
+			password="C0mpl3x+event-planning-2026!",
+			account_type=account_type,
+		)
+
+	def test_anonymous_visitors_are_redirected_from_account_areas(self):
+		protected_paths = (
+			"/customer_dashboard/",
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+			"/staff-event-details/1/",
+		)
+
+		for path in protected_paths:
+			with self.subTest(path=path):
+				response = self.client.get(path)
+				self.assertEqual(response.status_code, 302)
+				self.assertTrue(response["Location"].startswith("/authentication/?next="))
+
+	def test_customer_and_staff_can_only_access_their_own_account_areas(self):
+		customer = self.create_account("customer")
+		staff = self.create_account("staff")
+		staff_paths = (
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+			"/staff-event-details/1/",
+		)
+
+		self.client.force_login(customer)
+		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 200)
+		for path in staff_paths:
+			with self.subTest(account="customer", path=path):
+				self.assertEqual(self.client.get(path).status_code, 403)
+
+		self.client.force_login(staff)
+		self.assertEqual(self.client.get("/customer_dashboard/").status_code, 403)
+		for path in staff_paths:
+			with self.subTest(account="staff", path=path):
+				expected = 404 if path.startswith("/staff-event-details/") else 200
+				self.assertEqual(self.client.get(path).status_code, expected)
+
+	def test_superuser_can_access_customer_and_staff_portals(self):
+		superuser = get_user_model().objects.create_superuser(
+			username="portal-admin",
+			email="portal-admin@example.com",
+			password="C0mpl3x+event-planning-2026!",
+		)
+		self.client.force_login(superuser)
+
+		for path in (
+			"/customer_dashboard/",
+			"/staff/",
+			"/staff-booking-history/",
+			"/staff-profile/",
+			"/staff-task-assignment/",
+		):
+			with self.subTest(path=path):
+				self.assertEqual(self.client.get(path).status_code, 200)
+
+		self.assertEqual(self.client.get("/staff-event-details/1/").status_code, 404)
+
+
 class AccountPasswordTests(TestCase):
 	password = "C0mpl3x+event-planning-2026!"
 	new_password = "An0ther+strong-password-2026!"

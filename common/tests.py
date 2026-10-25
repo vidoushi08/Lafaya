@@ -14,6 +14,7 @@ from common.location import get_postal_code, load_cities, load_city_postal_codes
 from common.management.commands.export_catalog_fixtures import CATALOG_MODELS
 from car_events.models import Venue
 from seaside.models import SeasideVenue
+from wedding.models import WeddingPackage, WeddingService, WeddingVenue
 
 
 class LocationDataTests(SimpleTestCase):
@@ -100,6 +101,11 @@ class CatalogFixtureExportTests(TestCase):
                 "SeasidePackage",
                 "SeasideService",
             ),
+            "wedding": (
+                "WeddingPackage",
+                "WeddingVenue",
+                "WeddingService",
+            ),
         }
         self.assertEqual(CATALOG_MODELS, expected_models)
 
@@ -115,6 +121,16 @@ class CatalogFixtureExportTests(TestCase):
             description="A test car event venue.",
             price="200.00",
         )
+        WeddingPackage.objects.create(
+            name="Fixture package",
+            slug="fixture-package",
+            price="300.00",
+        )
+        WeddingVenue.objects.create(
+            name="Fixture wedding venue",
+            location="Mauritius",
+        )
+        WeddingService.objects.create(name="Fixture wedding service")
         get_user_model().objects.create_user(
             username="private-user",
             email="private@example.com",
@@ -149,10 +165,37 @@ class CatalogFixtureExportTests(TestCase):
             "Côte d'Or",
             [item["fields"]["name"] for item in exported["car_events"]],
         )
+        self.assertEqual(
+            {item["model"] for item in exported["wedding"]},
+            {
+                "wedding.weddingpackage",
+                "wedding.weddingvenue",
+                "wedding.weddingservice",
+            },
+        )
         self.assertTrue(
             all(
                 item["model"].split(".", 1)[0] == app_label
                 for app_label, items in exported.items()
                 for item in items
             )
+        )
+
+
+class CatalogFixtureLoadTests(TestCase):
+    def test_load_catalog_imports_catalogue_rows(self):
+        call_command("load_catalog", stdout=io.StringIO())
+
+        self.assertTrue(
+            SeasideVenue.objects.filter(name="The Glass Pavilion").exists()
+        )
+        self.assertTrue(Venue.objects.filter(name="Côte d'Or").exists())
+        self.assertTrue(
+            WeddingPackage.objects.filter(slug="elopement-soiree").exists()
+        )
+        self.assertTrue(
+            WeddingVenue.objects.filter(name="Island View Hall").exists()
+        )
+        self.assertTrue(
+            WeddingService.objects.filter(name="Symphonic Entertainment").exists()
         )

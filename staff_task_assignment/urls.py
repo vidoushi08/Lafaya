@@ -7,4 +7,5 @@ app_name = "staff_task_assignment"
 
 urlpatterns = [
     path("", views.index, name="tasks"),
+    path("tasks/<int:task_id>/update/", views.update_task, name="update_task"),
 ]

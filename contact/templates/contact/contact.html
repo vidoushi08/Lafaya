@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Lafaya | Let's plan something memorable{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'contact/css/contact.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="contact-page">
+    <section class="contact-hero" aria-labelledby="contact-title">
+      <div class="contact-hero-copy">
+        <p class="contact-eyebrow">We’re here to help</p>
+        <h1 id="contact-title">Let’s make your next event <span>unforgettable.</span></h1>
+        <p>Tell us what you’re planning. From the first idea to the final detail, the Lafaya team will help you bring it to life.</p>
+        <a class="contact-hero-link" href="#contact-form">Talk to our team <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+      </div>
+      <div class="contact-hero-art" aria-hidden="true">
+        <img src="{% static 'images/events/homepage.png' %}" alt="">
+        <span class="contact-hero-caption">Made for the moments that matter</span>
+      </div>
+    </section>
+
+    <section class="contact-main contact-design-section" aria-label="Get in touch">
+      <div class="contact-design-copy">
+        <h2>Get in Touch</h2>
+        <p class="contact-design-lead">I'd like to hear from you!</p>
+        <p class="contact-design-description">If you have any inquiries or just want to say hi, please use the contact form!</p>
+        <div class="contact-design-socials">
+          <a class="contact-design-email" href="mailto:{{ contact_email }}">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>{{ contact_email }}
+          </a>
+          <div class="contact-design-social-links" aria-label="Lafaya social media">
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-card contact-design-form-card" id="contact-form">
+
+        {% if messages %}
+          {% for message in messages %}<div class="contact-message-success" role="status"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>{{ message }}</div>{% endfor %}
+        {% endif %}
+        {% if form.non_field_errors %}<div class="contact-form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+
+        <form method="post" action="{% url 'contact:contact' %}#contact-form" class="contact-form">
+          {% csrf_token %}
+          {{ form.website }}
+          <div class="contact-design-name-row">
+            <div class="contact-field">
+              <label for="{{ form.first_name.id_for_label }}">First Name</label>
+              {{ form.first_name }}{{ form.first_name.errors }}
+            </div>
+            <div class="contact-field">
+              <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+              {{ form.last_name }}{{ form.last_name.errors }}
+            </div>
+          </div>
+          <div class="contact-field">
+            <label for="{{ form.email.id_for_label }}">Email <span>*</span></label>
+            {{ form.email }}{{ form.email.errors }}
+          </div>
+          <div class="contact-field">
+            <label for="{{ form.message.id_for_label }}">Message</label>
+            {{ form.message }}{{ form.message.errors }}
+          </div>
+          <div class="contact-form-submit-row">
+            <span></span>
+            <button type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="contact-event-cta" aria-label="Explore event planning">
+      <p class="contact-eyebrow">Already have an idea?</p>
+      <h2>Start planning your event.</h2>
+      <div class="contact-event-links">
+        <a href="{% url 'wedding:wedding' %}">Weddings</a>
+        <a href="{% url 'birthday:birthday' %}">Birthdays</a>
+        <a href="{% url 'car_events:car_events' %}">Car events</a>
+        <a href="{% url 'seaside:seaside' %}">Seaside</a>
+        <a href="{% url 'conference:conference' %}">Conferences</a>
+      </div>
+    </section>
+  </div>
+{% endblock %}

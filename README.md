@@ -1,4 +1,4 @@
-﻿# Lafaya
+# Lafaya
 
 ## Setup
 
@@ -94,22 +94,6 @@ python manage.py runserver
 > [NOTE]
 > The Django admin panel is available at `http://127.0.0.1:8000/admin/`.
 
-### Existing database created before the custom customer account model
-
-If this project database already has `auth_user` and the built-in admin
-migrations recorded, but does not have `authentication_user`, back up
-`db.sqlite3` before migrating. Then run:
-
-```bash
-python manage.py shell -c 'from django.db import connection; connection.cursor().execute("DELETE FROM django_migrations WHERE app = %s", ["admin"])'
-python manage.py migrate authentication 0001_initial
-python manage.py migrate admin 0003_logentry_add_action_flag_choices --fake
-python manage.py migrate
-```
-
-This preserves existing accounts and admin history while moving the project
-to the custom customer account model. New databases only need the standard
-`python manage.py migrate` command.
 ## Sharing catalogue data (prices, packages, venues, services)
 
 Git only shares code. The data entered through the admin (prices, price bases,
@@ -129,14 +113,18 @@ Never export users, payments, or booking requests. They contain personal data.
 python manage.py export_catalog_fixtures
 ```
 
-   This exports Birthday, Car Events, Conference, and Seaside catalogues. To
-   export only selected apps, list them after the command, for example:
-   `python manage.py export_catalog_fixtures seaside conference`.
-3. Commit and push the fixtures:
+   This exports Birthday, Car Events, Conference, Seaside, and Wedding
+   catalogues. To export only selected apps, list them after the command, for
+   example: `python manage.py export_catalog_fixtures seaside wedding`.
+   Published customer reviews are exported separately with
+   `python manage.py export_reviews_fixture`. The review fixture contains
+   anonymized public-review snapshots only; it does not export customer accounts
+   or booking records.
+3. Commit and push the fixtures along with any uploaded catalogue images:
 
 ```bash
-git add birthday/fixtures car_events/fixtures conference/fixtures seaside/fixtures
-git commit -m "Update catalogue fixtures"
+git add birthday/fixtures car_events/fixtures conference/fixtures reviews/fixtures seaside/fixtures wedding/fixtures media
+git commit -m "Update catalogue fixtures and images"
 git push
 ```
 
@@ -156,8 +144,14 @@ git merge origin/<owner-branch>
 
 ```bash
 python manage.py migrate
-python manage.py loaddata birthday_catalog car_events_catalog conference_catalog seaside_catalog
+python manage.py load_catalog
 ```
+
+   `load_catalog` loads the Birthday, Car Events, Conference, Seaside, and
+   Wedding fixtures in one step. Reviews are separate, so load them safely with:
+   `python manage.py load_reviews_fixture`.
+   This command updates anonymized review snapshots without changing local
+   customer, booking, or payment records.
 
 3. Open the site or the admin to check that the prices appear.
 
@@ -166,8 +160,9 @@ python manage.py loaddata birthday_catalog car_events_catalog conference_catalog
 > prices already edited in your local database. Run it on a fresh or development
 > database, not on a database whose prices were changed on purpose afterwards.
 
-Uploaded images are not part of the fixtures. They are stored in `media/`, so
-copy that folder from the owner's laptop as well if images are needed.
+Catalogue images uploaded through the admin are stored under
+`media/<app>/catalog/`, and those files are tracked by git so teammates see the
+same images after pulling. Other media, such as profile pictures, stays local.
 
 ### Seaside catalogue images
 
@@ -177,3 +172,13 @@ directory; SQLite stores the file paths, not the image contents. Back up the
 `media/` directory alongside `db.sqlite3`. Uploaded images can be served by the
 development server while `DEBUG=True`; production deployment needs an
 appropriate media-file storage and serving configuration.
+
+## Staff workflow
+
+1. A customer books a theme; admin approves; customer pays, so the booking becomes `CONFIRMED`.
+2. In the superadmin (`/admin/`), open a `CONFIRMED` booking and add **Staff assignments** (staff member + role), or use *Staff assignments > Add*. Tasks (title, description, priority, due date) are added under each assignment. Unconfirmed bookings cannot be assigned. Overlapping events for a staff member only show a warning.
+3. Staff sign in and see the dashboard counts, **Booking History** (own bookings only, with search, filters and pagination), **View Tasks** and **Event Details**.
+4. Staff update only their own tasks: `pending > in progress > completed`, or `blocked` (and back to in progress). Updates are locked once the booking is `COMPLETED` or `CANCELLED`.
+5. Admin marks the booking `COMPLETED` or `CANCELLED` after the event. Cancelling frees the venue and date for new requests.
+
+Run `python manage.py migrate` after pulling to create the staff tables.

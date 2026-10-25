@@ -145,11 +145,17 @@ class CarEventBookingForm(forms.Form):
 
         package = cleaned.get("package")
         attendees = cleaned.get("expected_attendees")
-        if attendees and venue and venue.capacity and attendees > venue.capacity:
-            self.add_error(
-                "venue",
-                f"{venue.name} holds up to {venue.capacity} attendees.",
-            )
+        if attendees and venue:
+            if attendees < venue.min_attendees:
+                self.add_error(
+                    "venue",
+                    f"{venue.name} needs at least {venue.min_attendees} attendees.",
+                )
+            elif venue.max_attendees and attendees > venue.max_attendees:
+                self.add_error(
+                    "venue",
+                    f"{venue.name} holds up to {venue.max_attendees} attendees.",
+                )
         if attendees and package:
             if attendees < package.min_attendees:
                 self.add_error(

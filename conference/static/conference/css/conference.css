@@ -1,3 +1,26 @@
+body.conference-theme {
+  --color-accent: #123b68;
+  --color-accent-hover: #0b2b4e;
+  --color-brand: #123b68;
+  --color-complement: #1d4f91;
+  --color-complement-hover: #123b68;
+  --color-dark: #0b1f3a;
+  --color-grey: #bdcde0;
+  --color-grey-dark: #425a73;
+  --color-muted: #eaf1f9;
+  --color-orange: #1d4f91;
+  --color-gold: #1d4f91;
+  --color-yellow-dark: #1d4f91;
+  --color-overlay: rgba(5, 20, 40, 0.72);
+  --color-shadow: rgba(5, 20, 40, 0.12);
+  --color-white: #ffffff;
+  --color-white-muted: rgba(255, 255, 255, 0.85);
+  --color-instagram-1: #1d4f91;
+  --color-instagram-2: #123b68;
+  --color-instagram-3: #0b1f3a;
+  --color-whatsapp: #1d4f91;
+}
+
 .conference-page {
   background-color: var(--color-white);
 }
@@ -579,7 +602,7 @@
 
 .conference-form-field label span,
 .conference-form-required-note span {
-  color: #b35334;
+  color: #1d4f91;
 }
 
 .conference-form-control {
@@ -686,7 +709,7 @@
 }
 
 .conference-enquiry-form > .conference-button-submit:focus-visible {
-  outline: 3px solid #d3b17d;
+  outline: 3px solid #1d4f91;
   outline-offset: 3px;
 }
 

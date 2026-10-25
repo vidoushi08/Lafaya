@@ -158,6 +158,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Primary keys
+# Keep every app on the same auto field so the schema stays consistent.
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
@@ -194,6 +200,7 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@lafaya.mu")
+CONTACT_RECIPIENT_EMAIL = os.getenv("CONTACT_RECIPIENT_EMAIL", "hello@lafaya.mu")
 EMAIL_BACKEND = (
     "django.core.mail.backends.smtp.EmailBackend"
     if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD

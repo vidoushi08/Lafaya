@@ -1,25 +1,29 @@
 const ratingButtons = document.querySelectorAll(".reviews-rating-button");
 const reviewForm = document.querySelector(".reviews-form");
-const reviewFormStatus = document.querySelector(".reviews-form-status");
 
-ratingButtons.forEach(function (button) {
-  button.addEventListener("click", function () {
-    const selectedRating = Number(button.dataset.rating);
+if (reviewForm) {
+  const ratingInput = reviewForm.querySelector('[name="rating"]');
+  const hint = reviewForm.querySelector(".reviews-rating-hint");
 
-    ratingButtons.forEach(function (ratingButton) {
-      const isSelected = Number(ratingButton.dataset.rating) <= selectedRating;
-      const icon = ratingButton.querySelector("i");
+  function selectRating(rating) {
+    ratingInput.value = rating;
+    ratingButtons.forEach(function (button) {
+      const value = Number(button.dataset.rating);
+      const active = value <= rating;
+      const icon = button.querySelector("i");
+      button.classList.toggle("reviews-rating-button-selected", active);
+      button.setAttribute("aria-checked", String(value === rating));
+      icon.classList.toggle("fa-solid", active);
+      icon.classList.toggle("fa-regular", !active);
+    });
+    hint.textContent = `${rating} out of 5 stars selected`;
+  }
 
-      ratingButton.classList.toggle("reviews-rating-button-selected", isSelected);
-      ratingButton.setAttribute("aria-checked", String(Number(ratingButton.dataset.rating) === selectedRating));
-      icon.classList.toggle("fa-solid", isSelected);
-      icon.classList.toggle("fa-regular", !isSelected);
+  ratingButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      selectRating(Number(button.dataset.rating));
     });
   });
-});
 
-reviewForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  reviewFormStatus.textContent =
-    "Review submission is not connected yet. Your review has not been submitted.";
-});
+  if (ratingInput.value) selectRating(Number(ratingInput.value));
+}

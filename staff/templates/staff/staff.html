@@ -5,6 +5,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'staff/css/staff.css' %}">
+  <link rel="stylesheet" href="{% static 'css/staff_shared.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -105,6 +106,13 @@
 
       </section>
 
+      <section class="staff-counts" aria-label="task summary">
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-count-card"><strong>{{ counts.total }}</strong><span>Tasks assigned</span></a>
+        <a href="{% url 'staff_task_assignment:tasks' %}?status=in_progress" class="staff-count-card"><strong>{{ counts.in_progress }}</strong><span>In progress</span></a>
+        <a href="{% url 'staff_task_assignment:tasks' %}?status=completed" class="staff-count-card"><strong>{{ counts.completed }}</strong><span>Completed</span></a>
+        <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-count-card"><strong>{{ counts.due_soon }}</strong><span>Due soon</span></a>
+      </section>
+
       <section class="staff-action-grid">
         <a href="{% url 'staff_booking_history:history' %}" class="staff-action-card">
           <div class="staff-action-icon staff-icon-green">
@@ -128,7 +136,16 @@
           <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
         </a>
 
-        <a href="{% url 'staff_profile:profile' %}" class="staff-manage-btn">Manage Profile</a>
+        <a href="{% url 'staff_profile:profile' %}" class="staff-action-card">
+          <div class="staff-action-icon staff-icon-blue">
+            <i class="fa-solid fa-user-gear"></i>
+          </div>
+          <div class="staff-action-text">
+            <h3>Manage Profile</h3>
+            <p>Update your personal staff details.</p>
+          </div>
+          <i class="fa-solid fa-arrow-right staff-action-arrow"></i>
+        </a>
       </section>
     </main>
   </div>

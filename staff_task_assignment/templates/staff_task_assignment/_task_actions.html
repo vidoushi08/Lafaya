@@ -1,0 +1,11 @@
+{% if task.event_closed_label %}<span class="staff-event-closed-badge">{{ task.event_closed_label }}</span>{% endif %}
+<div class="staff-task-actions">
+  {% for value, label in task.actions %}
+    <form method="post" action="{% url 'staff_task_assignment:update_task' task.pk %}" class="staff-task-action-form">
+      {% csrf_token %}
+      <input type="hidden" name="status" value="{{ value }}">
+      <input type="hidden" name="next" value="{{ next_url }}">
+      <button type="submit" class="staff-task-action-btn staff-task-action-{{ value }}">{{ label }}</button>
+    </form>
+  {% endfor %}
+</div>

@@ -1,0 +1,24 @@
+<div class="staff-pagination">
+  <span>
+    {% if page.paginator.count %}
+      Showing {{ page.start_index }}-{{ page.end_index }} of {{ page.paginator.count }} {{ noun }}
+    {% else %}
+      No {{ noun }}
+    {% endif %}
+  </span>
+  {% if page.paginator.num_pages > 1 %}
+    <div class="staff-page-links">
+      {% if page.has_previous %}
+        <a class="staff-page-link" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>
+      {% else %}
+        <span class="staff-page-link staff-page-link-disabled">Previous</span>
+      {% endif %}
+      <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}
+        <a class="staff-page-link" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>
+      {% else %}
+        <span class="staff-page-link staff-page-link-disabled">Next</span>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

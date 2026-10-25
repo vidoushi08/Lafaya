@@ -62,7 +62,20 @@ db.sqlite3
 db.sqlite3-journal
 
 # Locally uploaded media files
-/media/
+# Catalogue uploads are shared with the team; other media stays local.
+/media/*
+!/media/birthday/
+!/media/car_events/
+!/media/conference/
+!/media/seaside/
+/media/birthday/*
+!/media/birthday/catalog/
+/media/car_events/*
+!/media/car_events/catalog/
+/media/conference/*
+!/media/conference/catalog/
+/media/seaside/*
+!/media/seaside/catalog/
 
 # Flask stuff:
 instance/

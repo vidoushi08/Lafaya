@@ -2,6 +2,9 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from staff_task_assignment.models import StaffAssignment
+from staff_task_assignment.tests import make_booking
+
 
 class StaffDashboardTests(TestCase):
     def test_staff_dashboard_uses_shared_navbar_for_branding_and_logout(self):
@@ -49,13 +52,19 @@ class StaffDashboardTests(TestCase):
             is_active=True,
         )
         self.client.force_login(staff_user)
+        customer = get_user_model().objects.create_user(
+            username="portal-customer", email="pc@example.com", password="x-Pass-12345"
+        )
+        assignment = StaffAssignment.objects.create(
+            booking=make_booking(customer), staff=staff_user, role="Decorator"
+        )
         portal_pages = (
             ("staff_booking_history:history", {}),
             ("staff_task_assignment:tasks", {}),
             ("staff_profile:profile", {}),
             (
                 "staff_event_details:detail",
-                {"task_id": "floral-styling-review"},
+                {"assignment_id": assignment.pk},
             ),
         )
 
@@ -67,7 +76,6 @@ class StaffDashboardTests(TestCase):
                 self.assertEqual(response.content.count(b'class="lafaya-logo"'), 1)
                 self.assertEqual(response.content.count(b'Log out</button>'), 1)
                 if route_name == "staff_task_assignment:tasks":
-                    self.assertContains(response, "staff-member")
                     self.assertNotContains(response, "Emma Watson")
                 if route_name == "staff_profile:profile":
                     self.assertContains(response, 'class="staff-profile-password-link"')

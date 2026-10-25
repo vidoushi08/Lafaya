@@ -50,6 +50,7 @@ class CarEventPageTests(TestCase):
         response = self.client.get(reverse("car_events:car_events"))
 
         self.assertContains(response, "SVICC")
+        self.assertContains(response, "100–5000 attendees")
         self.assertContains(response, "Starter Meet")
         self.assertContains(response, "Venue sourcing and booking")
         self.assertContains(response, "VIP Experience")
@@ -126,7 +127,8 @@ class CarEventBookingTests(TestCase):
             location="x",
             description="x",
             price=Decimal("10000"),
-            capacity=100,
+            min_attendees=15,
+            max_attendees=100,
         )
         self.package = EventPackage.objects.create(
             name="Test package",
@@ -297,6 +299,14 @@ class CarEventBookingTests(TestCase):
         )
         self.assert_rejected(
             self.client.post(self.url, self.payload(expected_attendees="9")),
+            "venue",
+        )
+        self.assert_rejected(
+            self.client.post(self.url, self.payload(expected_attendees="12")),
+            "venue",
+        )
+        self.assert_rejected(
+            self.client.post(self.url, self.payload(expected_attendees="9")),
             "package",
         )
         self.assert_rejected(
@@ -380,6 +390,8 @@ class CarEventCatalogueTests(TestCase):
         call_command("seed_car_events", verbosity=0)
 
         self.assertEqual(Venue.objects.count(), 3)
+        svicc = Venue.objects.get(name="SVICC")
+        self.assertEqual((svicc.min_attendees, svicc.max_attendees), (100, 5000))
         self.assertEqual(EventPackage.objects.count(), 3)
         self.assertEqual(ExtraService.objects.count(), 3)
         self.assertEqual(
@@ -397,7 +409,7 @@ class CarEventCatalogueTests(TestCase):
         self.assertEqual(service.price_basis, ExtraService.PriceBasis.PER_GUEST)
         self.assertFalse(service.is_active)
 
-    def test_guest_capacity_and_package_limits_are_validated(self):
+    def test_venue_and_package_attendee_limits_are_validated(self):
         invalid = EventPackage(
             name="Invalid package",
             tagline="x",
@@ -413,7 +425,8 @@ class CarEventCatalogueTests(TestCase):
                     name="Invalid capacity venue",
                     location="x",
                     description="x",
-                    capacity=0,
+                    min_attendees=50,
+                    max_attendees=10,
                 )
 
     def test_only_superadmin_can_open_car_event_catalogue_admin(self):

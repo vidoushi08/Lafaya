@@ -1,0 +1,119 @@
+[
+  {
+    "model": "wedding.weddingpackage",
+    "pk": 1,
+    "fields": {
+      "name": "Elopement Soirée",
+      "slug": "elopement-soiree",
+      "description": "Intimate wedding planning, floral design, a champagne toast, and photography.",
+      "price": "125000.00",
+      "min_guests": 1,
+      "max_guests": null,
+      "is_active": true,
+      "display_order": 1
+    }
+  },
+  {
+    "model": "wedding.weddingpackage",
+    "pk": 2,
+    "fields": {
+      "name": "Classic Heritage",
+      "slug": "classic-heritage",
+      "description": "Full-service wedding planning, venue sourcing, dining design, and photography.",
+      "price": "180000.00",
+      "min_guests": 1,
+      "max_guests": null,
+      "is_active": true,
+      "display_order": 2
+    }
+  },
+  {
+    "model": "wedding.weddingpackage",
+    "pk": 3,
+    "fields": {
+      "name": "Royal Imperial",
+      "slug": "royal-imperial",
+      "description": "Multi-day celebration planning with guest concierge and full production support.",
+      "price": "210000.00",
+      "min_guests": 1,
+      "max_guests": null,
+      "is_active": true,
+      "display_order": 3
+    }
+  },
+  {
+    "model": "wedding.weddingvenue",
+    "pk": 1,
+    "fields": {
+      "name": "Island View Hall",
+      "location": "Petit Raffray, Mauritius",
+      "description": "A refined setting for an intimate celebration.",
+      "image": "wedding/images/wedding_venue_island_hall.png",
+      "capacity": null,
+      "is_active": true,
+      "position": 1
+    }
+  },
+  {
+    "model": "wedding.weddingvenue",
+    "pk": 2,
+    "fields": {
+      "name": "Seven Golden Rays",
+      "location": "Nouvelle France, Mauritius",
+      "description": "A historic estate with elegant ballrooms and grounds.",
+      "image": "wedding/images/wedding_venue_seven_rays.png",
+      "capacity": null,
+      "is_active": true,
+      "position": 2
+    }
+  },
+  {
+    "model": "wedding.weddingvenue",
+    "pk": 3,
+    "fields": {
+      "name": "Domaine Des Aubineaux",
+      "location": "Curepipe, Mauritius",
+      "description": "A colonial tea estate surrounded by gardens.",
+      "image": "wedding/images/wedding_venue_domain_abineaux.png",
+      "capacity": null,
+      "is_active": true,
+      "position": 3
+    }
+  },
+  {
+    "model": "wedding.weddingservice",
+    "pk": 1,
+    "fields": {
+      "name": "Symphonic Entertainment",
+      "description": "Live music, DJs, and curated sound.",
+      "price": null,
+      "price_basis": "per_booking",
+      "is_active": true,
+      "position": 1
+    }
+  },
+  {
+    "model": "wedding.weddingservice",
+    "pk": 2,
+    "fields": {
+      "name": "Immersive Scenography",
+      "description": "Floral installations, drapery, and event lighting.",
+      "price": null,
+      "price_basis": "per_booking",
+      "is_active": true,
+      "position": 2
+    }
+  },
+  {
+    "model": "wedding.weddingservice",
+    "pk": 3,
+    "fields": {
+      "name": "Gourmet Gastronomy",
+      "description": "Custom dining, wine pairings, and wedding cakes.",
+      "price": null,
+      "price_basis": "per_booking",
+      "is_active": true,
+      "position": 3
+    }
+  }
+]

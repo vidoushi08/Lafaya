@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{% static 'css/footer.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   {% block navbar %}
     {% include 'includes/navbar.html' %}
   {% endblock %}

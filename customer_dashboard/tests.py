@@ -1,6 +1,12 @@
+from datetime import date, time, timedelta
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from django.urls import reverse
+
+from booking.models import Booking
 
 
 class CustomerDashboardTests(TestCase):
@@ -125,6 +131,7 @@ class CustomerDashboardTests(TestCase):
             reverse("customer_dashboard:manage_profile"),
         )
         self.assertContains(response, "customer-action-create-menu")
+        self.assertContains(response, "<strong>Manage Profile</strong>")
         for route_name in (
             "car_events:car_events",
             "wedding:wedding",
@@ -154,6 +161,134 @@ class CustomerDashboardTests(TestCase):
         history_response = self.client.get(history_url)
         self.assertEqual(history_response.status_code, 200)
         self.assertContains(history_response, "All bookings")
+
+    def test_booking_history_offers_every_event_theme_without_existing_bookings(self):
+        user = get_user_model().objects.create_user(
+            username="emma",
+            email="emma@example.com",
+            password="test-password",
+            account_type="customer",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("customer_dashboard:booking_history"))
+
+        for event_type, label in (
+            ("Seaside", "Seaside"),
+            ("Conference", "Conference"),
+            ("Wedding", "Wedding"),
+            ("Birthday", "Birthday"),
+            ("Car Event", "Car Meet"),
+            ("Concert", "Concert"),
+        ):
+            with self.subTest(event_type=event_type):
+                self.assertContains(response, f'<option value="{event_type}"')
+                self.assertContains(response, f">{label}</option>")
+
+    def test_booking_history_pagination_preserves_filters(self):
+        user = get_user_model().objects.create_user(
+            username="emma",
+            email="emma@example.com",
+            password="test-password",
+            account_type="customer",
+        )
+        content_type = ContentType.objects.get_for_model(user)
+        for index in range(11):
+            Booking.objects.create(
+                customer=user,
+                source_content_type=content_type,
+                source_object_id=10000 + index,
+                event_type="Car Event",
+                event_name=f"Car meetup {index}",
+                event_date=date.today() + timedelta(days=30),
+                start_time=time(18, 0),
+                end_time=time(21, 0),
+                guests=20,
+                venue_name="Event venue",
+                package_name="Event package",
+                budget=Decimal("10000.00"),
+                estimated_total=Decimal("7000.00"),
+            )
+        self.client.force_login(user)
+
+        first_page = self.client.get(
+            reverse("customer_dashboard:booking_history"),
+            {"event_type": "Car Event", "status": "pending"},
+        )
+
+        self.assertContains(first_page, "page=2")
+        self.assertContains(first_page, "event_type=Car+Event")
+        self.assertContains(first_page, "status=pending")
+        self.assertEqual(first_page.context["page_obj"].number, 1)
+
+        second_page = self.client.get(
+            reverse("customer_dashboard:booking_history"),
+            {"event_type": "Car Event", "status": "pending", "page": 2},
+        )
+        self.assertEqual(second_page.context["page_obj"].number, 2)
+        self.assertEqual(len(second_page.context["bookings"]), 1)
+
+    def test_booking_history_displays_completed_and_cancelled_statuses_correctly(self):
+        user = get_user_model().objects.create_user(
+            username="emma",
+            email="emma@example.com",
+            password="test-password",
+            account_type="customer",
+        )
+        content_type = ContentType.objects.get_for_model(user)
+        common_fields = {
+            "customer": user,
+            "source_content_type": content_type,
+            "event_type": "Car Event",
+            "event_date": date.today() + timedelta(days=30),
+            "start_time": time(18, 0),
+            "end_time": time(21, 0),
+            "guests": 20,
+            "venue_name": "Event venue",
+            "package_name": "Event package",
+            "budget": Decimal("10000.00"),
+            "estimated_total": Decimal("7000.00"),
+        }
+        Booking.objects.create(
+            source_object_id=20001,
+            event_name="Finished meetup",
+            status=Booking.Status.COMPLETED,
+            **common_fields,
+        )
+        Booking.objects.create(
+            source_object_id=20002,
+            event_name="Cancelled meetup",
+            status=Booking.Status.CANCELLED,
+            **common_fields,
+        )
+        Booking.objects.create(
+            source_object_id=20003,
+            event_name="Rejected meetup",
+            status=Booking.Status.REJECTED,
+            **common_fields,
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("customer_dashboard:booking_history"))
+
+        self.assertContains(response, "Finished meetup")
+        self.assertContains(response, "Completed")
+        self.assertContains(response, "Cancelled meetup")
+        self.assertContains(response, "Cancelled")
+        self.assertContains(response, "Rejected meetup")
+        self.assertContains(response, "Rejected")
+        self.assertEqual(response.context["completed_count"], 1)
+        self.assertEqual(response.context["rejected_count"], 1)
+        self.assertNotIn("cancelled_count", response.context)
+        self.assertNotContains(response, 'option value="cancelled"')
+
+        rejected_response = self.client.get(
+            reverse("customer_dashboard:booking_history"),
+            {"status": "rejected"},
+        )
+        self.assertEqual(rejected_response.context["page_obj"].paginator.count, 1)
+        self.assertContains(rejected_response, "Rejected meetup")
+        self.assertNotContains(rejected_response, "Cancelled meetup")
 
     def test_customer_sidebar_dropdown_is_shared_across_account_pages(self):
         user = get_user_model().objects.create_user(

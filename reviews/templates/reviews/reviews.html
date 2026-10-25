@@ -18,156 +18,81 @@
         <h1 id="reviews-heading">Customer Reviews</h1>
 
         <section class="reviews-summary" aria-label="Average review rating">
-          <div class="reviews-average">
-            <strong>4.7</strong>
-            <span>out of 5</span>
-          </div>
+          <div class="reviews-average"><strong>{{ average_rating|floatformat:1 }}</strong><span>out of 5</span></div>
           <div class="reviews-summary-detail">
-            <div class="reviews-stars reviews-stars-summary" aria-label="4.7 out of 5 stars">
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star reviews-star-muted" aria-hidden="true"></i>
+            <div class="reviews-stars reviews-stars-summary" aria-label="{{ average_rating|floatformat:1 }} out of 5 stars">
+              {% for star in "12345" %}<i class="fa-solid fa-star{% if average_rating < forloop.counter %} reviews-star-muted{% endif %}" aria-hidden="true"></i>{% endfor %}
             </div>
-            <p>Based on <strong>128 verified reviews</strong></p>
+            <p>Based on <strong>{{ review_count }} verified review{{ review_count|pluralize }}</strong></p>
           </div>
         </section>
 
         <section class="reviews-distribution" aria-labelledby="reviews-distribution-heading">
           <h2 id="reviews-distribution-heading">Rating Distribution</h2>
           <ul>
-            <li>
-              <span>5 Star</span>
-              <span class="reviews-rating-track"><span class="reviews-rating-fill-5"></span></span>
-              <span>98</span>
-            </li>
-            <li>
-              <span>4 Star</span>
-              <span class="reviews-rating-track"><span class="reviews-rating-fill-4"></span></span>
-              <span>18</span>
-            </li>
-            <li>
-              <span>3 Star</span>
-              <span class="reviews-rating-track"><span class="reviews-rating-fill-3"></span></span>
-              <span>8</span>
-            </li>
-            <li>
-              <span>2 Star</span>
-              <span class="reviews-rating-track"><span class="reviews-rating-fill-2"></span></span>
-              <span>3</span>
-            </li>
-            <li>
-              <span>1 Star</span>
-              <span class="reviews-rating-track"><span class="reviews-rating-fill-1"></span></span>
-              <span>1</span>
-            </li>
+            {% for rating, count in rating_distribution.items %}
+              <li>
+                <span>{{ rating }} Star</span>
+                <span class="reviews-rating-track"><span style="width: {% if review_count %}{% widthratio count review_count 100 %}{% else %}0{% endif %}%"></span></span>
+                <span>{{ count }}</span>
+              </li>
+            {% endfor %}
           </ul>
         </section>
 
         <section class="reviews-form-card" aria-labelledby="write-review-heading">
           <h2 id="write-review-heading">Write Your Review</h2>
-          <p class="reviews-form-intro">Share your thoughts and experience with the community. Review posting is not connected yet, so submissions will not be saved.</p>
-          <form class="reviews-form">
-            {% csrf_token %}
-            <fieldset class="reviews-rating-picker">
-              <legend>Select rating</legend>
-              <div class="reviews-rating-buttons" role="radiogroup" aria-label="Select a rating from 1 to 5">
-                {% for rating in "12345" %}
-                  <button
-                    class="reviews-rating-button"
-                    type="button"
-                    role="radio"
-                    data-rating="{{ rating }}"
-                    aria-label="{{ rating }} star{% if rating != '1' %}s{% endif %}"
-                    aria-checked="false"
-                  >
-                    <i class="fa-regular fa-star" aria-hidden="true"></i>
-                  </button>
-                {% endfor %}
-                <span class="reviews-rating-hint">Tap to rate</span>
-              </div>
-            </fieldset>
-            <label class="reviews-visually-hidden" for="review-comment">Your review</label>
-            <textarea
-              id="review-comment"
-              name="comment"
-              rows="5"
-              placeholder="What did you love or dislike about your experience? Tell us about your event..."
-            ></textarea>
-            <button class="reviews-submit-button" type="submit">Add Review</button>
-            <p class="reviews-form-status" role="status" aria-live="polite">Reviews are currently displayed as a preview.</p>
-          </form>
+          <p class="reviews-form-intro">Share your experience after a completed Lafaya event. Reviews are checked before they appear publicly.</p>
+          {% if messages %}<ul class="reviews-messages" role="status">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+          {% if eligible_booking_count %}
+            <form class="reviews-form" method="post" action="{% url 'reviews:reviews' %}">
+              {% csrf_token %}
+              {% if form.non_field_errors %}<div class="reviews-form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+              <label class="reviews-booking-label" for="{{ form.booking.id_for_label }}">Event to review</label>
+              {{ form.booking }}{{ form.booking.errors }}
+              <fieldset class="reviews-rating-picker">
+                <legend>Select rating</legend>
+                <div class="reviews-rating-buttons" role="radiogroup" aria-label="Select a rating from 1 to 5 stars">
+                  {% for rating in "12345" %}
+                    <button class="reviews-rating-button" type="button" role="radio" data-rating="{{ rating }}" aria-label="{{ rating }} star{% if rating != '1' %}s{% endif %}" aria-checked="false"><i class="fa-regular fa-star" aria-hidden="true"></i></button>
+                  {% endfor %}
+                  <span class="reviews-rating-hint">Tap to rate</span>
+                </div>
+                {{ form.rating }}{{ form.rating.errors }}
+              </fieldset>
+              <label class="reviews-visually-hidden" for="{{ form.comment.id_for_label }}">Your review</label>
+              {{ form.comment }}{{ form.comment.errors }}
+              <button class="reviews-submit-button" type="submit">Add Review</button>
+              <p class="reviews-form-status" role="status" aria-live="polite">Select a rating and submit your review.</p>
+            </form>
+          {% else %}
+            <p class="reviews-form-status">You can review a booking after it has been marked completed.</p>
+          {% endif %}
+          {% if own_reviews %}
+            <div class="reviews-own-status"><h3>Your submissions</h3><ul>{% for review in own_reviews %}<li>{{ review.booking.event_name|default:review.booking.event_type }} — {{ review.get_status_display }}</li>{% endfor %}</ul></div>
+          {% endif %}
         </section>
       </aside>
 
       <div class="reviews-list" aria-label="Recent customer reviews">
-        <article class="review-card">
-          <div class="review-card-header">
-            <div>
-              <h2>Margot Vance</h2>
-              <time datetime="2025-10-12">October 12, 2025</time>
+        {% for review in reviews %}
+          <article class="review-card">
+            <div class="review-card-header">
+              <div>
+                <h2>{{ review.author_name }}</h2>
+                <time datetime="{{ review.created_at|date:'Y-m-d' }}">{{ review.created_at|date:"F j, Y" }}</time>
+              </div>
+              <span class="reviews-stars" aria-label="{{ review.rating }} out of 5 stars">
+                {% for star in "12345" %}<i class="fa-solid fa-star{% if review.rating < forloop.counter %} reviews-star-muted{% endif %}" aria-hidden="true"></i>{% endfor %}
+              </span>
             </div>
-            <span class="reviews-stars" aria-label="5 out of 5 stars">
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-            </span>
-          </div>
-          <h3>Seaside Luxury Redefined</h3>
-          <p class="review-card-copy">LaFaya created an unforgettable coastal celebration. The décor was breathtaking, service seamless, and every guest felt immersed in luxury. Truly exceeded our expectations in every way.</p>
-          <ul class="review-tags" aria-label="Review highlights">
-            <li>Seaside celebration</li>
-            <li>Thoughtful décor</li>
-            <li>Guest experience</li>
-          </ul>
-        </article>
-
-        <article class="review-card">
-          <div class="review-card-header">
-            <div>
-              <h2>Julianne K.</h2>
-              <time datetime="2025-09-28">September 28, 2025</time>
-            </div>
-            <span class="reviews-stars" aria-label="5 out of 5 stars">
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-            </span>
-          </div>
-          <h3>Crafted for Timeless Moments</h3>
-          <p class="review-card-copy">From planning to the final sunset, LaFaya delivered perfection. The curated package, flawless execution, and magical atmosphere made our event a cherished memory forever.</p>
-          <ul class="review-tags" aria-label="Review highlights">
-            <li>Wedding planning</li>
-            <li>Event coordination</li>
-          </ul>
-        </article>
-
-        <article class="review-card">
-          <div class="review-card-header">
-            <div>
-              <h2>Serene Alvarez</h2>
-              <time datetime="2025-08-15">August 15, 2025</time>
-            </div>
-            <span class="reviews-stars" aria-label="4 out of 5 stars">
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star" aria-hidden="true"></i>
-              <i class="fa-regular fa-star reviews-star-muted" aria-hidden="true"></i>
-            </span>
-          </div>
-          <h3>Where Horizons Meet Elegance</h3>
-          <p class="review-card-copy">LaFaya gave us more than an event — it was a dream. Guests adored the views, the elegance, and the warmth of every detail shared.</p>
-          <ul class="review-tags" aria-label="Review highlights">
-            <li>Oceanfront venue</li>
-            <li>Warm hospitality</li>
-          </ul>
-        </article>
+            <h3>{{ review.event_name|default:review.event_type }}</h3>
+            <p class="review-card-copy">{{ review.comment|linebreaksbr }}</p>
+            <ul class="review-tags" aria-label="Review event details"><li>{{ review.event_type }}</li><li>{{ review.event_date|date:"j M Y" }}</li></ul>
+          </article>
+        {% empty %}
+          <p class="reviews-empty">No customer reviews have been published yet.</p>
+        {% endfor %}
       </div>
     </section>
   </div>

@@ -53,11 +53,16 @@ class Venue(PricedCatalogItem):
         blank=True,
         help_text="Optional uploaded image; takes precedence over the existing static image path.",
     )
-    capacity = models.PositiveIntegerField(
+    min_attendees = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text="Smallest number of attendees this venue accepts.",
+    )
+    max_attendees = models.PositiveIntegerField(
         null=True,
         blank=True,
         validators=[MinValueValidator(1)],
-        help_text="Maximum attendees this venue holds. Leave empty for no limit.",
+        help_text="Largest number of attendees this venue holds. Leave empty for no limit.",
     )
 
     class Meta:
@@ -65,10 +70,22 @@ class Venue(PricedCatalogItem):
         constraints = [
             price_nonnegative_constraint("venue"),
             models.CheckConstraint(
-                condition=Q(capacity__isnull=True) | Q(capacity__gte=1),
-                name="car_events_venue_capacity_positive",
+                condition=Q(min_attendees__gte=1),
+                name="car_events_venue_min_attendees_positive",
+            ),
+            models.CheckConstraint(
+                condition=Q(max_attendees__isnull=True)
+                | Q(max_attendees__gte=models.F("min_attendees")),
+                name="car_events_venue_attendee_range_valid",
             ),
         ]
+
+    def clean(self):
+        super().clean()
+        if self.max_attendees is not None and self.max_attendees < self.min_attendees:
+            raise ValidationError(
+                {"max_attendees": "Maximum attendees cannot be less than minimum attendees."}
+            )
 
     def __str__(self):
         return self.name
@@ -216,6 +233,7 @@ class CarEventBookingRequest(models.Model):
         PENDING = "pending", "Pending approval"
         APPROVED = "approved", "Approved"
         REJECTED = "rejected", "Rejected"
+        CANCELLED = "cancelled", "Cancelled"
 
     EVENT_TYPE = "Car Event"
 

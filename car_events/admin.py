@@ -7,7 +7,6 @@ from booking.admin import BookingRequestAdminActions
 
 from .models import (
     CarEventBookingRequest,
-    CarEventEnquiry,
     EventPackage,
     ExtraService,
     PackageFeature,
@@ -46,7 +45,8 @@ class VenueAdmin(PricedCatalogItemAdmin):
     list_display = (
         "name",
         "location",
-        "capacity",
+        "min_attendees",
+        "max_attendees",
         "price",
         "price_basis",
         "is_active",
@@ -61,7 +61,8 @@ class VenueAdmin(PricedCatalogItemAdmin):
         "image",
         "image_preview",
         "uploaded_image",
-        "capacity",
+        "min_attendees",
+        "max_attendees",
         "price",
         "price_basis",
         "is_active",
@@ -166,28 +167,11 @@ class CarEventBookingRequestAdmin(BookingRequestAdminActions, admin.ModelAdmin):
         return False
 
 
-class CarEventEnquiryAdmin(admin.ModelAdmin):
-    list_display = (
-        "full_name",
-        "email",
-        "preferred_date",
-        "venue",
-        "event_package",
-        "status",
-        "created_at",
-    )
-    list_filter = ("status", "preferred_date", "venue", "event_package")
-    search_fields = ("full_name", "email", "phone")
-    filter_horizontal = ("extras",)
-    readonly_fields = ("created_at", "updated_at")
-
-
 for model, model_admin in (
     (Venue, VenueAdmin),
     (EventPackage, EventPackageAdmin),
     (ExtraService, ExtraServiceAdmin),
     (CarEventBookingRequest, CarEventBookingRequestAdmin),
-    (CarEventEnquiry, CarEventEnquiryAdmin),
 ):
     try:
         superadmin_site.register(model, model_admin)
