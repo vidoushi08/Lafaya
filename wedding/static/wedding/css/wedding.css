@@ -694,3 +694,47 @@
     background-color: #d4af37;
     border-color: #d4af37;
 }
+
+.wedding-enquiry {
+    padding: 72px 6%;
+    background: #f7f3e9;
+}
+
+.wedding-enquiry-panel {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 56px);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 15px 45px rgba(45, 35, 15, .1);
+}
+
+.wedding-booking-form { display: grid; gap: 22px; }
+.wedding-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.wedding-booking-form label { display: grid; gap: 7px; font-weight: 600; }
+.wedding-booking-form input:not([type="checkbox"]),
+.wedding-booking-form select,
+.wedding-booking-form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #c9c2ae;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    font: inherit;
+}
+.wedding-booking-form textarea { resize: vertical; }
+.wedding-form-services { display: flex; flex-wrap: wrap; gap: 14px 24px; border: 1px solid #ddd5c3; border-radius: 8px; padding: 16px; }
+.wedding-form-services label { display: inline-flex; align-items: center; gap: 6px; }
+.wedding-form-message { display: grid; gap: 8px; }
+.wedding-access-notice { padding: 22px; border-radius: 10px; background: #f7f3e9; }
+.wedding-form-success { padding: 14px; background: #edf7ed; border-radius: 6px; }
+.wedding-booking-form button { justify-self: start; cursor: pointer; }
+.wedding-booking-form ul.errorlist { margin: 0; padding-left: 18px; color: #a32222; font-weight: 400; }
+
+@media (max-width: 650px) {
+    .wedding-form-grid { grid-template-columns: 1fr; }
+    .wedding-enquiry { padding: 44px 4%; }
+}

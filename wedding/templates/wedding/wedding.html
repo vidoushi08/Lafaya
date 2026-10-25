@@ -38,6 +38,9 @@
                     <a href="{% url 'contact:contact' %}" class="wedding-button wedding-button-outline">
                         Contact our team
                     </a>
+                    <a href="#wedding-enquiry" class="wedding-button wedding-button-outline">
+                        Book your wedding
+                    </a>
                 </div>
             </div>
         </section>
@@ -344,6 +347,54 @@
             </div>
 
         </section>        
+
+        <section class="wedding-enquiry" id="wedding-enquiry" aria-labelledby="wedding-enquiry-heading">
+            <div class="wedding-enquiry-panel">
+                <header class="wedding-section-heading">
+                    <p class="wedding-eyebrow">Wedding celebrations</p>
+                    <h2 id="wedding-enquiry-heading">Plan your wedding with Lafaya</h2>
+                    <p>Share your date, venue and package preferences to request a booking.</p>
+                </header>
+                {% if not is_customer %}
+                <div class="wedding-access-notice" role="status">
+                    <h3>Sign in to book your wedding</h3>
+                    {% if user.is_authenticated %}
+                    <p>Wedding booking requests are available to signed-in customer accounts.</p>
+                    {% else %}
+                    <p>Sign in with your customer account or create one to submit a booking request.</p>
+                    {% endif %}
+                    <a class="wedding-button wedding-button-primary" href="{% url 'authentication:login' %}?next={{ login_next|urlencode }}">Sign in</a>
+                    {% if not user.is_authenticated %}<a class="wedding-button wedding-button-outline" href="{% url 'authentication:register' %}">Create an account</a>{% endif %}
+                </div>
+                {% else %}
+                {% for message in messages %}<p class="wedding-form-success" role="status">{{ message }}</p>{% endfor %}
+                <form method="post" action="{% url 'wedding:wedding' %}#wedding-enquiry" class="wedding-booking-form">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}<div role="alert">{{ form.non_field_errors }}</div>{% endif %}
+                    <div class="wedding-form-grid">
+                        <label>First name<input name="first_name" value="{{ form.first_name.value|default_if_none:'' }}" autocomplete="given-name" required>{{ form.first_name.errors }}</label>
+                        <label>Last name<input name="last_name" value="{{ form.last_name.value|default_if_none:'' }}" autocomplete="family-name" required>{{ form.last_name.errors }}</label>
+                        <label>Email<input type="email" value="{{ user.email }}" autocomplete="email" readonly></label>
+                        <label>Phone<input name="phone" type="tel" value="{{ form.phone.value|default_if_none:'' }}" {% if form.phone_locked %}readonly{% endif %} required>{{ form.phone.errors }}</label>
+                        <label>Event name<input name="event_name" maxlength="120" value="{{ form.event_name.value|default_if_none:'' }}" placeholder="Optional">{{ form.event_name.errors }}</label>
+                        <label>Event date<input name="event_date" type="date" min="{{ min_event_date }}" max="{{ max_event_date }}" value="{{ form.event_date.value|default_if_none:'' }}" required>{{ form.event_date.errors }}</label>
+                        <label>Start time<input name="start_time" type="time" value="{{ form.start_time.value|default_if_none:'' }}" required>{{ form.start_time.errors }}</label>
+                        <label>End time<input name="end_time" type="time" value="{{ form.end_time.value|default_if_none:'' }}" required>{{ form.end_time.errors }}</label>
+                        <label>Expected guests<input name="expected_guests" type="number" min="1" max="10000" value="{{ form.expected_guests.value|default_if_none:'' }}" required>{{ form.expected_guests.errors }}</label>
+                        <label>Preferred venue<select name="venue" required><option value="">Choose a venue</option>{% for venue in bookable_venues %}<option value="{{ venue.pk }}" {% if form.venue.value|stringformat:'s' == venue.pk|stringformat:'s' %}selected{% endif %}>{{ venue.name }} — {{ venue.location }}</option>{% endfor %}</select>{{ form.venue.errors }}</label>
+                        <label>Wedding package<select name="package" required><option value="">Choose a package</option>{% for package in bookable_packages %}<option value="{{ package.pk }}" {% if form.package.value|stringformat:'s' == package.pk|stringformat:'s' %}selected{% endif %}>{{ package.name }} — Rs {{ package.price|floatformat:0 }}</option>{% endfor %}</select>{{ form.package.errors }}</label>
+                        <label>Budget (Rs)<input name="budget" type="number" min="0.01" max="10000000" step="0.01" value="{{ form.budget.value|default_if_none:'' }}" required>{{ form.budget.errors }}</label>
+                    </div>
+                    <fieldset class="wedding-form-services"><legend>Optional services</legend>
+                        {% for service in bookable_services %}<label><input type="checkbox" name="optional_services" value="{{ service.pk }}" {% if service.pk|stringformat:'s' in selected_services %}checked{% endif %}> {{ service.name }} — Rs {{ service.price|floatformat:0 }}</label>{% empty %}<p>Optional services can be selected once their prices are set.</p>{% endfor %}
+                        {{ form.optional_services.errors }}
+                    </fieldset>
+                    <label class="wedding-form-message">Message<textarea name="message" rows="4" maxlength="1000" placeholder="Tell us about your plans">{{ form.message.value|default_if_none:'' }}</textarea>{{ form.message.errors }}</label>
+                    <button class="wedding-button wedding-button-primary" type="submit">Submit wedding booking request</button>
+                </form>
+                {% endif %}
+            </div>
+        </section>
 
     </div>
 
