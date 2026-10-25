@@ -155,7 +155,6 @@ class BookingAdmin(admin.ModelAdmin):
         "approve_bookings",
         "reject_bookings",
         "complete_bookings",
-        "cancel_bookings",
     )
 
     def save_formset(self, request, form, formset, change):
@@ -263,27 +262,5 @@ class BookingAdmin(admin.ModelAdmin):
             self.message_user(
                 request,
                 f"{completed} booking(s) marked as completed.",
-                level=messages.SUCCESS,
-            )
-
-    @admin.action(description="Cancel selected bookings")
-    def cancel_bookings(self, request, queryset):
-        cancelled = 0
-        for booking in queryset:
-            try:
-                booking.mark_cancelled()
-            except ValidationError as error:
-                self.message_user(
-                    request,
-                    f"{booking.reference}: {' '.join(error.messages)}",
-                    level=messages.ERROR,
-                )
-                continue
-            cancelled += 1
-
-        if cancelled:
-            self.message_user(
-                request,
-                f"{cancelled} booking(s) cancelled.",
                 level=messages.SUCCESS,
             )

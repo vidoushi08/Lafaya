@@ -27,6 +27,11 @@ CATALOG_MODELS = {
         "SeasidePackage",
         "SeasideService",
     ),
+    "wedding": (
+        "WeddingPackage",
+        "WeddingVenue",
+        "WeddingService",
+    ),
 }
 
 

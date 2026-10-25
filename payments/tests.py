@@ -161,6 +161,33 @@ class PaymentWorkflowTests(TestCase):
         self.payment.refresh_from_db()
         self.assertEqual(self.payment.paid_at, first_paid_at)
 
+    def test_cancelled_booking_cannot_be_paid_or_show_payment_checkout(self):
+        Booking.objects.filter(pk=self.booking.pk).update(
+            status=Booking.Status.CANCELLED
+        )
+        detail_url = reverse("payments:payment_detail", args=(self.booking.pk,))
+
+        response = self.client.get(detail_url)
+
+        self.assertContains(response, "This booking was cancelled.")
+        self.assertNotContains(response, "Payment will be available after Lafaya approves")
+        self.assertNotContains(response, reverse("payments:demo_payment", args=(self.booking.pk,)))
+        with self.assertRaises(ValidationError):
+            self.payment.complete_demo_payment()
+
+    def test_completed_booking_displays_completed_instead_of_confirmed(self):
+        self.approve_booking()
+        self.payment.complete_demo_payment()
+        self.booking.mark_completed()
+
+        response = self.client.get(
+            reverse("payments:payment_detail", args=(self.booking.pk,))
+        )
+
+        self.assertContains(response, "This event is completed.")
+        self.assertNotContains(response, "Your booking is confirmed.")
+        self.assertContains(response, "Demo payment completed.")
+
     def test_failed_receipt_can_be_retried_without_charging_demo_payment_twice(self):
         self.approve_booking()
         demo_url = reverse("payments:demo_payment", args=(self.booking.pk,))

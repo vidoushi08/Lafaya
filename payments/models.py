@@ -58,6 +58,11 @@ class Payment(models.Model):
         payment = type(self).objects.select_for_update().select_related(
             "booking"
         ).get(pk=self.pk)
+        if payment.booking.status in (
+            payment.booking.Status.REJECTED,
+            payment.booking.Status.CANCELLED,
+        ):
+            raise ValidationError("This booking cannot be paid.")
         if payment.status in (self.Status.VERIFIED, self.Status.DEMO_PAID):
             return False
         if payment.booking.status != payment.booking.Status.APPROVED:
