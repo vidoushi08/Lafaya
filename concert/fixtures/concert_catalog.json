@@ -1,134 +1,152 @@
 [
-  {
-    "model": "concert.concertvenue",
-    "pk": 1,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 0,
-      "name": "The Neon Dome Arena",
-      "location": "Tokyo, Japan",
-      "description": "A multi-sensory cyber dome loaded with spatial-audio arrays and 360-degree LED walls.",
-      "image": "concert/images/concert_venue_neon_arena.png"
-    }
-  },
-  {
-    "model": "concert.concertvenue",
-    "pk": 2,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 1,
-      "name": "Viper Canyon Amphitheater",
-      "location": "Colorado, USA",
-      "description": "Monolithic red rocks meet premium acoustic projection, creating natural sonic perfection under open stars.",
-      "image": "concert/images/concert_venue_viper_theatre.png"
-    }
-  },
-  {
-    "model": "concert.concertvenue",
-    "pk": 3,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 2,
-      "name": "The Foundry Cathedral",
-      "location": "Berlin, Germany",
-      "description": "A dark industrial powerhouse delivering pure brutal aesthetics and earth-shaking low-end bass.",
-      "image": "concert/images/concert_venue_foundry_cathedral.png"
-    }
-  },
-  {
-    "model": "concert.concertpackage",
-    "pk": 1,
-    "fields": {
-      "price": "2500",
-      "price_basis": "per_guest",
-      "is_active": true,
-      "position": 0,
-      "name": "Arena Pit Pass",
-      "tagline": "Standard admission",
-      "features": "Access to general arena standing pit\nStandard digital entry pass\nHigh-fidelity acoustic coverage zones\nMerchandise kiosk access",
-      "is_featured": false,
-      "min_guests": 1,
-      "max_guests": null
-    }
-  },
-  {
-    "model": "concert.concertpackage",
-    "pk": 2,
-    "fields": {
-      "price": "5000",
-      "price_basis": "per_guest",
-      "is_active": true,
-      "position": 1,
-      "name": "VIP Backstage Pass",
-      "tagline": "Elevated premium",
-      "features": "Fast-track VIP venue entrance\nAccess to backstage bar & lounge\nExclusive limited edition show poster\nPremium elevated sound stage viewing",
-      "is_featured": false,
-      "min_guests": 1,
-      "max_guests": null
-    }
-  },
-  {
-    "model": "concert.concertpackage",
-    "pk": 3,
-    "fields": {
-      "price": "10000",
-      "price_basis": "per_guest",
-      "is_active": true,
-      "position": 2,
-      "name": "All-Access AAA",
-      "tagline": "Ultimate experience",
-      "features": "Full artist soundcheck experience\nOn-stage side platform viewing area\nBespoke catering & premium open bar\nExclusive artist meet & greet photo",
-      "is_featured": false,
-      "min_guests": 1,
-      "max_guests": null
-    }
-  },
-  {
-    "model": "concert.concertservice",
-    "pk": 1,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 0,
-      "name": "Sonic Engineering",
-      "description": "High-fidelity spatial audio arrays providing clinical, thunderous soundscapes. Every corner of the arena is tuned for absolute acoustic purity.",
-      "highlights": "120dB Clarity\nSpatial Arrays\nBass Curation",
-      "image": "concert/images/concert_services_sonic_engineering.png"
-    }
-  },
-  {
-    "model": "concert.concertservice",
-    "pk": 2,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 1,
-      "name": "Laser Scenography",
-      "description": "Aesthetic visual transformations utilizing towering strobe systems, immersive neon vectors, and custom real-time reactive stage lighting.",
-      "highlights": "3D Vector Lasers\nLive Visual Mapping\nReactive Strobes",
-      "image": "concert/images/concert_services_laser_scenes.png"
-    }
-  },
-  {
-    "model": "concert.concertservice",
-    "pk": 3,
-    "fields": {
-      "price": null,
-      "price_basis": "per_booking",
-      "is_active": true,
-      "position": 2,
-      "name": "Backstage Catering",
-      "description": "Michelin-caliber culinary services, curated cocktail mixers, and dedicated green room support for all VIP and artist spaces.",
-      "highlights": "VIP Lounge Access\nArtisanal Cocktails\nGreen Room Dining",
-      "image": "concert/images/concert_services_catering.png"
-    }
+{
+  "model": "concert.concertvenue",
+  "pk": 1,
+  "fields": {
+    "price": "45000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "The Neon Dome Arena",
+    "location": "Tokyo, Japan",
+    "description": "A multi-sensory cyber dome loaded with spatial-audio arrays and 360-degree LED walls.",
+    "image": "concert/images/concert_venue_neon_arena.png",
+    "uploaded_image": "",
+    "capacity": null
   }
+},
+{
+  "model": "concert.concertvenue",
+  "pk": 2,
+  "fields": {
+    "price": "99000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Viper Canyon Amphitheater",
+    "location": "Colorado, USA",
+    "description": "Monolithic red rocks meet premium acoustic projection, creating natural sonic perfection under open stars.",
+    "image": "concert/images/concert_venue_viper_theatre.png",
+    "uploaded_image": "",
+    "capacity": null
+  }
+},
+{
+  "model": "concert.concertvenue",
+  "pk": 3,
+  "fields": {
+    "price": "122999.86",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "The Foundry Cathedral",
+    "location": "Berlin, Germany",
+    "description": "A dark industrial powerhouse delivering pure brutal aesthetics and earth-shaking low-end bass.",
+    "image": "concert/images/concert_venue_foundry_cathedral.png",
+    "uploaded_image": "",
+    "capacity": null
+  }
+},
+{
+  "model": "concert.concertpackage",
+  "pk": 1,
+  "fields": {
+    "price": "250.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 0,
+    "name": "Arena Pit Pass",
+    "tagline": "Standard admission",
+    "description": "",
+    "image": "",
+    "features": "Access to general arena standing pit\nStandard digital entry pass\nHigh-fidelity acoustic coverage zones\nMerchandise kiosk access",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": null
+  }
+},
+{
+  "model": "concert.concertpackage",
+  "pk": 2,
+  "fields": {
+    "price": "500.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 1,
+    "name": "VIP Backstage Pass",
+    "tagline": "Elevated premium",
+    "description": "",
+    "image": "",
+    "features": "Fast-track VIP venue entrance\nAccess to backstage bar & lounge\nExclusive limited edition show poster\nPremium elevated sound stage viewing",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": null
+  }
+},
+{
+  "model": "concert.concertpackage",
+  "pk": 3,
+  "fields": {
+    "price": "1000.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 2,
+    "name": "All-Access AAA",
+    "tagline": "Ultimate experience",
+    "description": "",
+    "image": "",
+    "features": "Full artist soundcheck experience\nOn-stage side platform viewing area\nBespoke catering & premium open bar\nExclusive artist meet & greet photo",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": null
+  }
+},
+{
+  "model": "concert.concertservice",
+  "pk": 1,
+  "fields": {
+    "price": "75000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Sonic Engineering",
+    "description": "High-fidelity spatial audio arrays providing clinical, thunderous soundscapes. Every corner of the arena is tuned for absolute acoustic purity.",
+    "highlights": "120dB Clarity\nSpatial Arrays\nBass Curation",
+    "image": "concert/images/concert_services_sonic_engineering.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "concert.concertservice",
+  "pk": 2,
+  "fields": {
+    "price": "100000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Laser Scenography",
+    "description": "Aesthetic visual transformations utilizing towering strobe systems, immersive neon vectors, and custom real-time reactive stage lighting.",
+    "highlights": "3D Vector Lasers\nLive Visual Mapping\nReactive Strobes",
+    "image": "concert/images/concert_services_laser_scenes.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "concert.concertservice",
+  "pk": 3,
+  "fields": {
+    "price": "150000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Backstage Catering",
+    "description": "Michelin-caliber culinary services, curated cocktail mixers, and dedicated green room support for all VIP and artist spaces.",
+    "highlights": "VIP Lounge Access\nArtisanal Cocktails\nGreen Room Dining",
+    "image": "concert/images/concert_services_catering.png",
+    "uploaded_image": ""
+  }
+}
 ]
