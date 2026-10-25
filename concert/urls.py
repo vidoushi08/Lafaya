@@ -1,10 +1,6 @@
 from django.urls import path
-
 from . import views
 
-# namespace for app urls so they can be referenced as `app:name`
-app_name = "concert"
-
 urlpatterns = [
-    path("", views.index, name="concert"),
+    path('', views.concert_home, name='concert_home'),
 ]
