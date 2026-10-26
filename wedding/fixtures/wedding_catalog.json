@@ -5,12 +5,15 @@
     "fields": {
       "name": "Elopement Soirée",
       "slug": "elopement-soiree",
+      "tagline": "The Intimate Gathering",
+      "features": "Bespoke elopement planner\nLuxury floral design & backdrop\nPre-ceremony champagne toast\nDedicated photographer (4 Hours)",
       "description": "Intimate wedding planning, floral design, a champagne toast, and photography.",
       "price": "125000.00",
-      "min_guests": 1,
-      "max_guests": null,
+      "price_basis": "per_booking",
+      "min_guests": 100,
+      "max_guests": 200,
       "is_active": true,
-      "display_order": 1
+      "position": 1
     }
   },
   {
@@ -19,12 +22,15 @@
     "fields": {
       "name": "Classic Heritage",
       "slug": "classic-heritage",
+      "tagline": "Signature Grandeur",
+      "features": "Full-service weekend curation\nElite venue sourcing & buyout\nCocktail & premium dining design\nCinematography & photography team",
       "description": "Full-service wedding planning, venue sourcing, dining design, and photography.",
       "price": "180000.00",
-      "min_guests": 1,
-      "max_guests": null,
+      "price_basis": "per_booking",
+      "min_guests": 100,
+      "max_guests": 350,
       "is_active": true,
-      "display_order": 2
+      "position": 2
     }
   },
   {
@@ -33,12 +39,15 @@
     "fields": {
       "name": "Royal Imperial",
       "slug": "royal-imperial",
+      "tagline": "The Masterpiece Studio",
+      "features": "Multi-day celebration planning\nCelebrity guest concierge\n3D custom floorplan & renders\nSymphony orchestra procurement",
       "description": "Multi-day celebration planning with guest concierge and full production support.",
       "price": "210000.00",
-      "min_guests": 1,
-      "max_guests": null,
+      "price_basis": "per_booking",
+      "min_guests": 100,
+      "max_guests": 400,
       "is_active": true,
-      "display_order": 3
+      "position": 3
     }
   },
   {
@@ -48,6 +57,8 @@
       "name": "Island View Hall",
       "location": "Petit Raffray, Mauritius",
       "description": "A refined setting for an intimate celebration.",
+      "price": "150000.00",
+      "price_basis": "per_booking",
       "image": "wedding/images/wedding_venue_island_hall.png",
       "capacity": null,
       "is_active": true,
@@ -61,6 +72,8 @@
       "name": "Seven Golden Rays",
       "location": "Nouvelle France, Mauritius",
       "description": "A historic estate with elegant ballrooms and grounds.",
+      "price": "250000.00",
+      "price_basis": "per_booking",
       "image": "wedding/images/wedding_venue_seven_rays.png",
       "capacity": null,
       "is_active": true,
@@ -74,6 +87,8 @@
       "name": "Domaine Des Aubineaux",
       "location": "Curepipe, Mauritius",
       "description": "A colonial tea estate surrounded by gardens.",
+      "price": "225000.00",
+      "price_basis": "per_booking",
       "image": "wedding/images/wedding_venue_domain_abineaux.png",
       "capacity": null,
       "is_active": true,
@@ -85,8 +100,10 @@
     "pk": 1,
     "fields": {
       "name": "Symphonic Entertainment",
+      "highlights": "Premium Soundscapes\nElite Curators\nLive Orchestral Integration",
+      "image": "wedding/images/wedding_services_entertainment.png",
       "description": "Live music, DJs, and curated sound.",
-      "price": null,
+      "price": "90000.00",
       "price_basis": "per_booking",
       "is_active": true,
       "position": 1
@@ -97,8 +114,10 @@
     "pk": 2,
     "fields": {
       "name": "Immersive Scenography",
+      "highlights": "Custom Floral Art\nLighting Mastery\nTable Curation",
+      "image": "wedding/images/wedding_services_scenes.png",
       "description": "Floral installations, drapery, and event lighting.",
-      "price": null,
+      "price": "60000.00",
       "price_basis": "per_booking",
       "is_active": true,
       "position": 2
@@ -109,9 +128,11 @@
     "pk": 3,
     "fields": {
       "name": "Gourmet Gastronomy",
+      "highlights": "Bespoke Banquets\nSommelier Selection\nCrafted Patisserie",
+      "image": "wedding/images/wedding_services_gastronomy.png",
       "description": "Custom dining, wine pairings, and wedding cakes.",
-      "price": null,
-      "price_basis": "per_booking",
+      "price": "1000.00",
+      "price_basis": "per_guest",
       "is_active": true,
       "position": 3
     }

@@ -694,3 +694,195 @@
     background-color: #d4af37;
     border-color: #d4af37;
 }
+
+/* Wedding booking form: use the Wedding gold accent with Seaside's layout. */
+.wedding-page .seaside-enquiry {
+    background-color: #f5eed6;
+}
+
+.wedding-page .seaside-enquiry-shade {
+    background: linear-gradient(180deg, rgba(72, 55, 12, 0.12), rgba(111, 79, 10, 0.28));
+}
+
+.wedding-page .seaside-enquiry-panel {
+    background: linear-gradient(135deg, rgba(255, 253, 246, 0.94), rgba(249, 241, 213, 0.9));
+    box-shadow: 0 24px 70px rgba(98, 76, 19, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.wedding-page .seaside-enquiry-heading .seaside-eyebrow,
+.wedding-page .seaside-form-section h3,
+.wedding-page .seaside-form-field label span,
+.wedding-page .seaside-form-required-note span,
+.wedding-page .seaside-estimate-total strong {
+    color: #D4AF37;
+}
+
+.wedding-page .seaside-enquiry-heading h2,
+.wedding-page .seaside-form-field label,
+.wedding-page .seaside-form-field legend,
+.wedding-page .seaside-form-options label,
+.wedding-page .seaside-form-control,
+.wedding-page .seaside-estimate,
+.wedding-page .seaside-access-notice {
+    color: #333333;
+}
+
+.wedding-page .seaside-enquiry-heading > p:last-child,
+.wedding-page .seaside-form-label-note,
+.wedding-page .seaside-form-required-note {
+    color: #665d46;
+}
+
+.wedding-page .seaside-form-section {
+    border-bottom-color: rgba(212, 175, 55, 0.3);
+}
+
+.wedding-page .seaside-form-control {
+    background: rgba(255, 252, 240, 0.8);
+    box-shadow: inset 0 1px 3px rgba(98, 76, 19, 0.08);
+}
+
+.wedding-page .seaside-form-control::placeholder {
+    color: rgba(51, 51, 51, 0.58);
+}
+
+.wedding-page .seaside-form-control:focus {
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.22);
+}
+
+.wedding-page .seaside-form-control[readonly] {
+    background: rgba(239, 228, 189, 0.62);
+}
+
+.wedding-page .seaside-form-options input {
+    accent-color: #D4AF37;
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit {
+    background: #D4AF37;
+    box-shadow: 0 8px 20px rgba(98, 76, 19, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit:hover {
+    background: #b8962e;
+}
+
+.wedding-page .seaside-enquiry-form > .seaside-button-submit:focus-visible {
+    outline-color: #D4AF37;
+}
+
+.wedding-page .seaside-form-success {
+    border-left-color: #D4AF37;
+}
+
+.wedding-page .seaside-estimate {
+    background: rgba(255, 252, 240, 0.82);
+}
+
+/* Wedding palette (gold and cream), scoped to wedding pages only */
+body.wedding-theme {
+    --color-accent: #D4AF37;
+    --color-accent-hover: #B8962E;
+    --color-brand: #D4AF37;
+    --color-complement: #D4AF37;
+    --color-complement-hover: #B8962E;
+    --color-dark: #333333;
+    --color-grey: #E8DCC4;
+    --color-grey-dark: #666666;
+    --color-muted: #F6F0E7;
+    --color-orange: #D4AF37;
+    --color-gold: #D4AF37;
+    --color-yellow-dark: #B8962E;
+    --color-overlay: rgba(51, 42, 12, 0.58);
+    --color-shadow: rgba(98, 76, 19, 0.12);
+    --color-instagram-1: #F6E7A8;
+    --color-instagram-2: #D4AF37;
+    --color-instagram-3: #333333;
+    --color-whatsapp: #D4AF37;
+}
+
+body.wedding-theme .seaside-enquiry,
+body.wedding-theme .seaside-access-notice {
+    background-color: #F6F0E7;
+}
+
+body.wedding-theme .seaside-packages .seaside-explore-button:hover i,
+body.wedding-theme .seaside-packages .seaside-explore-button:focus-visible i,
+body.wedding-theme .seaside-packages .seaside-explore-button:active i {
+    background-color: #FFFFFF;
+    border-color: #D4AF37;
+    color: #B8962E;
+}
+
+body.wedding-theme .seaside-packages {
+    background-color: #EDDFB5;
+}
+
+body.wedding-theme .seaside-packages .seaside-eyebrow,
+body.wedding-theme .seaside-packages .seaside-section-heading h2,
+body.wedding-theme .seaside-packages .seaside-section-hint,
+body.wedding-theme .seaside-packages .seaside-explore-button,
+body.wedding-theme .seaside-enquiry-heading h2,
+body.wedding-theme .seaside-form-field label,
+body.wedding-theme .seaside-form-field legend,
+body.wedding-theme .seaside-form-options label,
+body.wedding-theme .seaside-estimate,
+body.wedding-theme .seaside-access-notice {
+    color: #333333;
+}
+
+body.wedding-theme .seaside-packages .seaside-section-hint i,
+body.wedding-theme .seaside-packages .seaside-explore-button i,
+body.wedding-theme .seaside-enquiry-heading .seaside-eyebrow,
+body.wedding-theme .seaside-form-field label span,
+body.wedding-theme .seaside-form-required-note span,
+body.wedding-theme .seaside-form-options input,
+body.wedding-theme .seaside-form-success {
+    color: #B8962E;
+    border-color: #D4AF37;
+    accent-color: #D4AF37;
+}
+
+body.wedding-theme .seaside-form-section h3,
+body.wedding-theme .seaside-estimate-total strong {
+    color: #B8962E;
+}
+
+body.wedding-theme .seaside-form-control {
+    background: rgba(246, 240, 231, 0.72);
+    color: #333333;
+}
+
+body.wedding-theme .seaside-form-control:focus {
+    border-color: #D4AF37;
+}
+
+body.wedding-theme .seaside-enquiry-form > .seaside-button-submit {
+    background: linear-gradient(135deg, #D4AF37, #B8962E);
+}
+
+body.wedding-theme .seaside-enquiry-form > .seaside-button-submit:hover {
+    background: linear-gradient(135deg, #B8962E, #8F7322);
+}
+
+body.wedding-theme .seaside-enquiry-form > .seaside-button-submit:focus-visible {
+    outline-color: #F6E7A8;
+}
+
+/* Pale yellow navbar Login button and Lafaya logo, wedding pages only */
+body.wedding-theme .navbar-auth {
+    background-color: #FFF3B0;
+    color: #5C4A00;
+}
+
+body.wedding-theme .navbar-auth:hover {
+    background-color: #FFE97A;
+    color: #3D3000;
+}
+
+body.wedding-theme .lafaya-logo-circle {
+    background-color: #FFF3B0;
+    box-shadow: inset 0 0 0 2px #F6E7A8;
+}
+

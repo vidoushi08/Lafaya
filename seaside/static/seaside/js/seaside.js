@@ -60,6 +60,15 @@
   var totalOutput = form.querySelector("[data-estimate-total]");
   var noteOutput = form.querySelector("[data-estimate-note]");
   var submitButton = form.querySelector('button[type="submit"]');
+  var hasPriceOnRequest = services.some(function (box) {
+    return box.dataset.priceOnRequest === "true";
+  });
+
+  function setEstimateNote(note) {
+    noteOutput.textContent = hasPriceOnRequest
+      ? note + " Optional services marked price on request will be quoted separately."
+      : note;
+  }
 
   function setSubmitBlocked(blocked) {
     submitButton.disabled = blocked;
@@ -133,8 +142,7 @@
     if (!haveGuests) {
       setSubmitBlocked(false);
       totalOutput.textContent = "Rs 0";
-      noteOutput.textContent =
-        "Enter your expected guests to see your estimate.";
+      setEstimateNote("Enter your expected guests to see your estimate.");
       [venueSelect, packageSelect].forEach(function (select) {
         Array.prototype.forEach.call(select.options, function (option) {
           if (option.value) {
@@ -183,23 +191,23 @@
     var packageFloor = cheapest(packageSelect, guests);
 
     if (venueFloor === null || packageFloor === null) {
-      noteOutput.textContent =
-        "No venue or package is available for this number of guests.";
+      setEstimateNote("No venue or package is available for this number of guests.");
     } else if (haveBudget && venueFloor + packageFloor > budget) {
-      noteOutput.textContent =
+      setEstimateNote(
         "For " + guests + " guests the lowest possible total is " +
-        money(venueFloor + packageFloor) + ", which is above your budget.";
+        money(venueFloor + packageFloor) + ", which is above your budget."
+      );
     } else if (!venue || !pack) {
-      noteOutput.textContent = "Choose a venue and package to see your estimate.";
+      setEstimateNote("Choose a venue and package to see your estimate.");
     } else if (haveBudget && total > budget) {
-      noteOutput.textContent =
+      setEstimateNote(
         "This selection is " + money(total - budget) +
-        " over your budget. Pick a cheaper venue, package or services, or raise your budget.";
+        " over your budget. Pick a cheaper venue, package or services, or raise your budget."
+      );
     } else if (haveBudget) {
-      noteOutput.textContent =
-        "Within your budget. " + money(budget - total) + " remaining.";
+      setEstimateNote("Within your budget. " + money(budget - total) + " remaining.");
     } else {
-      noteOutput.textContent = "Enter your budget to check this estimate.";
+      setEstimateNote("Enter your budget to check this estimate.");
     }
   }
 
