@@ -21,6 +21,60 @@
   --color-whatsapp: #7e22ce;
 }
 
+/* A clipped, non-interactive celebration layer; content remains in front. */
+.birthday-confetti-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  contain: strict;
+  pointer-events: none;
+  mask-image: linear-gradient(to right, #000 12%, rgba(0, 0, 0, 0.2) 38%,
+    rgba(0, 0, 0, 0.2) 62%, #000 88%);
+}
+
+.birthday-confetti-particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 11px;
+  background-color: currentColor;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.birthday-confetti-particle-small { width: 4px; height: 7px; }
+.birthday-confetti-particle-large { width: 9px; height: 13px; }
+.birthday-confetti-circle { height: 7px; border-radius: 50%; aspect-ratio: 1; }
+.birthday-confetti-circle.birthday-confetti-particle-small { width: 4px; height: 4px; }
+.birthday-confetti-circle.birthday-confetti-particle-large { width: 9px; height: 9px; }
+.birthday-confetti-streamer { width: 4px; height: 20px; border-radius: 50% 0 50% 0; }
+.birthday-confetti-star {
+  width: 10px;
+  height: 10px;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 95%,
+    50% 72%, 21% 95%, 32% 57%, 2% 35%, 39% 35%);
+}
+.birthday-confetti-coral { color: #f37369; }
+.birthday-confetti-pink { color: #ed5ea2; }
+.birthday-confetti-yellow { color: #f0c94a; }
+.birthday-confetti-turquoise { color: #29bcb4; }
+.birthday-confetti-purple { color: #a166d4; }
+.birthday-confetti-blue { color: #458ee0; }
+.birthday-confetti-orange { color: #f49b42; }
+
+.birthday-page .birthday-hero-content,
+.birthday-page .birthday-enquiry,
+.birthday-page .birthday-book-cta {
+  position: relative;
+  z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-confetti-layer { display: none; }
+}
+
 .birthday-page {
   background-color: var(--color-white);
 }
