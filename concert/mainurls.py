@@ -1,7 +1,10 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from . import views
+
+# namespace for app urls so they can be referenced as `app:name`
+app_name = "concert"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('concert/', include('concert.urls')),
+    path("", views.index, name="concert"),
 ]
