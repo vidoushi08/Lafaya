@@ -169,14 +169,15 @@
   overflow: hidden;
 }
 
-/* One fine line sits directly around the photograph. */
+/* The active event theme colours the fine outline around the photograph. */
 .homepage-events-hero-slides::after {
   content: "";
   position: absolute;
   z-index: 2;
   inset: 0;
-  border: 1px solid rgba(198, 161, 91, 0.45);
+  border: 1px solid var(--event-accent, var(--luxury-gold));
   border-radius: inherit;
+  transition: border-color 450ms ease;
   pointer-events: none;
 }
 
@@ -502,6 +503,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .homepage-event-decorations { transition: none; }
+  .homepage-events-hero-slides::after { transition: none; }
 }
 
 .homepage-events-hero[data-event-theme="car"] {
