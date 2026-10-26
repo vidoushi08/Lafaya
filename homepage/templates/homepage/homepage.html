@@ -15,9 +15,10 @@
       <a class="homepage-welcome-cta" href="#homepage-events">Book Your Event</a>
     </section>
 
-    <section class="homepage-events-hero" id="homepage-events">
+    <section class="homepage-events-hero" id="homepage-events" data-event-theme="car">
+      <div class="homepage-events-frame" aria-hidden="true"></div>
       <div class="homepage-events-hero-slides">
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-car homepage-events-hero-slide-active">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-car homepage-events-hero-slide-active" data-event-theme="car">
           <a href="{% url 'car_events:car_events' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/cars_main.png' %}" alt="Car Events">
             <figcaption class="homepage-events-hero-text">
@@ -28,7 +29,7 @@
           </a>
         </figure>
 
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-wedding">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-wedding" data-event-theme="wedding">
           <a href="{% url 'wedding:wedding' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/wedding_main.png' %}" alt="Wedding">
             <figcaption class="homepage-events-hero-text">
@@ -39,7 +40,7 @@
           </a>
         </figure>
 
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-concert">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-concert" data-event-theme="concert">
           <a href="{% url 'concert:concert' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/concert_main.png' %}" alt="Concert">
             <figcaption class="homepage-events-hero-text">
@@ -50,7 +51,7 @@
           </a>
         </figure>
 
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-seaside">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-seaside" data-event-theme="seaside">
           <a href="{% url 'seaside:seaside' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/seaside_main.png' %}" alt="Seaside">
             <figcaption class="homepage-events-hero-text">
@@ -61,7 +62,7 @@
           </a>
         </figure>
 
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-conference">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-conference" data-event-theme="conference">
           <a href="{% url 'conference:conference' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/conference_main.png' %}" alt="Conference">
             <figcaption class="homepage-events-hero-text">
@@ -72,7 +73,7 @@
           </a>
         </figure>
 
-        <figure class="homepage-events-hero-slide homepage-events-hero-slide-birthday">
+        <figure class="homepage-events-hero-slide homepage-events-hero-slide-birthday" data-event-theme="birthday">
           <a href="{% url 'birthday:birthday' %}" class="homepage-events-hero-link">
             <img src="{% static 'images/events/birthday_main.png' %}" alt="Birthday">
             <figcaption class="homepage-events-hero-text">

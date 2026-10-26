@@ -1,11 +1,13 @@
 const slides = document.querySelectorAll(".homepage-events-hero-slide");
 const dots = document.querySelectorAll(".homepage-events-hero-dot");
+const slideshow = document.querySelector(".homepage-events-hero");
 let currentIndex = 0;
 const AUTO_SCROLL_MS = 3000;
 let autoScrollTimer = null;
 let isHovered = false;
 
 function showSlide(index) {
+  slideshow.dataset.eventTheme = slides[index].dataset.eventTheme;
   slides.forEach(function (slide, i) {
     slide.classList.toggle("homepage-events-hero-slide-active", i === index);
   });
@@ -71,6 +73,7 @@ document
     resetAutoScroll();
   });
 
+showSlide(currentIndex);
 startAutoScroll();
 
 const testimonialsTrack = document.querySelector(
