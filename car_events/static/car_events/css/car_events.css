@@ -896,3 +896,53 @@
     font-size: 1.5rem;
   }
 }
+
+/* Two lightweight racing pairs, clipped to the viewport. */
+.car-events-racing-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  contain: strict;
+  pointer-events: none;
+  mask-image: linear-gradient(to right, #000 15%, rgba(0, 0, 0, 0.18) 38%,
+    rgba(0, 0, 0, 0.18) 62%, #000 85%);
+}
+.car-events-racing-car {
+  position: absolute;
+  left: 0;
+  width: 58px;
+  height: 25px;
+  color: #dc5656;
+  pointer-events: none;
+}
+.car-events-racing-car-1 { top: 17%; }
+.car-events-racing-car-2 { top: calc(17% + 27px); color: #4b94d4; }
+.car-events-racing-car-3 { bottom: 14%; color: #c69445; }
+.car-events-racing-car-4 { bottom: calc(14% + 27px); color: #469c91; }
+.car-events-racing-car svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: #fbf8f2;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(37, 35, 33, 0.12));
+}
+.car-events-racing-car .car-events-racing-body { fill: currentColor; fill-opacity: 0.25; }
+.car-events-racing-car .car-events-racing-speed { fill: none; opacity: 0.6; }
+.car-events-page .car-events-hero-content,
+.car-events-page .car-events-enquiry,
+.car-events-page .car-events-book-cta {
+  position: relative;
+  z-index: 3;
+}
+@media (max-width: 600px) {
+  .car-events-racing-car { width: 44px; height: 20px; }
+  .car-events-racing-car-2 { top: calc(17% + 22px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .car-events-racing-layer { display: none; }
+}

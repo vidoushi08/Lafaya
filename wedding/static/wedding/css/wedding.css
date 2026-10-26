@@ -953,3 +953,13 @@ body.wedding-theme .lafaya-logo-circle {
     box-shadow: inset 0 0 0 2px #F6E7A8;
 }
 
+
+/* Continuous viewport lanes replace pop-up bursts. */
+.wedding-flower-drifter-1 { top: 16%; }
+.wedding-flower-drifter-2 { top: 27%; }
+.wedding-flower-drifter-3 { top: 63%; }
+.wedding-flower-drifter-4 { top: 84%; }
+.wedding-flower-drifter-5 { top: 38%; }
+.wedding-flower-drifter-6 { top: 73%; }
+.wedding-flower-drifter-7 { top: 49%; }
+.wedding-flower-drifter-8 { top: 91%; }

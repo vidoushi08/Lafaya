@@ -941,3 +941,13 @@ body.seaside-theme .seaside-page .seaside-book-cta {
 @media (prefers-reduced-motion: reduce) {
   .seaside-shell-layer { display: none; }
 }
+
+/* Continuous viewport lanes replace pop-up bursts. */
+.seaside-shell-drifter-1 { top: 16%; }
+.seaside-shell-drifter-2 { top: 27%; }
+.seaside-shell-drifter-3 { top: 63%; }
+.seaside-shell-drifter-4 { top: 84%; }
+.seaside-shell-drifter-5 { top: 38%; }
+.seaside-shell-drifter-6 { top: 73%; }
+.seaside-shell-drifter-7 { top: 49%; }
+.seaside-shell-drifter-8 { top: 91%; }

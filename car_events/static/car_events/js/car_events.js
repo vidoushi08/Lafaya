@@ -44,6 +44,80 @@
   });
 })();
 
+// Decorative racing pairs are independent of booking and pricing logic.
+(function carEventsRacingEffect() {
+  var carEventsLayer = document.querySelector('.car-events-racing-layer');
+  if (!carEventsLayer || !document.querySelector('.car-events-page') ||
+      typeof carEventsLayer.animate !== 'function') return;
+
+  var carEventsMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var carEventsMobile = window.matchMedia('(max-width: 600px)');
+  var carEventsAnimations = [];
+  var carEventsAway = false;
+  var carEventsResizeFrame = null;
+
+  function carEventsClearRace() {
+    carEventsAnimations.forEach(function (animation) { animation.cancel(); });
+    carEventsAnimations = [];
+    carEventsLayer.replaceChildren();
+  }
+
+  function carEventsPauseRace() {
+    carEventsAnimations.forEach(function (animation) {
+      if (document.hidden || carEventsAway) animation.pause();
+      else animation.play();
+    });
+  }
+
+  function carEventsBuildRace() {
+    carEventsClearRace();
+    if (carEventsMotion.matches || carEventsAway) return;
+    var count = carEventsMobile.matches ? 2 : 4;
+    for (var index = 0; index < count; index++) {
+      var car = document.createElement('span');
+      car.className = 'car-events-racing-car car-events-racing-car-' + (index + 1);
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 64 26');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      svg.innerHTML = '<path class="car-events-racing-body" d="M5 17v-5l10-2 9-7h19l10 8 7 2v6H5z"/>' +
+        '<path d="m20 10 7-5h13l7 6H20zm12-5v6M7 15h5m42 0h5"/>' +
+        '<circle cx="17" cy="19" r="5"/><circle cx="49" cy="19" r="5"/>' +
+        '<circle cx="17" cy="19" r="2"/><circle cx="49" cy="19" r="2"/>' +
+        '<path class="car-events-racing-speed" d="M0 6h12M0 11h7M0 21h6"/>';
+      car.appendChild(svg);
+      carEventsLayer.appendChild(car);
+      var animation = car.animate([
+        { transform: 'translate3d(-90px,0,0)', opacity: 0, offset: 0 },
+        { opacity: 0.8, offset: 0.08 },
+        { opacity: 0.8, offset: 0.92 },
+        { transform: 'translate3d(' + (window.innerWidth + 90) + 'px,0,0)', opacity: 0, offset: 1 }
+      ], { duration: [11500, 9000, 12500, 10000][index], iterations: Infinity, easing: 'linear' });
+      animation.currentTime = [0, 1200, 5400, 6500][index];
+      carEventsAnimations.push(animation);
+    }
+    carEventsPauseRace();
+  }
+
+  document.addEventListener('visibilitychange', carEventsPauseRace);
+  carEventsMotion.addEventListener('change', carEventsBuildRace);
+  carEventsMobile.addEventListener('change', carEventsBuildRace);
+  window.addEventListener('resize', function carEventsResizeRace() {
+    window.cancelAnimationFrame(carEventsResizeFrame);
+    carEventsResizeFrame = window.requestAnimationFrame(carEventsBuildRace);
+  });
+  window.addEventListener('pagehide', function carEventsStopRace() {
+    carEventsAway = true;
+    window.cancelAnimationFrame(carEventsResizeFrame);
+    carEventsClearRace();
+  });
+  window.addEventListener('pageshow', function carEventsResumeRace() {
+    carEventsAway = false;
+    if (!carEventsAnimations.length) carEventsBuildRace();
+  });
+  carEventsBuildRace();
+})();
+
 (function () {
   var form = document.querySelector("[data-booking-form]");
   if (!form) {
