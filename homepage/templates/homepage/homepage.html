@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Lafaya{% endblock %}
+{% block body_class %}homepage-page{% endblock %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'homepage/css/homepage.css' %}">
@@ -103,8 +104,8 @@
     </section>
 
     <section class="homepage-trusted">
-      <h2 class="homepage-trusted-heading">Trusted by industry leaders</h2>
-      <p class="homepage-trusted-subheading">Famous brands choose Lafaya to bring their events to life</p>
+      <h2 class="homepage-trusted-heading homepage-section-heading">Trusted by industry leaders</h2>
+      <p class="homepage-trusted-subheading homepage-section-subtitle">Famous brands choose Lafaya to bring their events to life</p>
       <div class="homepage-trusted-panel">
         <div class="homepage-trusted-cards">
           <a href="https://www.spotify.com" target="_blank" rel="noopener noreferrer" class="homepage-trusted-card homepage-trusted-card-spotify" title="Spotify">
@@ -137,7 +138,7 @@
 
     <section class="homepage-testimonials">
       <div class="homepage-testimonials-content">
-        <h2 class="homepage-testimonials-heading">Memories made with Lafaya</h2>
+        <h2 class="homepage-testimonials-heading homepage-section-heading">Memories made with Lafaya</h2>
         <div class="homepage-testimonials-viewport" tabindex="0" role="region" aria-label="Customer testimonials">
         <div class="homepage-testimonials-track">
           <div class="homepage-testimonials-card">

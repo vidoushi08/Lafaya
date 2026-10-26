@@ -1,10 +1,99 @@
+/* Homepage-only design tokens; shared pages retain their existing palette. */
+.homepage-page {
+  --luxury-ivory: #fbf8f2;
+  --luxury-cream: #f3ebdd;
+  --luxury-champagne: #e8d8b8;
+  --luxury-gold: #c6a15b;
+  --luxury-gold-dark: #9c783b;
+  --luxury-charcoal: #252321;
+  --luxury-muted: #706b64;
+  --lafaya-terracotta: var(--color-brand);
+  --luxury-action-hover: #98452a;
+  --luxury-gold-hover: #d0ac65;
+  --luxury-focus: #80602d;
+  --luxury-card: var(--color-white);
+  --luxury-radius: 14px;
+  --luxury-section-space: clamp(2.5rem, 5vw, 4.5rem);
+  --luxury-heading-space: clamp(1.5rem, 3vw, 2.5rem);
+  --luxury-shadow: 0 4px 16px rgba(158, 121, 57, 0.08);
+  --luxury-shadow-hover: 0 8px 24px rgba(158, 121, 57, 0.13),
+    0 0 12px rgba(198, 161, 91, 0.09);
+  background-color: var(--luxury-ivory);
+}
+
+.homepage {
+  background-color: var(--luxury-ivory);
+  color: var(--luxury-charcoal);
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.homepage-page .navbar-auth {
+  background-color: var(--lafaya-terracotta);
+}
+
+.homepage-page .navbar-auth:hover {
+  background-color: var(--luxury-action-hover);
+}
+
+.homepage-page .navbar-auth:focus-visible,
+.homepage-welcome-cta:focus-visible {
+  outline: 3px solid var(--luxury-focus);
+  outline-offset: 4px;
+}
+
+/* Optional eyebrow styling is ready for future sections; no copy is added. */
+.homepage-section-eyebrow {
+  color: var(--luxury-gold-dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.homepage .homepage-section-heading {
+  max-width: 28ch;
+  margin: 0 auto var(--luxury-heading-space);
+  color: var(--luxury-charcoal);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.homepage-section-heading::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 1px;
+  margin: 1rem auto 0;
+  background-color: var(--luxury-gold);
+}
+
+.homepage .homepage-section-subtitle {
+  max-width: 55ch;
+  margin: 0 auto var(--luxury-heading-space);
+  color: var(--luxury-muted);
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  line-height: 1.7;
+  opacity: 1;
+  text-wrap: balance;
+}
+
+.homepage .homepage-trusted-heading {
+  margin-bottom: 1rem;
+}
+
 .homepage-welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: clamp(2rem, 4vw, 3rem) var(--container-padding)
+  padding: var(--luxury-section-space) var(--container-padding)
     clamp(1.5rem, 3vw, 2.25rem);
 }
 
@@ -16,15 +105,15 @@
   max-width: 100%;
   text-wrap: balance;
   margin-bottom: 0.75rem;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
 }
 
 .homepage-welcome h3 {
   font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
   font-weight: 400;
-  color: var(--color-dark);
+  color: var(--luxury-muted);
   line-height: 1.5;
-  max-width: 100%;
+  max-width: min(100%, 45ch);
   text-wrap: balance;
   margin-bottom: 1.25rem;
 }
@@ -35,12 +124,12 @@
   align-items: center;
   justify-content: center;
   min-width: 220px;
-  background-color: var(--color-complement);
+  background-color: var(--lafaya-terracotta);
   color: var(--color-white);
-  border: 2px solid var(--color-complement);
+  border: 2px solid var(--lafaya-terracotta);
   padding: 0.9rem 2.5rem;
   border-radius: 999px;
-  box-shadow: 0 8px 20px var(--color-shadow);
+  box-shadow: var(--luxury-shadow);
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
@@ -52,7 +141,7 @@
 
 .homepage-welcome button:hover,
 .homepage-welcome-cta:hover {
-  background-color: var(--color-complement-hover);
+  background-color: var(--luxury-action-hover);
   transform: translateY(-2px);
 }
 
@@ -404,27 +493,27 @@
 .homepage-trusted {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 4rem var(--container-padding);
+  padding: var(--luxury-section-space) var(--container-padding);
   text-align: center;
 }
 
 .homepage-trusted-heading {
   font-size: 2rem;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
   margin-bottom: 0.5rem;
 }
 
 .homepage-trusted-subheading {
   font-size: 1rem;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
   opacity: 0.7;
   margin-bottom: 2.5rem;
 }
 
 .homepage-trusted-panel {
-  background-color: #f6f1e7;
-  border-radius: 14px;
-  padding: 2.5rem 1.5rem;
+  background-color: var(--luxury-cream);
+  border-radius: var(--luxury-radius);
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.5rem);
 }
 
 .homepage-trusted-cards {
@@ -442,10 +531,10 @@
   min-height: 180px;
   min-width: 0;
   padding: 2.5rem 1rem;
-  background-color: var(--color-white);
-  border: 1px solid #c6a15b;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(158, 121, 57, 0.08);
+  background-color: var(--luxury-card);
+  border: 1px solid var(--luxury-gold);
+  border-radius: var(--luxury-radius);
+  box-shadow: var(--luxury-shadow);
   transition:
     transform 250ms ease,
     box-shadow 250ms ease,
@@ -455,54 +544,30 @@
 
 .homepage-trusted-card i {
   font-size: 3.5rem;
-  color: #51483d;
+  color: var(--luxury-charcoal);
   transition: color 250ms ease;
 }
 
-.homepage-trusted-card:hover i {
-  color: var(--color-brand);
-}
-
-.homepage-trusted-card-spotify:hover i {
-  color: var(--color-spotify);
-}
-
-.homepage-trusted-card-linkedin:hover i {
-  color: var(--color-linkedin);
-}
-
-.homepage-trusted-card-airbnb:hover i {
-  color: var(--color-airbnb);
-}
-
-.homepage-trusted-card-uber:hover i {
-  color: var(--color-uber);
-}
-
-.homepage-trusted-card-pinterest:hover i {
-  color: var(--color-pinterest);
-}
-
-.homepage-trusted-card-etsy:hover i {
-  color: var(--color-etsy);
+.homepage-trusted-card:hover i,
+.homepage-trusted-card:focus-visible i {
+  color: var(--luxury-gold-dark);
 }
 
 .homepage-trusted-card span {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
 }
 
 .homepage-trusted-card:hover,
 .homepage-trusted-card:focus-visible {
-  border-color: #d0ac65;
+  border-color: var(--luxury-gold-hover);
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(158, 121, 57, 0.13),
-    0 0 12px rgba(198, 161, 91, 0.09);
+  box-shadow: var(--luxury-shadow-hover);
 }
 
 .homepage-trusted-card:focus-visible {
-  outline: 3px solid #80602d;
+  outline: 3px solid var(--luxury-focus);
   outline-offset: 4px;
 }
 
@@ -536,10 +601,12 @@
 }
 
 .homepage-testimonials {
-  background-color: #f6f1e7;
+  background-color: var(--luxury-cream);
   overflow: hidden;
-  padding: 4rem 0;
+  padding: var(--luxury-section-space) 0;
   text-align: center;
+  border-top: 1px solid var(--luxury-champagne);
+  border-bottom: 1px solid var(--luxury-champagne);
 }
 
 .homepage-testimonials-content {
@@ -550,7 +617,7 @@
 
 .homepage-testimonials-heading {
   font-size: 2rem;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
   margin-bottom: 2.5rem;
 }
 
@@ -564,7 +631,7 @@
 .homepage-testimonials-viewport {
   overflow-x: auto;
   scrollbar-width: none;
-  border-radius: 14px;
+  border-radius: var(--luxury-radius);
 }
 
 .homepage-testimonials-viewport::-webkit-scrollbar {
@@ -572,7 +639,7 @@
 }
 
 .homepage-testimonials-viewport:focus-visible {
-  outline: 3px solid #80602d;
+  outline: 3px solid var(--luxury-focus);
   outline-offset: 4px;
 }
 
@@ -595,10 +662,10 @@
   min-height: 260px;
   margin-right: 1.5rem;
   padding: 2rem 1.5rem;
-  background-color: var(--color-white);
-  border: 1px solid #c6a15b;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(158, 121, 57, 0.08);
+  background-color: var(--luxury-card);
+  border: 1px solid var(--luxury-gold);
+  border-radius: var(--luxury-radius);
+  box-shadow: var(--luxury-shadow);
   transition: transform 250ms ease, border-color 250ms ease,
     box-shadow 250ms ease;
 }
@@ -611,15 +678,15 @@
   width: 22px;
   height: 20px;
   opacity: 0.65;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20'%3E%3Cpath fill='%23c6a15b' d='M1 12C1 5 4 2 10 1v3C6 5 5 7 5 10h5v9H1zm13 0c0-7 3-10 9-11v3c-4 1-5 3-5 6h5v9h-9z'/%3E%3C/svg%3E") center / contain no-repeat;
+  background-color: var(--luxury-gold);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20'%3E%3Cpath d='M1 12C1 5 4 2 10 1v3C6 5 5 7 5 10h5v9H1zm13 0c0-7 3-10 9-11v3c-4 1-5 3-5 6h5v9h-9z'/%3E%3C/svg%3E") center / contain no-repeat;
   pointer-events: none;
 }
 
 .homepage-testimonials-card:hover {
   transform: translateY(-4px);
-  border-color: #d0ac65;
-  box-shadow: 0 8px 24px rgba(158, 121, 57, 0.13),
-    0 0 12px rgba(198, 161, 91, 0.09);
+  border-color: var(--luxury-gold-hover);
+  box-shadow: var(--luxury-shadow-hover);
 }
 
 .homepage-testimonials-card img {
@@ -628,15 +695,15 @@
   border-radius: var(--radius-circle);
   object-fit: cover;
   border: 2px solid var(--color-white);
-  box-shadow: 0 0 0 2px #c6a15b;
+  box-shadow: 0 0 0 2px var(--luxury-gold);
   margin-bottom: 1.5rem;
   flex-shrink: 0;
 }
 
 .homepage-testimonials-card p {
   font-size: 0.95rem;
-  color: var(--color-dark);
-  opacity: 0.85;
+  color: var(--luxury-muted);
+  max-width: 32ch;
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
@@ -644,13 +711,13 @@
 .homepage-testimonials-name {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--color-dark);
+  color: var(--luxury-charcoal);
   margin-top: auto;
 }
 
 @media (max-width: 600px) {
   .homepage-testimonials {
-    padding: 3rem 0;
+    padding: var(--luxury-section-space) 0;
   }
 
   .homepage-testimonials-card {
@@ -679,6 +746,15 @@
   }
 
   .homepage-testimonials-card:hover {
+    transform: none;
+  }
+
+  .homepage-welcome-cta,
+  .homepage-events-hero-slide {
+    transition: none;
+  }
+
+  .homepage-welcome-cta:hover {
     transform: none;
   }
 }
