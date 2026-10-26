@@ -13,6 +13,9 @@
   --luxury-focus: #80602d;
   --luxury-card: var(--color-white);
   --luxury-radius: 14px;
+  --luxury-frame-radius: 22px;
+  --luxury-frame-padding: clamp(1.5rem, 3vw, 2.5rem);
+  --luxury-card-border: #d8c39b;
   --luxury-section-space: clamp(2.5rem, 5vw, 4.5rem);
   --luxury-heading-space: clamp(1.5rem, 3vw, 2.5rem);
   --luxury-shadow: 0 4px 16px rgba(158, 121, 57, 0.08);
@@ -532,7 +535,7 @@
   min-width: 0;
   padding: 2.5rem 1rem;
   background-color: var(--luxury-card);
-  border: 1px solid var(--luxury-gold);
+  border: 1px solid var(--luxury-card-border);
   border-radius: var(--luxury-radius);
   box-shadow: var(--luxury-shadow);
   transition:
@@ -663,7 +666,7 @@
   margin-right: 1.5rem;
   padding: 2rem 1.5rem;
   background-color: var(--luxury-card);
-  border: 1px solid var(--luxury-gold);
+  border: 1px solid var(--luxury-card-border);
   border-radius: var(--luxury-radius);
   box-shadow: var(--luxury-shadow);
   transition: transform 250ms ease, border-color 250ms ease,
@@ -723,6 +726,97 @@
   .homepage-testimonials-card {
     margin-right: 1rem;
     padding: 2rem 1.25rem;
+  }
+}
+
+/* Reusable invitation-style frame. Decorations never receive pointer events. */
+.homepage .luxury-frame {
+  --corner-length: 14px;
+  position: relative;
+  min-width: 0;
+  padding: var(--luxury-frame-padding);
+  border: 1px solid var(--luxury-gold);
+  border-radius: var(--luxury-frame-radius);
+  box-shadow: var(--luxury-shadow);
+  isolation: isolate;
+}
+
+.luxury-frame::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 7px;
+  border: 1px solid var(--luxury-champagne);
+  border-radius: calc(var(--luxury-frame-radius) - 7px);
+  background:
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) left 6px top 6px / var(--corner-length) 1px,
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) left 6px top 6px / 1px var(--corner-length),
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) right 6px top 6px / var(--corner-length) 1px,
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) right 6px top 6px / 1px var(--corner-length),
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) left 6px bottom 6px / var(--corner-length) 1px,
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) left 6px bottom 6px / 1px var(--corner-length),
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) right 6px bottom 6px / var(--corner-length) 1px,
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) right 6px bottom 6px / 1px var(--corner-length),
+    linear-gradient(var(--luxury-gold), var(--luxury-gold)) center top 7px / 54px 1px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.luxury-frame::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background-color: var(--luxury-gold);
+  transform: translateX(-50%) rotate(45deg);
+  pointer-events: none;
+}
+
+.homepage .homepage-events-hero.luxury-frame {
+  --frame-size: 28px;
+  padding: var(--frame-size);
+}
+
+.homepage-testimonials-panel {
+  background-color: var(--luxury-ivory);
+}
+
+.luxury-frame:focus-visible,
+.luxury-frame a:focus-visible,
+.luxury-frame button:focus-visible {
+  outline: 3px solid var(--luxury-focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .homepage .luxury-frame {
+    --corner-length: 8px;
+    --luxury-frame-padding: 1.5rem 1rem;
+    --luxury-frame-radius: 18px;
+  }
+
+  .homepage .homepage-events-hero.luxury-frame {
+    --frame-size: 18px;
+  }
+
+  .luxury-frame::before {
+    inset: 5px;
+    border-radius: calc(var(--luxury-frame-radius) - 5px);
+    background-size: 8px 1px, 1px 8px, 8px 1px, 1px 8px,
+      8px 1px, 1px 8px, 8px 1px, 1px 8px, 38px 1px;
+  }
+
+  .luxury-frame::after {
+    top: 10px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .homepage-testimonials-card {
+    width: min(340px, calc(100vw - 5.5rem));
   }
 }
 
