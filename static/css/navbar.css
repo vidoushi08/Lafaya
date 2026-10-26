@@ -131,10 +131,17 @@
   text-decoration: none;
   color: var(--color-white);
   background-color: var(--color-accent);
+  border: 0;
   padding: 0.5rem 1.25rem;
   border-radius: var(--radius-btn);
   font-weight: 600;
   font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.navbar-auth-form {
+  margin: 0;
 }
 
 .navbar-auth:hover {
@@ -263,7 +270,8 @@
       transform 0.25s ease;
   }
 
-  .navbar-links.active ~ .navbar-auth {
+  .navbar-links.active ~ .navbar-auth,
+  .navbar-links.active ~ .navbar-auth-form .navbar-auth {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

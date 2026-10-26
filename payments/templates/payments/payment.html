@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payments | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'payments/css/payment.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="payment-page">
+    <div class="payment-checkout">
+      <section class="payment-panel" aria-labelledby="payments-heading">
+        <div class="payment-section-heading">
+          <h1 id="payments-heading">Your bookings and payments</h1>
+          <p>Demo payment is available after Lafaya approves a booking request. No real card is charged.</p>
+        </div>
+
+        {% for booking in bookings %}
+          <article class="payment-booking">
+            <div>
+              <h2>{{ booking.event_type }}{% if booking.event_name %}: {{ booking.event_name }}{% endif %}</h2>
+              <p>{{ booking.event_date|date:"j M Y" }} · {{ booking.venue_name }}</p>
+              <p>Reference: <strong>{{ booking.reference }}</strong></p>
+              <p>Status: <strong>{{ booking.get_status_display }}</strong></p>
+              {% if booking.status == "approved" %}
+                <p>Amount due: {{ booking.payment.currency }} {{ booking.payment.amount|floatformat:2 }}</p>
+              {% endif %}
+            </div>
+            <a class="payment-submit-button payment-booking-link" href="{% url 'payments:payment_detail' booking.id %}">
+              View booking
+            </a>
+          </article>
+        {% empty %}
+          <p>You do not have any booking requests yet. Start with one of our event pages to plan your event.</p>
+        {% endfor %}
+      </section>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Verify Your Email | Lafaya{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'authentication/css/authentication.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-page auth-page-utility">
+  <div class="auth-utility-card">
+    <div class="auth-header">
+      <span class="auth-kicker">customer account</span>
+      <h1>verify your email</h1>
+    </div>
+    <p>Your account is not active yet. Follow the verification link sent to your email before signing in.</p>
+    <p class="auth-switch"><a href="{% url 'authentication:resend_verification' %}">Need another verification link?</a></p>
+  </div>
+</section>
+{% endblock %}

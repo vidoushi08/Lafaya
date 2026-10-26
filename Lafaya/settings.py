@@ -10,10 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+dotenv_path = BASE_DIR / ".env"
+if not dotenv_path.exists():
+    dotenv_path = BASE_DIR / "env"
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
@@ -40,13 +47,10 @@ INSTALLED_APPS = [
     "customer_dashboard.apps.CustomerDashboardConfig",
     # staff application
     "staff.apps.StaffConfig",
-    # staff booking history application
+    # staff portal applications
     "staff_booking_history.apps.StaffBookingHistoryConfig",
-    # staff profile application
     "staff_profile.apps.StaffProfileConfig",
-    # staff task assignment application
     "staff_task_assignment.apps.StaffTaskAssignmentConfig",
-    # staff event details application
     "staff_event_details.apps.StaffEventDetailsConfig",
     # birthday application
     "birthday.apps.BirthdayConfig",
@@ -68,6 +72,10 @@ INSTALLED_APPS = [
     "booking.apps.BookingConfig",
     # contact application
     "contact.apps.ContactConfig",
+
+    # venues application
+    "venues.apps.VenuesConfig",
+
     # django default applications
     "django.contrib.admin",
     "django.contrib.auth",
@@ -78,11 +86,20 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = "authentication.User"
+AUTHENTICATION_BACKENDS = [
+    "authentication.backends.EmailOrUsernameModelBackend",
+]
+LOGIN_URL = "authentication:login"
+PASSWORD_RESET_TIMEOUT = 3600
+CUSTOMER_EMAIL_VERIFICATION_TIMEOUT = 24 * 60 * 60
+STAFF_INVITATION_TIMEOUT = 72 * 60 * 60
+ONBOARDING_EMAIL_RESEND_COOLDOWN = 60
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "authentication.middleware.OnboardingOriginMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -141,6 +158,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Primary keys
+# Keep every app on the same auto field so the schema stays consistent.
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
@@ -160,13 +183,26 @@ STATICFILES_DIRS = [
 
 # generation of URLs based on the static directory
 STATIC_URL = "static/"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {
+    "true",
+    "1",
+    "yes",
 }
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@lafaya.mu")
+CONTACT_RECIPIENT_EMAIL = os.getenv("CONTACT_RECIPIENT_EMAIL", "hello@lafaya.mu")
+EMAIL_BACKEND = (
+    "django.core.mail.backends.smtp.EmailBackend"
+    if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD
+    else "django.core.mail.backends.console.EmailBackend"
+)

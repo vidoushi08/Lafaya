@@ -22,33 +22,6 @@
   padding: 1.5rem 1.1rem 2rem;
 }
 
-.staff-profile-logo-area {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.staff-profile-logo-area .lafaya-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.staff-profile-logo-area .lafaya-logo-circle {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  border-radius: var(--radius-circle);
-  background-color: var(--color-brand);
-}
-
-.staff-profile-logo-area .lafaya-logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-dark);
-}
-
 .staff-profile-portal-label {
   font-size: 0.75rem;
   font-weight: 700;
@@ -128,6 +101,43 @@
   font-size: 2.3rem;
   line-height: 1.2;
   color: var(--profile-text);
+}
+
+.staff-profile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.staff-profile-password-link {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-dashboard-green-dark);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-dashboard-green-dark);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.staff-profile-password-link:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+}
+
+.staff-profile-password-link:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .staff-profile-save-button {
@@ -224,6 +234,13 @@
   outline: none;
   border-color: rgba(116, 89, 64, 0.35);
   box-shadow: 0 0 0 3px rgba(116, 89, 64, 0.08);
+}
+
+.staff-profile-field input.staff-profile-readonly {
+  border-color: rgba(86, 77, 69, 0.12);
+  background: rgba(86, 77, 69, 0.08);
+  color: rgba(70, 64, 58, 0.78);
+  cursor: not-allowed;
 }
 
 .staff-profile-field select {

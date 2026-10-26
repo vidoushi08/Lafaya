@@ -11,33 +11,6 @@
   padding: 1.5rem 1.1rem 2rem;
 }
 
-.staff-logo-area {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2.1rem;
-}
-
-.staff-logo-area .lafaya-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.staff-logo-area .lafaya-logo-circle {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  border-radius: var(--radius-circle);
-  background-color: var(--color-brand);
-}
-
-.staff-logo-area .lafaya-logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-dark);
-}
-
 .staff-portal-label {
   font-size: 0.8rem;
   font-weight: 700;
@@ -86,29 +59,47 @@
 .staff-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0.3rem 0 1.2rem;
   min-height: 52px;
 }
 
-.staff-header h1 {
-  font-size: 1.2rem;
-  font-weight: 800;
-  letter-spacing: 0.04rem;
-  color: #2d2d2d;
+.staff-header-actions {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.staff-logout-btn {
+.staff-password-link {
   display: inline-flex;
+  min-height: 42px;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.55rem;
   padding: 0.65rem 1rem;
-  border: 1px solid rgba(51, 51, 51, 0.15);
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.46);
-  color: #2d2d2d;
+  border: 1px solid var(--color-dashboard-green-dark);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-dashboard-green-dark);
+  color: var(--color-white);
   font-size: 0.85rem;
-  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.staff-password-link:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+}
+
+.staff-password-link:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .staff-profile-card {
@@ -331,7 +322,7 @@
 
   .staff-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
     gap: 0.8rem;
   }
 

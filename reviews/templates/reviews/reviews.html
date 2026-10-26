@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Customer Reviews | Lafaya{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'reviews/css/reviews.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="reviews-page">
+    <section class="reviews-layout" aria-labelledby="reviews-heading">
+      <aside class="reviews-sidebar">
+        <a class="reviews-dashboard-link" href="{% url 'customer_dashboard:customer_dashboard' %}">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          <span>Back to Dashboard</span>
+        </a>
+        <h1 id="reviews-heading">Customer Reviews</h1>
+
+        <section class="reviews-summary" aria-label="Average review rating">
+          <div class="reviews-average"><strong>{{ average_rating|floatformat:1 }}</strong><span>out of 5</span></div>
+          <div class="reviews-summary-detail">
+            <div class="reviews-stars reviews-stars-summary" aria-label="{{ average_rating|floatformat:1 }} out of 5 stars">
+              {% for star in "12345" %}<i class="fa-solid fa-star{% if average_rating < forloop.counter %} reviews-star-muted{% endif %}" aria-hidden="true"></i>{% endfor %}
+            </div>
+            <p>Based on <strong>{{ review_count }} verified review{{ review_count|pluralize }}</strong></p>
+          </div>
+        </section>
+
+        <section class="reviews-distribution" aria-labelledby="reviews-distribution-heading">
+          <h2 id="reviews-distribution-heading">Rating Distribution</h2>
+          <ul>
+            {% for rating, count in rating_distribution.items %}
+              <li>
+                <span>{{ rating }} Star</span>
+                <span class="reviews-rating-track"><span style="width: {% if review_count %}{% widthratio count review_count 100 %}{% else %}0{% endif %}%"></span></span>
+                <span>{{ count }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="reviews-form-card" aria-labelledby="write-review-heading">
+          <h2 id="write-review-heading">Write Your Review</h2>
+          <p class="reviews-form-intro">Share your experience after a completed Lafaya event. Reviews are checked before they appear publicly.</p>
+          {% if messages %}<ul class="reviews-messages" role="status">{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>{% endif %}
+          {% if eligible_booking_count %}
+            <form class="reviews-form" method="post" action="{% url 'reviews:reviews' %}">
+              {% csrf_token %}
+              {% if form.non_field_errors %}<div class="reviews-form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+              <label class="reviews-booking-label" for="{{ form.booking.id_for_label }}">Event to review</label>
+              {{ form.booking }}{{ form.booking.errors }}
+              <fieldset class="reviews-rating-picker">
+                <legend>Select rating</legend>
+                <div class="reviews-rating-buttons" role="radiogroup" aria-label="Select a rating from 1 to 5 stars">
+                  {% for rating in "12345" %}
+                    <button class="reviews-rating-button" type="button" role="radio" data-rating="{{ rating }}" aria-label="{{ rating }} star{% if rating != '1' %}s{% endif %}" aria-checked="false"><i class="fa-regular fa-star" aria-hidden="true"></i></button>
+                  {% endfor %}
+                  <span class="reviews-rating-hint">Tap to rate</span>
+                </div>
+                {{ form.rating }}{{ form.rating.errors }}
+              </fieldset>
+              <label class="reviews-visually-hidden" for="{{ form.comment.id_for_label }}">Your review</label>
+              {{ form.comment }}{{ form.comment.errors }}
+              <button class="reviews-submit-button" type="submit">Add Review</button>
+              <p class="reviews-form-status" role="status" aria-live="polite">Select a rating and submit your review.</p>
+            </form>
+          {% else %}
+            <p class="reviews-form-status">You can review a booking after it has been marked completed.</p>
+          {% endif %}
+          {% if own_reviews %}
+            <div class="reviews-own-status"><h3>Your submissions</h3><ul>{% for review in own_reviews %}<li>{{ review.booking.event_name|default:review.booking.event_type }} — {{ review.get_status_display }}</li>{% endfor %}</ul></div>
+          {% endif %}
+        </section>
+      </aside>
+
+      <div class="reviews-list" aria-label="Recent customer reviews">
+        {% for review in reviews %}
+          <article class="review-card">
+            <div class="review-card-header">
+              <div>
+                <h2>{{ review.author_name }}</h2>
+                <time datetime="{{ review.created_at|date:'Y-m-d' }}">{{ review.created_at|date:"F j, Y" }}</time>
+              </div>
+              <span class="reviews-stars" aria-label="{{ review.rating }} out of 5 stars">
+                {% for star in "12345" %}<i class="fa-solid fa-star{% if review.rating < forloop.counter %} reviews-star-muted{% endif %}" aria-hidden="true"></i>{% endfor %}
+              </span>
+            </div>
+            <h3>{{ review.event_name|default:review.event_type }}</h3>
+            <p class="review-card-copy">{{ review.comment|linebreaksbr }}</p>
+            <ul class="review-tags" aria-label="Review event details"><li>{{ review.event_type }}</li><li>{{ review.event_date|date:"j M Y" }}</li></ul>
+          </article>
+        {% empty %}
+          <p class="reviews-empty">No customer reviews have been published yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'reviews/js/reviews.js' %}"></script>
+{% endblock %}

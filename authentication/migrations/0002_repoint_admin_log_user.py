@@ -6,6 +6,7 @@ def repoint_admin_log_user(apps, schema_editor):
     User = apps.get_model("authentication", "User")
     old_field = LogEntry._meta.get_field("user")
     new_field = old_field.clone()
+    old_field.remote_field.model = apps.get_model("auth", "User")
     new_field.remote_field.model = User
     new_field.remote_field.field_name = User._meta.pk.name
     new_field.set_attributes_from_name("user")

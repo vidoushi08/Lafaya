@@ -1,0 +1,7 @@
+{% if messages %}
+  <ul class="staff-flash-list" role="status">
+    {% for message in messages %}
+      <li class="staff-flash staff-flash-{{ message.level_tag }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

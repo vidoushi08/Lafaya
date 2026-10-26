@@ -28,33 +28,6 @@
   padding: 1.5rem 1.1rem 2rem;
 }
 
-.task-assignment-logo-area {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.task-assignment-logo-area .lafaya-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.task-assignment-logo-area .lafaya-logo-circle {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  border-radius: var(--radius-circle);
-  background-color: var(--color-brand);
-}
-
-.task-assignment-logo-area .lafaya-logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-dark);
-}
-
 .task-assignment-portal-label {
   font-size: 0.75rem;
   font-weight: 700;
@@ -121,19 +94,6 @@
   font-size: 2.2rem;
   line-height: 1.2;
   color: var(--task-text);
-}
-
-.task-assignment-logout-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.7rem 1rem;
-  border: 1px solid rgba(87, 78, 70, 0.16);
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 0.8rem;
-  color: var(--task-text);
-  font-size: 0.85rem;
-  cursor: pointer;
 }
 
 .task-assignment-summary-row {

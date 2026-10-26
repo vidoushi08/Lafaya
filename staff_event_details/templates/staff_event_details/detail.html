@@ -3,19 +3,14 @@
 
 {% block title %}Staff Event Details | Lafaya{% endblock %}
 
-{% block navbar %}{% endblock %}
-
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'staff_event_details/css/detail.css' %}">
+  <link rel="stylesheet" href="{% static 'css/staff_shared.css' %}">
 {% endblock %}
 
 {% block content %}
   <div class="staff-detail-shell">
     <aside class="staff-detail-sidebar">
-      <div class="staff-detail-logo-area">
-        {% include 'includes/lafaya_logo.html' %}
-      </div>
-
       <div class="staff-detail-portal-label">staff portal</div>
 
       <nav class="staff-detail-nav" aria-label="staff portal navigation">
@@ -39,17 +34,15 @@
         <div class="staff-detail-breadcrumb">
           <span>staff</span>
           <i class="fa-solid fa-angle-right"></i>
-          <span>view tasks</span>
+          <span>event details</span>
         </div>
-        <button type="button" class="staff-detail-logout-btn">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span>Log Out</span>
-        </button>
       </header>
 
+      {% include 'includes/staff_messages.html' %}
+
       <section class="staff-detail-title-row">
-        <h1>{{ task.title }}</h1>
-        <span class="staff-detail-status staff-detail-status-{{ task.status|cut:' ' }}">{{ task.status }}</span>
+        <h1>{{ booking.event_name|default:booking.event_type }}</h1>
+        <span class="staff-detail-status staff-detail-status-{{ booking.status }}">{{ booking.get_status_display }}</span>
       </section>
 
       <section class="staff-detail-cards">
@@ -58,41 +51,68 @@
 
           <div class="staff-detail-grid">
             <div class="staff-detail-row">
+              <span class="staff-detail-label">reference</span>
+              <span class="staff-detail-value">{{ booking.reference }}</span>
+            </div>
+            <div class="staff-detail-row">
               <span class="staff-detail-label">theme</span>
-              <span class="staff-detail-value">{{ task.theme }}</span>
+              <span class="staff-detail-value">{{ booking.event_type }}</span>
             </div>
             <div class="staff-detail-row">
               <span class="staff-detail-label">date</span>
-              <span class="staff-detail-value">{{ task.date }}</span>
+              <span class="staff-detail-value">{{ booking.event_date|date:"j F Y" }}</span>
             </div>
             <div class="staff-detail-row">
               <span class="staff-detail-label">time</span>
-              <span class="staff-detail-value">{{ task.time }}</span>
+              <span class="staff-detail-value">{{ booking.start_time|time:"H:i" }} - {{ booking.end_time|time:"H:i" }}</span>
             </div>
             <div class="staff-detail-row">
               <span class="staff-detail-label">venue</span>
-              <span class="staff-detail-value">{{ task.venue }}</span>
+              <span class="staff-detail-value">{{ booking.venue_name }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">package</span>
+              <span class="staff-detail-value">{{ booking.package_name }}</span>
             </div>
             <div class="staff-detail-row">
               <span class="staff-detail-label">guests</span>
-              <span class="staff-detail-value">{{ task.guests }}</span>
+              <span class="staff-detail-value">{{ booking.guests }} attendees</span>
             </div>
             <div class="staff-detail-row">
               <span class="staff-detail-label">my role</span>
-              <span class="staff-detail-value">{{ task.role }}</span>
+              <span class="staff-detail-value">{{ assignment.role }}</span>
             </div>
           </div>
         </article>
 
         <article class="staff-detail-card">
+          <h2><i class="fa-regular fa-address-card"></i> Client</h2>
+
+          <div class="staff-detail-grid">
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">name</span>
+              <span class="staff-detail-value">{{ booking.client_name|default:"Not provided" }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">email</span>
+              <span class="staff-detail-value">{{ booking.client_email|default:"Not provided" }}</span>
+            </div>
+            <div class="staff-detail-row">
+              <span class="staff-detail-label">phone</span>
+              <span class="staff-detail-value">{{ booking.client_phone|default:"Not provided" }}</span>
+            </div>
+          </div>
+
           <h2><i class="fa-solid fa-list-check"></i> Event Services</h2>
 
           <ul class="staff-detail-services">
-            {% for service in task.services %}
+            {% for service in services %}
               <li>
                 <i class="fa-solid fa-check"></i>
                 <span>{{ service }}</span>
               </li>
+            {% empty %}
+              <li><span>No optional services were selected.</span></li>
             {% endfor %}
           </ul>
         </article>
@@ -102,24 +122,32 @@
         <h2><i class="fa-regular fa-clipboard"></i> My Assigned Tasks</h2>
 
         <ul class="staff-detail-task-list">
-          {% for item in task.tasks %}
+          {% for task in tasks %}
             <li class="staff-detail-task-item">
               <div class="staff-detail-task-left">
                 <span class="staff-detail-check"></span>
-                <span>{{ item.label }}</span>
+                <span>
+                  {{ task.title }}
+                  <small class="{% if task.is_overdue %}staff-overdue{% endif %}">
+                    · due {{ task.due_date|date:"j M Y" }} · {{ task.get_priority_display }} priority{% if task.is_overdue %} · overdue{% endif %}
+                  </small>
+                  {% if task.description %}<br><small>{{ task.description }}</small>{% endif %}
+                </span>
               </div>
 
               <div class="staff-detail-task-right">
-                <span class="staff-detail-task-status staff-detail-task-status-{{ item.status_class }}">{{ item.status }}</span>
-                <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-detail-task-button">{{ item.button }}</a>
+                <span class="staff-detail-task-status staff-detail-task-status-{{ task.status }}">{{ task.get_status_display }}</span>
+                {% include 'staff_task_assignment/_task_actions.html' with next_url=request.path %}
               </div>
             </li>
+          {% empty %}
+            <li class="staff-detail-task-item"><span>No tasks have been added for this event yet.</span></li>
           {% endfor %}
         </ul>
       </section>
 
       <div class="staff-detail-actions">
-        <a href="{% url 'staff:staff' %}" class="staff-detail-secondary-btn">Back to dashboard</a>
+        <a href="{% url 'staff_booking_history:history' %}" class="staff-detail-secondary-btn">Booking history</a>
         <a href="{% url 'staff_task_assignment:tasks' %}" class="staff-detail-primary-btn">View all my tasks</a>
       </div>
     </main>

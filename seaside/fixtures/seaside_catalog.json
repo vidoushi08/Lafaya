@@ -1,0 +1,167 @@
+[
+{
+  "model": "seaside.seasidevenue",
+  "pk": 1,
+  "fields": {
+    "price": "10000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "The Glass Pavilion",
+    "location": "Northern coast, Mauritius",
+    "description": "A bright, architectural setting for ceremonies, private dinners, and celebrations framed by white sand and blue water.",
+    "image": "seaside/images/seaside_venue_pavilion.png",
+    "uploaded_image": "",
+    "capacity": 150
+  }
+},
+{
+  "model": "seaside.seasidevenue",
+  "pk": 2,
+  "fields": {
+    "price": "15000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Sunset Terrace",
+    "location": "West coast, Mauritius",
+    "description": "An easygoing waterfront terrace for sunset receptions, long-table dining, and evenings that flow into the night.",
+    "image": "seaside/images/seaside_venue_terrace.png",
+    "uploaded_image": "",
+    "capacity": 250
+  }
+},
+{
+  "model": "seaside.seasidevenue",
+  "pk": 3,
+  "fields": {
+    "price": "25000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 2,
+    "name": "Oceanfront Villa",
+    "location": "Private island setting",
+    "description": "A private escape for intimate celebrations, weekend gatherings, and hosted experiences with a view in every direction.",
+    "image": "seaside/images/seaside_venue_villa.png",
+    "uploaded_image": "",
+    "capacity": 350
+  }
+},
+{
+  "model": "seaside.seasidepackage",
+  "pk": 1,
+  "fields": {
+    "price": "2000.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 0,
+    "name": "Barefoot Gathering",
+    "tagline": "Relaxed celebrations",
+    "description": "",
+    "image": "",
+    "features": "Seaside setup for up to 150 guests\nTables, chairs and relaxed beachside seating\nTeam on site to welcome guests, set up and clear away afterwards\nEvent coordinator to run your timeline on the day\nArrival and key moments planned around sunset\nFood and drinks not included (add Ocean-to-table catering)",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": 150
+  }
+},
+{
+  "model": "seaside.seasidepackage",
+  "pk": 2,
+  "fields": {
+    "price": "2500.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 1,
+    "name": "Sunset Social",
+    "tagline": "Signature celebrations",
+    "description": "",
+    "image": "",
+    "features": "Seaside setup for up to 250 guests\nTables, chairs and lounge-style seating\nSound system, background music and a microphone for speeches\nTeam on site to welcome guests, serve, assist and clear away\nEvent coordinator from setup to close\nFood and drinks not included (add Ocean-to-table catering)",
+    "uploaded_image": "",
+    "is_featured": true,
+    "min_guests": 1,
+    "max_guests": 250
+  }
+},
+{
+  "model": "seaside.seasidepackage",
+  "pk": 3,
+  "fields": {
+    "price": "3000.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 2,
+    "name": "Private Island",
+    "tagline": "Unforgettable occasions",
+    "description": "",
+    "image": "",
+    "features": "Exclusive use of the venue for up to 250 guests, with no other events\nEntertainment and production planned with you: live music or DJ, stage and lighting\nDedicated team to welcome guests, serve, assist and clear away\nEvent coordinator who plans with you beforehand and runs the day\nFood and drinks not included (add Ocean-to-table catering)",
+    "uploaded_image": "",
+    "is_featured": false,
+    "min_guests": 1,
+    "max_guests": 250
+  }
+},
+{
+  "model": "seaside.seasideservice",
+  "pk": 1,
+  "fields": {
+    "price": "20000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Coastal styling",
+    "description": "Natural textures, considered florals, candlelight, and tablescapes that belong to the landscape.",
+    "highlights": "Tablescapes\nFlorals",
+    "image": "seaside/images/seaside_services_styling.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "seaside.seasideservice",
+  "pk": 2,
+  "fields": {
+    "price": "30000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 1,
+    "name": "Photography",
+    "description": "Thoughtful coverage of the people, atmosphere, and small unscripted moments that make the day yours.",
+    "highlights": "Editorial Coverage\nGolden Hour",
+    "image": "seaside/images/seaside_services_photography.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "seaside.seasideservice",
+  "pk": 3,
+  "fields": {
+    "price": "1000.00",
+    "price_basis": "per_guest",
+    "is_active": true,
+    "position": 2,
+    "name": "Ocean-to-table catering",
+    "description": "Fresh, generous menus served with an easy rhythm from welcome aperitifs to the last toast.",
+    "highlights": "Fresh Menus\nBeach Bar",
+    "image": "seaside/images/seaside_services_catering.png",
+    "uploaded_image": ""
+  }
+},
+{
+  "model": "seaside.seasideservice",
+  "pk": 4,
+  "fields": {
+    "price": "10000.00",
+    "price_basis": "per_booking",
+    "is_active": true,
+    "position": 0,
+    "name": "Interactive Experience",
+    "description": "Captivating fire-art performances, a rustic 'create-your-own' beach favor station, and small-group masterclasses.",
+    "highlights": "",
+    "image": "",
+    "uploaded_image": "seaside/catalog/services/image_a30401ef.jpg"
+  }
+}
+]

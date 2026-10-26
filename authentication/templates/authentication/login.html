@@ -23,29 +23,49 @@
     <div class="auth-panel auth-panel-form">
       <div class="auth-header">
         <span class="auth-kicker">login</span>
-        <h2>access your account</h2>
+        <h2>Access your account</h2>
       </div>
 
-      <form class="auth-form">
+      {% if messages %}
+        <div class="auth-messages" role="status">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form class="auth-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="auth-form-errors" role="alert">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
         <label>
-          <span>email address</span>
-          <input type="email" name="email" placeholder="you@example.com">
+          <span>Email address or username</span>
+          {{ form.identifier }}
+          {% for error in form.identifier.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <label>
-          <span>password</span>
-          <input type="password" name="password" placeholder="enter your password">
+          <span>Password</span>
+          {{ form.password }}
+          {% for error in form.password.errors %}<span class="auth-field-error">{{ error }}</span>{% endfor %}
         </label>
 
         <div class="auth-meta">
           <label class="remember-me">
-            <input type="checkbox" name="remember">
+            <input type="checkbox" name="remember" {% if request.POST.remember == "on" %}checked{% endif %}>
             <span>remember me</span>
           </label>
-          <a href="#">forgot password?</a>
+          <a href="{% url 'authentication:password_reset' %}">forgot password?</a>
         </div>
 
-        <button type="submit" class="auth-button">sign in</button>
+        <button type="submit" class="auth-button">Login</button>
       </form>
 
       <p class="auth-switch">
