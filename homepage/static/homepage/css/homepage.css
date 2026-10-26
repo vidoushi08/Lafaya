@@ -422,14 +422,14 @@
 }
 
 .homepage-trusted-panel {
-  background-color: var(--color-muted);
-  border-radius: var(--radius-btn);
+  background-color: #f6f1e7;
+  border-radius: 14px;
   padding: 2.5rem 1.5rem;
 }
 
 .homepage-trusted-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
 }
 
@@ -440,20 +440,23 @@
   justify-content: center;
   gap: 0.75rem;
   min-height: 180px;
+  min-width: 0;
   padding: 2.5rem 1rem;
   background-color: var(--color-white);
-  border-radius: var(--radius-btn);
-  box-shadow: 0 4px 12px var(--color-shadow);
+  border: 1px solid #c6a15b;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(158, 121, 57, 0.08);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    border-color 250ms ease;
   text-decoration: none;
 }
 
 .homepage-trusted-card i {
   font-size: 3.5rem;
-  color: var(--color-grey);
-  transition: color 0.3s ease;
+  color: #51483d;
+  transition: color 250ms ease;
 }
 
 .homepage-trusted-card:hover i {
@@ -490,9 +493,46 @@
   color: var(--color-dark);
 }
 
-.homepage-trusted-card:hover {
+.homepage-trusted-card:hover,
+.homepage-trusted-card:focus-visible {
+  border-color: #d0ac65;
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px var(--color-shadow);
+  box-shadow: 0 8px 24px rgba(158, 121, 57, 0.13),
+    0 0 12px rgba(198, 161, 91, 0.09);
+}
+
+.homepage-trusted-card:focus-visible {
+  outline: 3px solid #80602d;
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+  .homepage-trusted-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-trusted-panel {
+    padding: 1.5rem 1rem;
+  }
+
+  .homepage-trusted-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homepage-trusted-card,
+  .homepage-trusted-card i {
+    transition: none;
+  }
+
+  .homepage-trusted-card:hover,
+  .homepage-trusted-card:focus-visible {
+    transform: none;
+  }
 }
 
 .homepage-testimonials {
