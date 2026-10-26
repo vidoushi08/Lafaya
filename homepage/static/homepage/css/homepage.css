@@ -4,12 +4,14 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 35vh;
-  padding: 4rem var(--container-padding);
+  padding: clamp(2rem, 4vw, 3rem) var(--container-padding)
+    clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .homepage-welcome h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
   color: var(--color-dark);
 }
 
@@ -17,7 +19,8 @@
   font-size: 1.25rem;
   font-weight: 400;
   color: var(--color-dark);
-  margin-bottom: 2rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
 }
 
 .homepage-welcome button,
