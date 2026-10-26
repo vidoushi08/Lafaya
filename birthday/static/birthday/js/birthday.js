@@ -43,7 +43,6 @@
     render();
   });
 })();
-
 (function () {
   var form = document.querySelector("[data-booking-form]");
   if (!form) {
@@ -211,4 +210,3 @@
     });
   update();
 })();
-
