@@ -9,17 +9,23 @@
 }
 
 .homepage-welcome h1 {
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  line-height: 1.2;
+  font-size: clamp(1.875rem, 1.1rem + 4vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  max-width: 100%;
+  text-wrap: balance;
   margin-bottom: 0.75rem;
   color: var(--color-dark);
 }
 
 .homepage-welcome h3 {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
   font-weight: 400;
   color: var(--color-dark);
   line-height: 1.5;
+  max-width: 100%;
+  text-wrap: balance;
   margin-bottom: 1.25rem;
 }
 
