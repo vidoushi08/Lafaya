@@ -210,3 +210,134 @@
     });
   update();
 })();
+
+// Concert-only decorative animation, independent of booking and pricing logic.
+(function concertNeonCelebration() {
+  var concertLayer = document.querySelector('.concert-neon-layer');
+  if (!concertLayer || !document.querySelector('.concert-page') ||
+      typeof concertLayer.animate !== 'function') {
+    return;
+  }
+
+  var concertMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var concertMobile = window.matchMedia('(max-width: 600px)');
+  var concertParticles = new Map();
+  var concertTimer = null;
+  var concertPageAway = false;
+  var concertColours = ['violet', 'pink', 'cyan', 'blue'];
+  var concertShapes = ['motif-1', 'motif-2', 'motif-3', 'motif-4'];
+  var concertIconPaths = ["<path d=\"m14 2-9 12h7l-2 8 9-13h-7z\"/>","<path d=\"M8 17V5l12-3v12M8 8l12-3\"/><ellipse cx=\"5\" cy=\"18\" rx=\"3\" ry=\"2\"/><ellipse cx=\"17\" cy=\"15\" rx=\"3\" ry=\"2\"/>","<path d=\"M4 8v9m5-13v17m5-15v13m5-9v7\"/>","<circle cx=\"12\" cy=\"12\" r=\"8\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"m5 3 2 2m12 14 2 2\"/>"];
+  var concertSizes = ['small', 'medium', 'large'];
+
+  function concertRandom(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function concertCanCelebrate() {
+    return !concertMotion.matches && !document.hidden && !concertPageAway;
+  }
+
+  function concertClearNeon() {
+    window.clearTimeout(concertTimer);
+    concertTimer = null;
+    concertParticles.forEach(function (animation, particle) {
+      animation.cancel();
+      particle.remove();
+    });
+    concertParticles.clear();
+  }
+
+  function concertNeonBurst(x, y, requestedCount, direction) {
+    if (!concertCanCelebrate()) return;
+    var concertLimit = concertMobile.matches ? 24 : 48;
+    var concertCount = Math.min(requestedCount, concertLimit - concertParticles.size);
+    for (var index = 0; index < concertCount; index++) {
+      var particle = document.createElement('span');
+      particle.className = 'concert-neon-particle concert-neon-' +
+        concertShapes[index % concertShapes.length] + ' concert-neon-' +
+        concertColours[Math.floor(concertRandom(0, concertColours.length))] +
+        ' concert-neon-particle-' + concertSizes[Math.floor(concertRandom(0, 3))];
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      svg.innerHTML = concertIconPaths[index % concertIconPaths.length];
+      particle.appendChild(svg);
+      concertLayer.appendChild(particle);
+
+      var spread = concertRandom(25, Math.min(110, window.innerWidth * 0.2));
+      var drift = direction ? direction * spread : concertRandom(-spread, spread);
+      var rise = concertRandom(40, y > window.innerHeight * 0.8 ? 220 : 140);
+      var fall = concertRandom(70, concertMobile.matches ? 130 : 180);
+      var rotation = concertRandom(-25, 25);
+      var turn = concertRandom(-40, 40);
+      var duration = concertRandom(2200, 3800);
+      var animation = particle.animate([
+        { transform: 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + rotation + 'deg) scale(0.4)', opacity: 0, offset: 0 },
+        { transform: 'translate3d(' + (x + drift * 0.45) + 'px,' + (y - rise) + 'px,0) rotate(' + (rotation + turn * 0.3) + 'deg) scale(1)', opacity: 0.9, offset: 0.25 },
+        { transform: 'translate3d(' + (x + drift * 0.8) + 'px,' + (y - rise * 0.25 + fall * 0.35) + 'px,0) rotate(' + (rotation + turn * 0.7) + 'deg)', opacity: 0.7, offset: 0.65 },
+        { transform: 'translate3d(' + (x + drift) + 'px,' + (y + fall) + 'px,0) rotate(' + (rotation + turn) + 'deg) scale(0.8)', opacity: 0, offset: 1 }
+      ], { duration: duration, easing: 'cubic-bezier(0.2, 0.55, 0.45, 1)', fill: 'both' });
+
+      concertParticles.set(particle, animation);
+      (function concertReleaseParticle(node, motion) {
+        function concertRemoveParticle() {
+          concertParticles.delete(node);
+          node.remove();
+        }
+        motion.onfinish = concertRemoveParticle;
+        motion.oncancel = concertRemoveParticle;
+      })(particle, animation);
+    }
+  }
+
+  function concertScheduleBurst() {
+    window.clearTimeout(concertTimer);
+    if (!concertCanCelebrate()) return;
+    concertTimer = window.setTimeout(function concertRecurringBurst() {
+      var right = Math.random() > 0.5;
+      var position = Math.random();
+      var x = window.innerWidth * (position > 0.85 ? concertRandom(0.25, 0.75) : (right ? 0.94 : 0.06));
+      var y = window.innerHeight * (position < 0.15 ? 0.9 :
+        position < 0.6 ? concertRandom(0.35, 0.7) : 0.14);
+      concertNeonBurst(x, y, concertMobile.matches ? 4 : 7, right ? -1 : 1);
+      concertScheduleBurst();
+    }, concertMobile.matches ? concertRandom(7000, 11000) : concertRandom(4000, 7000));
+  }
+
+  function concertRefreshCelebration() {
+    concertClearNeon();
+    concertScheduleBurst();
+  }
+
+  document.querySelectorAll('.concert-hero-actions a[href="#concert-enquiry"], .concert-book-cta a, .concert-button-submit')
+    .forEach(function (button) {
+      button.addEventListener('click', function concertBookingNeon() {
+        if (button.disabled) return;
+        var bounds = button.getBoundingClientRect();
+        concertNeonBurst(bounds.left + bounds.width / 2, bounds.top,
+          concertMobile.matches ? 6 : 10, 0);
+        // The original click, anchor navigation and form submission continue normally.
+      });
+    });
+
+  document.addEventListener('visibilitychange', concertRefreshCelebration);
+  concertMotion.addEventListener('change', concertRefreshCelebration);
+  window.addEventListener('pagehide', function concertPauseCelebration() {
+    concertPageAway = true;
+    concertClearNeon();
+  });
+  window.addEventListener('pageshow', function concertResumeCelebration() {
+    concertPageAway = false;
+    if (concertTimer === null) concertScheduleBurst();
+  });
+
+  // A single welcome celebration: stronger at the edges, light at the centre.
+  concertNeonBurst(window.innerWidth * 0.06, window.innerHeight * 0.2,
+    concertMobile.matches ? 6 : 10, 1);
+  concertNeonBurst(window.innerWidth * 0.94, window.innerHeight * 0.2,
+    concertMobile.matches ? 6 : 10, -1);
+  concertNeonBurst(window.innerWidth * 0.5, window.innerHeight * 0.25,
+    concertMobile.matches ? 3 : 5, 0);
+  concertScheduleBurst();
+})();

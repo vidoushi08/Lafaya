@@ -152,6 +152,30 @@ class RegisterPageTests(TestCase):
 		self.assertIsNotNone(match)
 		return match.group(1)
 
+	def test_registration_rejects_future_date_of_birth(self):
+		future_date = timezone.localdate() + timedelta(days=1)
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(date_of_birth=future_date.isoformat()),
+		)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertFormError(
+			response.context["form"],
+			"date_of_birth",
+			"date of birth cannot be in the future.",
+		)
+		self.assertFalse(get_user_model().objects.filter(username="new-customer").exists())
+
+	def test_registration_accepts_today_as_date_of_birth(self):
+		response = self.client.post(
+			"/authentication/register/",
+			self.registration_data(date_of_birth=timezone.localdate().isoformat()),
+		)
+
+		self.assertRedirects(response, reverse("authentication:verification_sent"))
+		self.assertTrue(get_user_model().objects.filter(username="new-customer").exists())
+
 	def test_register_page_shows_profile_fields_and_city_options(self):
 		response = self.client.get("/authentication/register/")
 

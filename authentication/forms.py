@@ -247,6 +247,12 @@ class CustomerRegistrationForm(UserCreationForm):
             raise ValidationError("an account with this email address already exists.")
         return email
 
+    def clean_date_of_birth(self):
+        date_of_birth = self.cleaned_data.get("date_of_birth")
+        if date_of_birth and date_of_birth > timezone.localdate():
+            raise ValidationError("date of birth cannot be in the future.")
+        return date_of_birth
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]

@@ -219,3 +219,80 @@
     });
   update();
 })();
+
+// Seaside-only continuous drift, independent of booking logic.
+(function seasideContinuousDrift() {
+  var seasideLayer = document.querySelector('.seaside-shell-layer');
+  if (!seasideLayer || !document.querySelector('.seaside-page') ||
+      typeof seasideLayer.animate !== 'function') return;
+  var seasideMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var seasideMobile = window.matchMedia('(max-width: 600px)');
+  var seasideAnimations = [];
+  var seasideAway = false;
+  var seasideResizeFrame = null;
+  var seasideColours = ["sand","pearl","coral","aqua"];
+  var seasideShapes = ["motif-1","motif-2","motif-3","motif-4"];
+    var seasideIconPaths = ["<path d=\"M9 19C-4 7 6-2 12 6c6-8 16 1 3 13zm3-13v13M5 6l6 13M19 6l-6 13M9 19v2h6v-2\"/>","<path d=\"M17 19C2 24-3 7 7 3c9-4 18 6 12 12-5 6-13-1-8-5 4-3 7 3 3 4\"/><path d=\"m4 10 3 1m-1 7 3-2m8-11-1 3\"/>","<path d=\"m3 20 3-8 3 1 2-8 3 2 3-5 4 9-5 5-7 1-6 3zm3-8 3 5m2-12 5 11m1-14 4 9\"/>","<path d=\"M4 16C0 7 8 0 12 6c4-6 12 1 8 10l-8 5zm8-10v15M6 6l6 15m6-15-6 15M4 16h16\"/>"];
+
+  function seasideClearDrift() {
+    seasideAnimations.forEach(function (animation) { animation.cancel(); });
+    seasideAnimations = [];
+    seasideLayer.replaceChildren();
+  }
+  function seasidePauseDrift() {
+    seasideAnimations.forEach(function (animation) {
+      if (document.hidden || seasideAway) animation.pause();
+      else animation.play();
+    });
+  }
+  function seasideBuildDrift() {
+    seasideClearDrift();
+    if (seasideMotion.matches || seasideAway) return;
+    var count = seasideMobile.matches ? 4 : 8;
+    for (var index = 0; index < count; index++) {
+      var particle = document.createElement('span');
+      particle.className = 'seaside-shell-particle seaside-shell-' +
+        seasideShapes[index % seasideShapes.length] + ' seaside-shell-' +
+        seasideColours[index % seasideColours.length] +
+        ' seaside-shell-drifter seaside-shell-drifter-' + (index + 1);
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('focusable', 'false');
+      svg.innerHTML = seasideIconPaths[index % seasideIconPaths.length];
+      particle.appendChild(svg);
+      seasideLayer.appendChild(particle);
+      var reverse = index % 2 === 1;
+      var start = reverse ? window.innerWidth + 40 : -40;
+      var end = reverse ? -40 : window.innerWidth + 40;
+      var sway = index % 3 === 0 ? 14 : -12;
+      var animation = particle.animate([
+        { transform: 'translate3d(' + start + 'px,0,0) rotate(-10deg)', opacity: 0, offset: 0 },
+        { transform: 'translate3d(' + (start + (end - start) * 0.12) + 'px,' + sway + 'px,0) rotate(4deg)', opacity: 0.8, offset: 0.12 },
+        { transform: 'translate3d(' + (start + (end - start) * 0.5) + 'px,' + (-sway) + 'px,0) rotate(12deg)', opacity: 0.8, offset: 0.5 },
+        { transform: 'translate3d(' + (start + (end - start) * 0.88) + 'px,' + sway + 'px,0) rotate(-4deg)', opacity: 0.8, offset: 0.88 },
+        { transform: 'translate3d(' + end + 'px,0,0) rotate(-10deg)', opacity: 0, offset: 1 }
+      ], { duration: 18000 + (index % 5) * 2200, iterations: Infinity, easing: 'linear' });
+      animation.currentTime = index * 2700;
+      seasideAnimations.push(animation);
+    }
+    seasidePauseDrift();
+  }
+  document.addEventListener('visibilitychange', seasidePauseDrift);
+  seasideMotion.addEventListener('change', seasideBuildDrift);
+  seasideMobile.addEventListener('change', seasideBuildDrift);
+  window.addEventListener('resize', function seasideResizeDrift() {
+    window.cancelAnimationFrame(seasideResizeFrame);
+    seasideResizeFrame = window.requestAnimationFrame(seasideBuildDrift);
+  });
+  window.addEventListener('pagehide', function seasideStopDrift() {
+    seasideAway = true;
+    window.cancelAnimationFrame(seasideResizeFrame);
+    seasideClearDrift();
+  });
+  window.addEventListener('pageshow', function seasideResumeDrift() {
+    seasideAway = false;
+    if (!seasideAnimations.length) seasideBuildDrift();
+  });
+  seasideBuildDrift();
+})();

@@ -157,11 +157,30 @@
   background-color: var(--color-review-track);
 }
 
-.reviews-rating-track > span {
+.reviews-rating-track > progress {
   display: block;
+  width: 100%;
   height: 100%;
+  border: 0;
   border-radius: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-review-track);
+}
+
+.reviews-rating-track > progress::-webkit-progress-bar {
+  background-color: var(--color-review-track);
+  border-radius: inherit;
+}
+
+.reviews-rating-track > progress::-webkit-progress-value {
   background-color: var(--color-review-star);
+  border-radius: inherit;
+}
+
+.reviews-rating-track > progress::-moz-progress-bar {
+  background-color: var(--color-review-star);
+  border-radius: inherit;
 }
 
 .reviews-booking-label {
