@@ -1,3 +1,70 @@
+/* Wedding-only floral celebration; clipped behind primary reading areas. */
+.wedding-flower-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    contain: strict;
+    pointer-events: none;
+    mask-image: linear-gradient(to right, #000 12%, rgba(0, 0, 0, 0.2) 38%,
+        rgba(0, 0, 0, 0.2) 62%, #000 88%);
+}
+
+.wedding-flower-particle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 15px;
+    background-color: currentColor;
+    border-radius: 85% 15% 75% 25%;
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.45),
+        0 1px 2px rgba(102, 76, 55, 0.12);
+    pointer-events: none;
+}
+
+.wedding-flower-particle-small { width: 7px; height: 10px; }
+.wedding-flower-particle-large { width: 14px; height: 18px; }
+.wedding-flower-ivory { color: #fff8ea; }
+.wedding-flower-blush { color: #efbbca; }
+.wedding-flower-rose { color: #d990a8; }
+.wedding-flower-champagne { color: #e6d1a9; }
+.wedding-flower-lavender { color: #c7b0da; }
+.wedding-flower-sage,
+.wedding-flower-leaf { color: #9eb59a; }
+.wedding-flower-leaf { border-radius: 100% 0 100% 0; }
+
+.wedding-flower-flower,
+.wedding-flower-blossom {
+    aspect-ratio: 1;
+    height: auto;
+    border-radius: 0;
+    clip-path: polygon(50% 0, 65% 20%, 90% 10%, 80% 38%, 100% 50%,
+        80% 62%, 90% 90%, 65% 80%, 50% 100%, 35% 80%, 10% 90%,
+        20% 62%, 0 50%, 20% 38%, 10% 10%, 35% 20%);
+}
+
+.wedding-flower-blossom { border-radius: 50%; }
+.wedding-flower-flower::after,
+.wedding-flower-blossom::after {
+    content: "";
+    position: absolute;
+    inset: 40%;
+    background-color: #b9985d;
+    border-radius: 50%;
+}
+
+.wedding-page .seaside-hero-content,
+.wedding-page .seaside-enquiry,
+.wedding-page .seaside-book-cta {
+    position: relative;
+    z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wedding-flower-layer { display: none; }
+}
+
 /* General Wedding Page */
 .wedding-page {
     font-family: 'Manrope', sans-serif;
@@ -886,3 +953,13 @@ body.wedding-theme .lafaya-logo-circle {
     box-shadow: inset 0 0 0 2px #F6E7A8;
 }
 
+
+/* Continuous viewport lanes replace pop-up bursts. */
+.wedding-flower-drifter-1 { top: 16%; }
+.wedding-flower-drifter-2 { top: 27%; }
+.wedding-flower-drifter-3 { top: 63%; }
+.wedding-flower-drifter-4 { top: 84%; }
+.wedding-flower-drifter-5 { top: 38%; }
+.wedding-flower-drifter-6 { top: 73%; }
+.wedding-flower-drifter-7 { top: 49%; }
+.wedding-flower-drifter-8 { top: 91%; }
