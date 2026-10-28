@@ -33,7 +33,7 @@
             {% for rating, count in rating_distribution.items %}
               <li>
                 <span>{{ rating }} Star</span>
-                <span class="reviews-rating-track"><span style="width: {% if review_count %}{% widthratio count review_count 100 %}{% else %}0{% endif %}%"></span></span>
+                <span class="reviews-rating-track"><progress value="{{ count }}" max="{{ review_count|default:1 }}" aria-label="{{ rating }} star reviews"></progress></span>
                 <span>{{ count }}</span>
               </li>
             {% endfor %}

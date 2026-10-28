@@ -891,3 +891,63 @@ body.seaside-theme {
     font-size: 1.5rem;
   }
 }
+/* Page-local decorative bursts; no pointer or scroll interference. */
+.seaside-shell-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  contain: strict;
+  pointer-events: none;
+  mask-image: linear-gradient(to right, #000 15%, rgba(0, 0, 0, 0.25) 38%,
+    rgba(0, 0, 0, 0.25) 62%, #000 85%);
+}
+.seaside-shell-particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 19px;
+  height: 19px;
+  pointer-events: none;
+}
+.seaside-shell-particle-small { width: 13px; height: 13px; }
+.seaside-shell-particle-large { width: 24px; height: 24px; }
+.seaside-shell-particle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  fill-opacity: 0.18;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(112, 91, 61, 0.18));
+}
+.seaside-shell-sand { color: #c5a372; }
+.seaside-shell-pearl { color: #f5e7ce; }
+.seaside-shell-coral { color: #dc9d8b; }
+.seaside-shell-aqua { color: #4d9eaa; }
+
+body.seaside-theme .seaside-page .seaside-hero-content,
+body.seaside-theme .seaside-page .seaside-enquiry,
+body.seaside-theme .seaside-page .seaside-book-cta {
+  position: relative;
+  z-index: 3;
+}
+@media (max-width: 600px) {
+  .seaside-shell-particle-large { width: 20px; height: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seaside-shell-layer { display: none; }
+}
+
+/* Continuous viewport lanes replace pop-up bursts. */
+.seaside-shell-drifter-1 { top: 16%; }
+.seaside-shell-drifter-2 { top: 27%; }
+.seaside-shell-drifter-3 { top: 63%; }
+.seaside-shell-drifter-4 { top: 84%; }
+.seaside-shell-drifter-5 { top: 38%; }
+.seaside-shell-drifter-6 { top: 73%; }
+.seaside-shell-drifter-7 { top: 49%; }
+.seaside-shell-drifter-8 { top: 91%; }

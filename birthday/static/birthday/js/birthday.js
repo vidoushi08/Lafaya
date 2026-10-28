@@ -43,6 +43,130 @@
     render();
   });
 })();
+// Birthday-only decorative animation, independent of booking and pricing logic.
+(function birthdayConfettiCelebration() {
+  var birthdayLayer = document.querySelector('.birthday-confetti-layer');
+  if (!birthdayLayer || !document.body.classList.contains('birthday-theme') ||
+      typeof birthdayLayer.animate !== 'function') {
+    return;
+  }
+
+  var birthdayMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var birthdayMobile = window.matchMedia('(max-width: 600px)');
+  var birthdayParticles = new Map();
+  var birthdayTimer = null;
+  var birthdayPageAway = false;
+  var birthdayColours = ['coral', 'pink', 'yellow', 'turquoise', 'purple', 'blue', 'orange'];
+  var birthdayShapes = ['rectangle', 'circle', 'streamer', 'star'];
+  var birthdaySizes = ['small', 'medium', 'large'];
+
+  function birthdayRandom(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function birthdayCanCelebrate() {
+    return !birthdayMotion.matches && !document.hidden && !birthdayPageAway;
+  }
+
+  function birthdayClearConfetti() {
+    window.clearTimeout(birthdayTimer);
+    birthdayTimer = null;
+    birthdayParticles.forEach(function (animation, particle) {
+      animation.cancel();
+      particle.remove();
+    });
+    birthdayParticles.clear();
+  }
+
+  function birthdayConfettiBurst(x, y, requestedCount, direction) {
+    if (!birthdayCanCelebrate()) return;
+    var birthdayLimit = birthdayMobile.matches ? 32 : 72;
+    var birthdayCount = Math.min(requestedCount, birthdayLimit - birthdayParticles.size);
+    for (var index = 0; index < birthdayCount; index++) {
+      var particle = document.createElement('span');
+      particle.className = 'birthday-confetti-particle birthday-confetti-' +
+        birthdayShapes[index % birthdayShapes.length] + ' birthday-confetti-' +
+        birthdayColours[Math.floor(birthdayRandom(0, birthdayColours.length))] +
+        ' birthday-confetti-particle-' + birthdaySizes[Math.floor(birthdayRandom(0, 3))];
+      birthdayLayer.appendChild(particle);
+
+      var spread = birthdayRandom(35, Math.min(180, window.innerWidth * 0.25));
+      var drift = direction ? direction * spread : birthdayRandom(-spread, spread);
+      var rise = birthdayRandom(40, y > window.innerHeight * 0.8 ? 220 : 140);
+      var fall = birthdayRandom(100, birthdayMobile.matches ? 210 : 300);
+      var rotation = birthdayRandom(-100, 100);
+      var turn = birthdayRandom(-120, 120);
+      var duration = birthdayRandom(2200, 3800);
+      var animation = particle.animate([
+        { transform: 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + rotation + 'deg) scale(0.4)', opacity: 0, offset: 0 },
+        { transform: 'translate3d(' + (x + drift * 0.45) + 'px,' + (y - rise) + 'px,0) rotate(' + (rotation + turn * 0.3) + 'deg) scale(1)', opacity: 0.9, offset: 0.25 },
+        { transform: 'translate3d(' + (x + drift * 0.8) + 'px,' + (y - rise * 0.25 + fall * 0.35) + 'px,0) rotate(' + (rotation + turn * 0.7) + 'deg)', opacity: 0.7, offset: 0.65 },
+        { transform: 'translate3d(' + (x + drift) + 'px,' + (y + fall) + 'px,0) rotate(' + (rotation + turn) + 'deg) scale(0.8)', opacity: 0, offset: 1 }
+      ], { duration: duration, easing: 'cubic-bezier(0.2, 0.55, 0.45, 1)', fill: 'both' });
+
+      birthdayParticles.set(particle, animation);
+      (function birthdayReleaseParticle(node, motion) {
+        function birthdayRemoveParticle() {
+          birthdayParticles.delete(node);
+          node.remove();
+        }
+        motion.onfinish = birthdayRemoveParticle;
+        motion.oncancel = birthdayRemoveParticle;
+      })(particle, animation);
+    }
+  }
+
+  function birthdayScheduleBurst() {
+    window.clearTimeout(birthdayTimer);
+    if (!birthdayCanCelebrate()) return;
+    birthdayTimer = window.setTimeout(function birthdayRecurringBurst() {
+      var right = Math.random() > 0.5;
+      var position = Math.random();
+      var x = window.innerWidth * (right ? 0.96 : 0.04);
+      var y = window.innerHeight * (position < 0.15 ? 0.94 :
+        position < 0.6 ? birthdayRandom(0.35, 0.7) : 0.14);
+      birthdayConfettiBurst(x, y, birthdayMobile.matches ? 7 : 14, right ? -1 : 1);
+      birthdayScheduleBurst();
+    }, birthdayMobile.matches ? birthdayRandom(7000, 11000) : birthdayRandom(4000, 7000));
+  }
+
+  function birthdayRefreshCelebration() {
+    birthdayClearConfetti();
+    birthdayScheduleBurst();
+  }
+
+  document.querySelectorAll('.birthday-hero-actions a[href="#birthday-enquiry"], .birthday-book-cta a, .birthday-button-submit')
+    .forEach(function (button) {
+      button.addEventListener('click', function birthdayBookingConfetti() {
+        if (button.disabled) return;
+        var bounds = button.getBoundingClientRect();
+        birthdayConfettiBurst(bounds.left + bounds.width / 2, bounds.top,
+          birthdayMobile.matches ? 6 : 10, 0);
+        // The original click, anchor navigation and form submission continue normally.
+      });
+    });
+
+  document.addEventListener('visibilitychange', birthdayRefreshCelebration);
+  birthdayMotion.addEventListener('change', birthdayRefreshCelebration);
+  window.addEventListener('pagehide', function birthdayPauseCelebration() {
+    birthdayPageAway = true;
+    birthdayClearConfetti();
+  });
+  window.addEventListener('pageshow', function birthdayResumeCelebration() {
+    birthdayPageAway = false;
+    if (birthdayTimer === null) birthdayScheduleBurst();
+  });
+
+  // A single welcome celebration: stronger at the edges, light at the centre.
+  birthdayConfettiBurst(window.innerWidth * 0.06, window.innerHeight * 0.2,
+    birthdayMobile.matches ? 8 : 18, 1);
+  birthdayConfettiBurst(window.innerWidth * 0.94, window.innerHeight * 0.2,
+    birthdayMobile.matches ? 8 : 18, -1);
+  birthdayConfettiBurst(window.innerWidth * 0.5, window.innerHeight * 0.25,
+    birthdayMobile.matches ? 5 : 10, 0);
+  birthdayScheduleBurst();
+})();
+
 (function () {
   var form = document.querySelector("[data-booking-form]");
   if (!form) {
